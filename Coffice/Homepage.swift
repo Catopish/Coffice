@@ -10,7 +10,14 @@ import SwiftData
 
 struct Homepage: View {
     var body: some View {
-        Text("test")
+        Text("Hello, World!")
+        ProfileUser()
+    }
+}
+
+struct ProfileUser: View {
+    var body: some View {
+        Text("Hello, World!")
     }
 }
 

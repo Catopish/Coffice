@@ -10,15 +10,7 @@ import SwiftData
 
 struct Maps: View {
     var body: some View {
-        NavigationStack {
-            List {
-                NavigationLink{
-                    Homepage()
-                } label: {
-                    Text("Homepage")
-                }
-            }
-        }
+        Text("Maps")
     }
 }
 
