@@ -12,6 +12,9 @@ struct CoffeeShopStruct: Identifiable {
     var id = UUID()
     var name: String
     var description: String
+    var distance: Double
+    var steps: Int
+    var calories: Int
 }
 
 struct Homepage: View {
@@ -21,11 +24,11 @@ struct Homepage: View {
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
     
     let coffeeShop : [CoffeeShopStruct] = [
-        CoffeeShopStruct(name: "Starbucks",description: "lorem"),
-        CoffeeShopStruct(name: "Fore",description: "lorem"),
-        CoffeeShopStruct(name: "Tamper",description: "lorem"),
-        CoffeeShopStruct(name: "Kopi Kenangan",description: "lorem"),
-        CoffeeShopStruct(name: "Dunkin Donuts",description: "lorem")
+        CoffeeShopStruct(name: "Starbucks",description: "lorem",distance: 127,steps: 123,calories: 123),
+        CoffeeShopStruct(name: "Fore",description: "lorem",distance: 45 ,steps: 54,calories: 134),
+        CoffeeShopStruct(name: "Tamper",description: "lorem",distance: 431,steps: 887,calories: 1223),
+        CoffeeShopStruct(name: "Kopi Kenangan",description: "lorem",distance: 134,steps: 412,calories: 531),
+        CoffeeShopStruct(name: "Dunkin Donuts",description: "lorem",distance: 486,steps: 212,calories: 431)
     ]
     //    ["Starbucks","Fore","Tamper","Kopi Kenangan","Dunkin Donuts"]
     

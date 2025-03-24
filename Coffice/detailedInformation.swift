@@ -50,15 +50,15 @@ struct coffeeshopInformation: View{
                         Spacer()
                         VStack{
                             Image(systemName: "location.fill")
-                            Text("1 Km")
+                            Text(String(shop.distance))
                         }
                         VStack{
                             Image(systemName: "figure.walk")
-                            Text("670 steps")
+                            Text(String(shop.steps))
                         }
                         VStack{
                             Image(systemName: "flame.fill")
-                            Text("60 cal")
+                            Text(String(shop.calories))
                         }
                         Spacer()
                     }
