@@ -25,8 +25,8 @@ jobs:
           -scheme Coffice \
           -destination 'platform=iOS Simulator,name=iPhone 16'
 
-     // - name: Run Tests
-        //run: |
-          //xcodebuild test \
-         // -scheme Coffice \
-         // -destination 'platform=iOS Simulator,name=iPhone 16'
+     #- name: Run Tests
+        #run: |
+          #xcodebuild test \
+         # -scheme Coffice \
+         #-destination 'platform=iOS Simulator,name=iPhone 16'
