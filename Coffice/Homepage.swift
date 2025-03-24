@@ -7,12 +7,35 @@
 
 import SwiftUI
 import SwiftData
+import HealthKit
 
 struct Homepage: View {
+    
+    @State private var searchContent: String = ""
+    var coffeeshopNames : [String] = ["Startbucks","Fore","Tamper"]
+    
     var body: some View {
-        Text("test")
+        VStack(alignment: .leading){
+            VStack{
+                
+                NavigationView{
+                    List{
+                        ForEach(coffeeshopNames, id: \.description){
+                            name in Text(name)
+                        }
+                        .navigationTitle("Coffeeshops")
+                    }
+                    .searchable(text: $searchContent,placement: .navigationBarDrawer(displayMode: .always))
+                    
+                    
+                    
+                }
+            }
+            
+        }
     }
 }
+
 
 #Preview {
     Homepage()
