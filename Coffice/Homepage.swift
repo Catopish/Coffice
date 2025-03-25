@@ -65,7 +65,7 @@ struct Homepage: View {
             VStack{
                 
                 NavigationView{
-                    List(filteredCoffeeshop) { shop in
+                    List(filteredCoffeeshop.sorted(by: {$0.distance < $1.distance})) { shop in
                         Button(action: {
                             selectedCoffeeshop = shop
                             showDetail = true
