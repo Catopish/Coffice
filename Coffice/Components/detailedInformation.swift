@@ -6,8 +6,10 @@
 ////
 
 import SwiftUI
+import MapKit
 
 struct coffeeshopInformation: View{
+    @State var showMapView: Bool = false
     @Binding var showDetail: Bool
     @Binding var selectedCoffeeshop: CoffeeShopStruct?
     
@@ -62,6 +64,37 @@ struct coffeeshopInformation: View{
                         }
                         Spacer()
                     }
+                    
+//                    NavigationView {
+//                        VStack {
+//                            NavigationLink(destination: MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))) {
+//                                Text("Login")
+//
+//                            }
+//                        }
+//                    }
+                    
+                    NavigationStack{
+                        VStack{
+                            Button("tes"){
+//                                NOTE: fix biar gada animasi keluar
+//                                showDetail = false
+                                showMapView=true
+                            }
+                        }.fullScreenCover(isPresented: $showMapView) {
+                            MapView(showDetail: $showDetail, coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
+                        }
+                    }
+                
+
+                    
+//                    Button {
+//                        MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
+//                    } label: {
+//                        Text("Map View")
+//                    }
+                    
+
                     Color.green
                     //                            Text("Description:")
                     //                                .font(.headline)
