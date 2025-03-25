@@ -93,6 +93,11 @@ struct Homepage: View {
             coffeeshopInformation(showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
                 .animation(.easeInOut, value: showDetail)
         )
+//        sheet(isPresented: $showDetail){
+//            coffeeshopInformation(showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
+//                .animation(.easeInOut, value: showDetail)
+//        }
+
     }
 }
 
