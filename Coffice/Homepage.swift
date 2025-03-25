@@ -10,14 +10,13 @@ import SwiftData
 
 struct Homepage: View {
     var body: some View {
-        Text("Hello, World!")
-        ProfileUser()
-    }
-}
-
-struct ProfileUser: View {
-    var body: some View {
-        Text("Hello, World!")
+        HStack {
+            Image(systemName: "person.fill")
+            VStack {
+                Color.red
+                Color.green
+            }
+        }
     }
 }
 

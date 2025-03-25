@@ -13,7 +13,7 @@ struct CofficeApp: App {
 
     var body: some Scene {
         WindowGroup {
-            Homepage()
+            HealthDashboardView()
         }
     }
 }
