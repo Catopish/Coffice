@@ -17,6 +17,16 @@ struct CoffeeShopStruct: Identifiable {
     var calories: Int
 }
 
+//Contoh buat max range
+@Observable
+class filterModel: ObservableObject {
+    var maxRange: Double
+    
+    init(maxRange: Double) {
+        self.maxRange = maxRange
+    }
+}
+
 struct Homepage: View {
     
     @State private var searchContent: String = ""
@@ -30,15 +40,18 @@ struct Homepage: View {
         CoffeeShopStruct(name: "Kopi Kenangan",description: "lorem",distance: 134,steps: 412,calories: 531),
         CoffeeShopStruct(name: "Dunkin Donuts",description: "lorem",distance: 486,steps: 212,calories: 431)
     ]
+    
+    
     //    ["Starbucks","Fore","Tamper","Kopi Kenangan","Dunkin Donuts"]
     
     var filteredCoffeeshop: [CoffeeShopStruct] {
         guard !searchContent.isEmpty else {
             return coffeeShop
         }
-        return coffeeShop.filter {
-            $0.name.localizedCaseInsensitiveContains(searchContent)
-        }
+        return coffeeShop
+            .filter {
+                $0.name.localizedCaseInsensitiveContains(searchContent)
+            }
     }
     
     
@@ -56,10 +69,18 @@ struct Homepage: View {
                         Button(action: {
                             selectedCoffeeshop = shop
                             showDetail = true
-                        }) {
-                            Text(shop.name)
-                                .foregroundColor(.primary)
+                        }){
+                            HStack{
+                                Text(shop.name)
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                Text(String(shop.distance))
+                                    .foregroundColor(.primary)
+                            }
+
                         }
+                        .listRowSeparator(.hidden)
+                        
                     }
                     .navigationTitle("coffeeshops")
                     .searchable(text: $searchContent,placement: .navigationBarDrawer(displayMode: .always))
@@ -67,7 +88,7 @@ struct Homepage: View {
             }
         }.overlay(
             coffeeshopInformation(showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
-                        .animation(.easeInOut, value: showDetail)
+                .animation(.easeInOut, value: showDetail)
         )
     }
 }
