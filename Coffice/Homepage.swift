@@ -15,6 +15,7 @@ struct CoffeeShopStruct: Identifiable {
     var distance: Double
     var steps: Int
     var calories: Int
+    
 }
 
 //Contoh buat max range
@@ -38,7 +39,9 @@ struct Homepage: View {
         CoffeeShopStruct(name: "Fore",description: "lorem",distance: 45 ,steps: 54,calories: 134),
         CoffeeShopStruct(name: "Tamper",description: "lorem",distance: 431,steps: 887,calories: 1223),
         CoffeeShopStruct(name: "Kopi Kenangan",description: "lorem",distance: 134,steps: 412,calories: 531),
-        CoffeeShopStruct(name: "Dunkin Donuts",description: "lorem",distance: 486,steps: 212,calories: 431)
+        CoffeeShopStruct(name: "Dunkin Donuts",description: "lorem",distance: 486,steps: 212,calories: 431),
+        CoffeeShopStruct(name: "Kenangan Signature",description: "lorem",distance: 325,steps: 78,calories: 431),
+        CoffeeShopStruct(name: "Tabemori",description: "lorem",distance: 256,steps: 102,calories: 45)
     ]
     
     
