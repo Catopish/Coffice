@@ -47,32 +47,83 @@ struct MapView: View {
 
 
 
-//#Preview {
+#Preview {
 //    MapView(showDetail: $showDetail, coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
-//}
+    ActivitySummary()
+}
+
+import SwiftUI
 
 struct ActivitySummary: View {
     var body: some View {
-        VStack {
-            Spacer()
+        Spacer()
+        VStack(alignment: .leading, spacing: 10) {
             HStack {
-                ZStack{
-                    Rectangle()
-                        .fill(Color.white)
-                        .frame(width: 350, height: 150)
-                        .cornerRadius(10)
-                    HStack {
-                        Text ("Your Activity")
-                        
+                Image (systemName: "figure.walk")
+                    .padding(.bottom)
+                Text("Your Activity")
+                    .foregroundColor(Color("brown3"))
+                    .padding(.bottom)
+                    .fontWeight(.bold)
+            }
+            
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Move")
+                        .font(.headline)
+                        .foregroundColor(Color("brown2"))
+                    
+                    HStack(alignment: .firstTextBaseline, spacing: 2) {
+                        Text("258")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.primary)
+                            .foregroundColor(Color("brown3"))
+
+                        Text("kcal")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
                     }
-                    VStack {
-                        Text ("Move")
-                        Text ("258 kcal")
+                }
+                
+                Spacer()
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Steps")
+                        .font(.headline)
+                        .foregroundColor(Color("brown2"))
+                    
+                    HStack(alignment: .firstTextBaseline, spacing: 2) {
+                        Text("3672")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.primary)
+                            .foregroundColor(Color("brown3"))
+                        Text("steps")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
-            Spacer()
-                .frame(height: 10)
+            .padding(.horizontal)
         }
+        .padding()
+        .frame(width: 350, height: 150)
+        .background(Color.white)
+        .cornerRadius(12)
+        .shadow(radius: 5)
     }
 }
+
+struct ActivitySummary_Previews: PreviewProvider {
+    static var previews: some View {
+        ActivitySummary()
+            .previewLayout(.sizeThatFits)
+            .padding()
+            .background(Color.gray.opacity(0.2))
+    }
+}
+
+
+
