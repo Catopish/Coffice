@@ -23,7 +23,6 @@ struct MapView: View {
             Spacer()
             ActivitySummary()
             Button("Dismiss") {
-                showDetail = false
                 dismiss()
             }
         }
@@ -39,13 +38,6 @@ struct MapView: View {
                 
             }
 }
-
-
-
-
-   
-
-
 
 //#Preview {
 //    MapView(showDetail: $showDetail, coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))

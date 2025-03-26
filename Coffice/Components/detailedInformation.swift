@@ -9,10 +9,11 @@ import SwiftUI
 import MapKit
 
 struct coffeeshopInformation: View{
+    
     @State var showMapView: Bool = false
     @Binding var showDetail: Bool
     @Binding var selectedCoffeeshop: CoffeeShopStruct?
-    
+        
     var body: some View {
         ZStack {
             if showDetail, let shop = selectedCoffeeshop {
@@ -74,17 +75,18 @@ struct coffeeshopInformation: View{
 //                        }
 //                    }
                     
-                    NavigationStack{
-                        VStack{
-                            Button("tes"){
-//                                NOTE: fix biar gada animasi keluar
-//                                showDetail = false
-                                showMapView=true
-                            }
-                        }.fullScreenCover(isPresented: $showMapView) {
-                            MapView(showDetail: $showDetail, coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
+                    //                    NavigationStack{
+                    VStack{
+                        Button("tes"){
+                            //                                NOTE: fix biar gada animasi keluar
+                            //                                showDetail = false
+                            showMapView=true
+//                            showDetail = false
                         }
+                    }.fullScreenCover(isPresented: $showMapView) {
+                        MapView(showDetail: $showDetail, coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
                     }
+                    //                    }
                 
 
                     

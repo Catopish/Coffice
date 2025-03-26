@@ -31,9 +31,11 @@ class filterModel: ObservableObject {
 struct Homepage: View {
     @State private var streak: Int = 0
     
+    
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
+    
     
     let coffeeShop : [CoffeeShopStruct] = [
         CoffeeShopStruct(name: "Starbucks",description: "lorem",distance: 127,steps: 123,calories: 123),
@@ -44,9 +46,6 @@ struct Homepage: View {
         CoffeeShopStruct(name: "Kenangan Signature",description: "lorem",distance: 325,steps: 78,calories: 431),
         CoffeeShopStruct(name: "Tabemori",description: "lorem",distance: 256,steps: 102,calories: 45)
     ]
-    
-    
-    //    ["Starbucks","Fore","Tamper","Kopi Kenangan","Dunkin Donuts"]
     
     var filteredCoffeeshop: [CoffeeShopStruct] {
         guard !searchContent.isEmpty else {
@@ -59,15 +58,14 @@ struct Homepage: View {
     }
     
     
-    
     var body: some View {
         VStack(alignment: .leading){
             userProfile()
             Color.red
                 .frame(height: 150)
-            VStack{
-                
-                NavigationView{
+            NavigationStack{
+                VStack{
+                    
                     List(filteredCoffeeshop.sorted(by: {$0.distance < $1.distance})) { shop in
                         Button(action: {
                             selectedCoffeeshop = shop
@@ -80,7 +78,7 @@ struct Homepage: View {
                                 Text(String(shop.distance))
                                     .foregroundColor(.primary)
                             }
-
+                            
                         }
                         .listRowSeparator(.hidden)
                         
@@ -93,48 +91,42 @@ struct Homepage: View {
             coffeeshopInformation(showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
                 .animation(.easeInOut, value: showDetail)
         )
-//        sheet(isPresented: $showDetail){
-//            coffeeshopInformation(showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
-//                .animation(.easeInOut, value: showDetail)
-//        }
-
     }
 }
 
 
 struct userProfile: View {
     var body: some View {
-    VStack {
-                HStack {
-                    Image("avatar")
+        VStack {
+            HStack {
+                Image("avatar")
                     .resizable()
                     .frame(width: 50, height: 50)
                     .clipShape(Circle())
                     .padding()
-                   
-                    VStack (alignment: .leading) {
-                        Text("User's Name")
-                        Text("User's Location")
-                            .foregroundColor(.secondary)
+                
+                VStack (alignment: .leading) {
+                    Text("User's Name")
+                    Text("User's Location")
+                        .foregroundColor(.secondary)
                     
-                    }
-                    Spacer()
-                    
-                    HStack {
-                        Text ("25 Streak")
-                        Image(systemName: "flame.fill")
-                    }
-                    .padding(13)
-                    .background(Color.orange)
-                    .foregroundColor(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .padding()
-                    }
-                    Spacer()
-                          }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                      }
-                  }
+                }
+                Spacer()
+                
+                HStack {
+                    Text ("25 Streak")
+                    Image(systemName: "flame.fill")
+                }
+                .padding(13)
+                .background(Color(uiColor: .primary))
+                .foregroundColor(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .padding()
+            }
+        }
+        //        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+    }
+}
 
 
 
