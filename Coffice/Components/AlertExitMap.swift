@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ContentView: View {
+struct AlertExitMap: View {
     @State private var showPopup = false
     @State private var isYes = false
     @Environment(\.dismiss) var dismiss
@@ -75,7 +75,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        AlertExitMap()
     }
 }
 
