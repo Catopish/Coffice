@@ -29,6 +29,7 @@ class filterModel: ObservableObject {
 }
 
 struct Homepage: View {
+    @State private var streak: Int = 0
     
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
@@ -61,8 +62,7 @@ struct Homepage: View {
     
     var body: some View {
         VStack(alignment: .leading){
-            Color.blue
-                .frame(height: 100)
+            userProfile()
             Color.red
                 .frame(height: 150)
             VStack{
@@ -100,6 +100,42 @@ struct Homepage: View {
 
     }
 }
+
+
+struct userProfile: View {
+    var body: some View {
+    VStack {
+                HStack {
+                    Image("avatar")
+                    .resizable()
+                    .frame(width: 50, height: 50)
+                    .clipShape(Circle())
+                    .padding()
+                   
+                    VStack (alignment: .leading) {
+                        Text("User's Name")
+                        Text("User's Location")
+                            .foregroundColor(.secondary)
+                    
+                    }
+                    Spacer()
+                    
+                    HStack {
+                        Text ("25 Streak")
+                        Image(systemName: "flame.fill")
+                    }
+                    .padding(13)
+                    .background(Color.orange)
+                    .foregroundColor(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .padding()
+                    }
+                    Spacer()
+                          }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                      }
+                  }
+
 
 
 #Preview {
