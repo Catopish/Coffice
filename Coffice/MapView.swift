@@ -21,9 +21,14 @@ struct MapView: View {
             
             Spacer()
             ActivitySummary()
-            Button("Dismiss") {
-                dismiss()
+//            Button("Dismiss") {
+//                dismiss()
+//            }
+            VStack {
+                AlertExitMap()
+                Spacer()
             }
+
         }
     }
     
