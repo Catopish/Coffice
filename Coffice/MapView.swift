@@ -90,7 +90,7 @@ struct ActivitySummary: View {
                         .foregroundColor(Color("brown2"))
                     
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text("3672")
+                        Text("1072")
                             .font(.title)
                             .foregroundStyle(.primary)
                             .foregroundColor(Color("brown3"))
