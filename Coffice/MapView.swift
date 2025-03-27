@@ -11,7 +11,6 @@ import HealthKit
 
 struct MapView: View {
     @Environment(\.dismiss) var dismiss
-    @Binding var showDetail: Bool
     
     var coordinate: CLLocationCoordinate2D
     
@@ -22,10 +21,14 @@ struct MapView: View {
             
             Spacer()
             ActivitySummary()
-            Button("Dismiss") {
-                showDetail = false
-                dismiss()
+//            Button("Dismiss") {
+//                dismiss()
+//            }
+            VStack {
+                AlertExitMap()
+                Spacer()
             }
+
         }
     }
     
@@ -40,19 +43,9 @@ struct MapView: View {
             }
 }
 
-
-
-
-   
-
-
-
 #Preview {
-//    MapView(showDetail: $showDetail, coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
-    ActivitySummary()
+    MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
 }
-
-import SwiftUI
 
 struct ActivitySummary: View {
     var body: some View {

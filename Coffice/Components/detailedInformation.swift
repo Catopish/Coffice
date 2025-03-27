@@ -9,14 +9,14 @@ import SwiftUI
 import MapKit
 
 struct coffeeshopInformation: View{
+    
     @State var showMapView: Bool = false
     @Binding var showDetail: Bool
     @Binding var selectedCoffeeshop: CoffeeShopStruct?
-    
+        
     var body: some View {
         ZStack {
             if showDetail, let shop = selectedCoffeeshop {
-                //shadow
                 Rectangle()
                     .fill(Color.black.opacity(0.3))
                     .ignoresSafeArea()
@@ -65,58 +65,14 @@ struct coffeeshopInformation: View{
                         Spacer()
                     }
                     
-//                    NavigationView {
-//                        VStack {
-//                            NavigationLink(destination: MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))) {
-//                                Text("Login")
-//
-//                            }
-//                        }
-//                    }
-                    
-                    NavigationStack{
-                        VStack{
-                            Button("tes"){
-//                                NOTE: fix biar gada animasi keluar
-//                                showDetail = false
-                                showMapView=true
-                            }
-                        }.fullScreenCover(isPresented: $showMapView) {
-                            MapView(showDetail: $showDetail, coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
+                    VStack{
+                        Button("tes"){
+                            showMapView=true
                         }
+                    }.fullScreenCover(isPresented: $showMapView) {
+                        MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
                     }
-                
-
-                    
-//                    Button {
-//                        MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
-//                    } label: {
-//                        Text("Map View")
-//                    }
-                    
-
                     Color.green
-                    //                            Text("Description:")
-                    //                                .font(.headline)
-                    //                            Text(shop.description)
-                    //                                .padding(.bottom, 8)
-                    //
-                    //                            Text("Location:")
-                    //                                .font(.headline)
-                    //                            Text(shop.location)
-                    //                                .padding(.bottom, 8)
-                    //
-                    //                            Text("Rating:")
-                    //                                .font(.headline)
-                    //                            HStack {
-                    //                                ForEach(1...5, id: \.self) { star in
-                    //                                    Image(systemName: star <= Int(shop.rating) ? "star.fill" : "star")
-                    //                                        .foregroundColor(.yellow)
-                    //                                }
-                    //                                Text(String(format: "%.1f", shop.rating))
-                    //                                    .padding(.leading, 4)
-                    //                            }
-                    
                     Spacer()
                 }
                 .padding()

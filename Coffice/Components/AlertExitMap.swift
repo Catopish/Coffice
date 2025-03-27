@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ContentView: View {
+struct AlertExitMap: View {
     @State private var showPopup = false
     @State private var isYes = false
     @Environment(\.dismiss) var dismiss
@@ -9,8 +9,8 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             // Background (peta atau konten utama)
-            Color(.systemBackground)
-                .edgesIgnoringSafeArea(.all)
+//            Color(.systemBackground)
+//                .edgesIgnoringSafeArea(.all)
             
             // Tombol untuk menampilkan popup
             Button("End Journey") {
@@ -38,18 +38,27 @@ struct ContentView: View {
                                 
                                 
                                     HStack(spacing: 20) {
-                                        NavigationLink(){
-                                            Homepage()
-                                        } label : {
+//                                        NavigationLink(){
+//                                            Homepage()
+//                                        } label : {
+//                                            Text("Yes")
+//                                                .frame(width: 100, height: 40)
+//                                                .background(Color.white)
+//                                                .foregroundColor(.black)
+//                                                .clipShape(RoundedRectangle(cornerRadius: 10))
+//                                                .overlay(
+//                                                    RoundedRectangle(cornerRadius: 10)
+//                                                        .stroke(Color.black, lineWidth: 2)
+//                                                )
+//                                        }
+                                        Button(action: {
+                                            dismiss()
+                                        }) {
                                             Text("Yes")
                                                 .frame(width: 100, height: 40)
-                                                .background(Color.white)
-                                                .foregroundColor(.black)
+                                                .background(Color.black)
+                                                .foregroundColor(.white)
                                                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                                                .overlay(
-                                                    RoundedRectangle(cornerRadius: 10)
-                                                        .stroke(Color.black, lineWidth: 2)
-                                                )
                                         }
                                         
                                         Button(action: {
@@ -75,7 +84,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        AlertExitMap()
     }
 }
 
