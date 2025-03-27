@@ -8,18 +8,14 @@ struct AlertExitMap: View {
     
     var body: some View {
         ZStack {
-            // Background (peta atau konten utama)
-//            Color(.systemBackground)
-//                .edgesIgnoringSafeArea(.all)
-            
-            // Tombol untuk menampilkan popup
-            Button("End Journey") {
-                showPopup = true
+                Button(action: {
+                    showPopup = true
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.red)
+                        .font(.title)
+                }
             }
-            .padding()
-            .background(Color.black)
-            .foregroundColor(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
             
             // Popup
             if showPopup {
@@ -80,7 +76,7 @@ struct AlertExitMap: View {
             }
         }
     }
-}
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

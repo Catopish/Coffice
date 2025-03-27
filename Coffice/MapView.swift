@@ -17,17 +17,20 @@ struct MapView: View {
     
     var body: some View {
         ZStack {
-            Map(position: .constant(.region(region)))
             
+            Map(position: .constant(.region(region)))
+            AlertExitMap()
+
             Spacer()
-            ActivitySummary()
+            VStack{
+
+                    
+                    ActivitySummary()
+
+            }
 //            Button("Dismiss") {
 //                dismiss()
 //            }
-            VStack {
-                AlertExitMap()
-                Spacer()
-            }
 
         }
     }
@@ -89,12 +92,11 @@ struct ActivitySummary: View {
                     
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
                         Text("3672")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
+                            .font(.title)
                             .foregroundStyle(.primary)
                             .foregroundColor(Color("brown3"))
-                        Text("steps")
-                            .font(.caption)
+                        Text("STEPS")
+                            .font(.headline)
                             .foregroundStyle(.secondary)
                     }
                 }

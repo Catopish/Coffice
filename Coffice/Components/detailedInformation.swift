@@ -35,7 +35,7 @@ struct coffeeshopInformation: View{
                         }) {
                             Image(systemName: "xmark.circle.fill")
                                 .foregroundColor(.gray)
-                                .font(.title2)
+                                .font(.title)
                         }
                     }
                     
