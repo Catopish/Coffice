@@ -13,10 +13,11 @@ struct coffeeshopInformation: View{
     @State var showMapView: Bool = false
     @Binding var showDetail: Bool
     @Binding var selectedCoffeeshop: CoffeeShopStruct?
-        
+    
     var body: some View {
         ZStack {
             if showDetail, let shop = selectedCoffeeshop {
+                // Shadow overlay
                 Rectangle()
                     .fill(Color.black.opacity(0.3))
                     .ignoresSafeArea()
@@ -24,65 +25,127 @@ struct coffeeshopInformation: View{
                         showDetail = false
                     }
                 
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text(shop.name)
-                            .font(.title)
-                            .bold()
-                        Spacer()
+                VStack(spacing: 12) {
+                    ZStack {
+                        VStack{
+                            Text(shop.name)
+                                .font(.title)
+                                .bold()
+                                .frame(maxWidth: .infinity)
+                            Text(shop.location)
+                                .font(.subheadline)
+                                .bold()
+                                .foregroundStyle(.secondary)
+                                .frame(maxWidth: .infinity)
+                        }
+                        
                         Button(action: {
                             showDetail = false
                         }) {
                             Image(systemName: "xmark.circle.fill")
                                 .foregroundColor(.gray)
-                                .font(.title2)
+                                .font(.title)
+                            
                         }
+                        .frame(maxWidth: .infinity)
+                        .offset(x: 150, y: -15)
+                        
+                        
                     }
                     
                     Divider()
-                    HStack{
-                        Spacer()
+                    VStack {
                         Image("Starbucks")
                             .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 300,height: 200)
-                        Spacer()
-                    }
-                    HStack{
-                        Spacer()
-                        VStack{
-                            Image(systemName: "location.fill")
-                            Text(String(shop.distance))
-                        }
-                        VStack{
-                            Image(systemName: "figure.walk")
-                            Text(String(shop.steps))
-                        }
-                        VStack{
-                            Image(systemName: "flame.fill")
-                            Text(String(shop.calories))
-                        }
-                        Spacer()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 300, height: 200) // Mengisi lebar penuh
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
                     
-                    VStack{
-                        Button("tes"){
-                            showMapView=true
+                    HStack(spacing: 30) {
+                        Spacer()
+                        VStack {
+                            Image(systemName: "location.north.line.fill")
+                                .resizable()
+                                .frame(width: 30, height: 40)
+                                .foregroundStyle(Color(uiColor: .primary))
+                            HStack(alignment: .firstTextBaseline, spacing: 2) {
+                                Text("\(shop.distance, specifier: "%.1f")")
+                                    .padding(.top, 5)
+                                    .fontWeight(.bold)
+                                    .font(.title3)
+                                Text("m")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                
+                            }
                         }
-                    }.fullScreenCover(isPresented: $showMapView) {
-                        MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
+                        VStack {
+                            Image(systemName: "figure.walk")
+                                .resizable()
+                                .frame(width: 30, height: 40)
+                                .foregroundStyle(Color(uiColor: .primary))
+                            HStack(alignment: .firstTextBaseline, spacing: 2) {
+                                Text("\(shop.steps)")
+                                    .padding(.top, 5)
+                                    .fontWeight(.bold)
+                                    .font(.title3)
+                                Text("steps")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                
+                            }
+                            
+                        }
+                        VStack {
+                            Image(systemName: "flame.fill")
+                                .resizable()
+                                .frame(width: 30, height: 40)
+                                .foregroundStyle(Color(uiColor: .primary))
+                            HStack(alignment: .firstTextBaseline, spacing: 2) {
+                                Text("\(shop.calories)")
+                                    .padding(.top, 5)
+                                    .fontWeight(.bold)
+                                    .font(.title3)
+                                Text("kcal")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            
+                        }
+                        Spacer()
                     }
-                    Color.green
-                    Spacer()
+                    .padding(.top, 20)
+                    
+                    Divider()
+                    
+                    VStack {
+                        Button {
+                            showMapView = true
+                        } label: {
+                            Text("Get Started")
+                                .padding(.horizontal, 85)
+                                .padding(.vertical)
+                                .foregroundColor(.white)
+                                .background(Color(uiColor: .primary))
+                                .cornerRadius(20)
+                        }
+                        .fullScreenCover(isPresented: $showMapView) {
+                            MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
+                        }
+                    }
+                    .padding(.bottom)
+                    
+                    }
+                    .padding(.top, 20)
+                    .background(Color.white)
+                    .cornerRadius(12)
+                    .shadow(radius: 10)
+                    .padding(.horizontal, 20)
+                    .transition(.scale)
+                    .frame(width: 400, height: 550)
                 }
-                .padding()
-                .background(Color.white)
-                .cornerRadius(12)
-                .shadow(radius: 10)
-                .padding(.horizontal, 20)
-                .transition(.scale)
-                .frame(width: 400, height: 500)
             }
         }
     }
-}
+

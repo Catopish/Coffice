@@ -11,6 +11,7 @@ import SwiftData
 struct CoffeeShopStruct: Identifiable {
     var id = UUID()
     var name: String
+    var location: String
     var description: String
     var distance: Double
     var steps: Int
@@ -38,13 +39,13 @@ struct Homepage: View {
     
     
     let coffeeShop : [CoffeeShopStruct] = [
-        CoffeeShopStruct(name: "Starbucks",description: "lorem",distance: 127,steps: 123,calories: 123),
-        CoffeeShopStruct(name: "Fore",description: "lorem",distance: 45 ,steps: 54,calories: 134),
-        CoffeeShopStruct(name: "Tamper",description: "lorem",distance: 431,steps: 887,calories: 1223),
-        CoffeeShopStruct(name: "Kopi Kenangan",description: "lorem",distance: 134,steps: 412,calories: 531),
-        CoffeeShopStruct(name: "Dunkin Donuts",description: "lorem",distance: 486,steps: 212,calories: 431),
-        CoffeeShopStruct(name: "Kenangan Signature",description: "lorem",distance: 325,steps: 78,calories: 431),
-        CoffeeShopStruct(name: "Tabemori",description: "lorem",distance: 256,steps: 102,calories: 45)
+        CoffeeShopStruct(name: "Starbucks",location: "Lorem Ipsum", description: "lorem",distance: 127,steps: 123,calories: 123),
+        CoffeeShopStruct(name: "Fore",location: "Lorem Ipsum", description: "lorem",distance: 45 ,steps: 54,calories: 134),
+        CoffeeShopStruct(name: "Tamper",location: "Lorem Ipsum", description: "lorem",distance: 431,steps: 887,calories: 1223),
+        CoffeeShopStruct(name: "Kopi Kenangan",location: "Lorem Ipsum", description: "lorem",distance: 134,steps: 412,calories: 531),
+        CoffeeShopStruct(name: "Dunkin Donuts",location: "Lorem Ipsum", description: "lorem",distance: 486,steps: 212,calories: 431),
+        CoffeeShopStruct(name: "Kenangan Signature",location: "Lorem Ipsum", description: "lorem",distance: 325,steps: 78,calories: 431),
+        CoffeeShopStruct(name: "Tabemori",location: "Lorem Ipsum", description: "lorem",distance: 256,steps: 102,calories: 45)
     ]
     
     var filteredCoffeeshop: [CoffeeShopStruct] {
@@ -83,7 +84,7 @@ struct Homepage: View {
                         .listRowSeparator(.hidden)
                         
                     }
-                    .navigationTitle("coffeeshops")
+                    .navigationTitle("Coffee Shops")
                     .searchable(text: $searchContent,placement: .navigationBarDrawer(displayMode: .always))
                 }
             }
@@ -110,6 +111,7 @@ struct userProfile: View {
                     Text("User's Location")
                         .foregroundColor(.secondary)
                     
+                    
                 }
                 Spacer()
                 
@@ -117,11 +119,11 @@ struct userProfile: View {
                     Text ("25 Streak")
                     Image(systemName: "flame.fill")
                 }
-                .padding(13)
-                .background(Color(uiColor: .primary))
+                .padding(10)
+                .background(Color.orange)
                 .foregroundColor(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                .padding()
+                
             }
         }
     }
