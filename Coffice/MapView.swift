@@ -71,13 +71,12 @@ struct ActivitySummary: View {
                     
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
                         Text("258")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
+                            .font(.title)
                             .foregroundStyle(.primary)
                             .foregroundColor(Color("brown3"))
 
-                        Text("kcal")
-                            .font(.caption)
+                        Text("CAL")
+                            .font(.headline)
                             .foregroundStyle(.secondary)
 
                     }
@@ -104,7 +103,7 @@ struct ActivitySummary: View {
             .padding(.horizontal)
         }
         .padding()
-        .frame(width: 350, height: 150)
+        .frame(width: 320, height: 130)
         .background(Color.white)
         .cornerRadius(12)
         .shadow(radius: 5)
