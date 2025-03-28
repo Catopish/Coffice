@@ -15,6 +15,11 @@ struct AlertExitMap: View {
                         .foregroundColor(.red)
                         .font(.title)
                 }
+                .offset(x:150,y:-360)
+            VStack{
+                    ActivitySummary()
+            }
+
             }
             
             // Popup

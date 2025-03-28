@@ -22,12 +22,6 @@ struct MapView: View {
             AlertExitMap()
 
             Spacer()
-            VStack{
-
-                    
-                    ActivitySummary()
-
-            }
 //            Button("Dismiss") {
 //                dismiss()
 //            }
@@ -84,7 +78,6 @@ struct ActivitySummary: View {
                 }
                 
                 Spacer()
-                
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Steps")
                         .font(.headline)

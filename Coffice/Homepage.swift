@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import HealthKit
 
 struct CoffeeShopStruct: Identifiable {
     var id = UUID()
@@ -37,7 +38,6 @@ struct Homepage: View {
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
     
-    
     let coffeeShop : [CoffeeShopStruct] = [
         CoffeeShopStruct(name: "Starbucks",location: "Lorem Ipsum", description: "lorem",distance: 127,steps: 123,calories: 123),
         CoffeeShopStruct(name: "Fore",location: "Lorem Ipsum", description: "lorem",distance: 45 ,steps: 54,calories: 134),
@@ -62,7 +62,7 @@ struct Homepage: View {
     var body: some View {
         VStack(alignment: .leading){
             userProfile()
-            Color.red
+            healthSummary()
                 .frame(height: 150)
             NavigationStack{
                 VStack{
@@ -95,6 +95,42 @@ struct Homepage: View {
     }
 }
 
+struct healthSummary: View {
+    @StateObject private var healthKitManager = HealthKitManager.shared
+    @State private var isLoading = false
+
+    
+    var body: some View {
+        VStack{
+            HStack{
+                Text("Today's steps")
+                Spacer()
+                Text(isLoading ? "Loading..." : "\(healthKitManager.stepCountToday)")
+            }
+            .padding(.horizontal)
+            HStack{
+                Text("Todays calories")
+                Spacer()
+                Text(isLoading ? "Loading..." : "\(healthKitManager.activeEnergyBurnedToday) kcal")
+            }
+            .padding(.horizontal)
+        }.onAppear(perform: refreshSteps)
+    }
+    
+    func refreshSteps() {
+        isLoading = true
+        healthKitManager.readStepCountToday()
+        healthKitManager.readActiveEnergyBurnedToday()
+        
+        // Simulate loading completion
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            isLoading = false
+        }
+    }
+
+
+}
+
 
 struct userProfile: View {
     var body: some View {
@@ -107,8 +143,8 @@ struct userProfile: View {
                     .padding()
                 
                 VStack (alignment: .leading) {
-                    Text("User's Name")
-                    Text("User's Location")
+                    Text("User")
+                    Text("User location")
                         .foregroundColor(.secondary)
                     
                     
