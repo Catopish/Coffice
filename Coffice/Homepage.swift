@@ -32,6 +32,7 @@ class filterModel: ObservableObject {
 
 struct Homepage: View {
     @State private var streak: Int = 0
+    @State var isLoading: Bool = false
     
     
     @State private var searchContent: String = ""
@@ -61,8 +62,8 @@ struct Homepage: View {
     
     var body: some View {
         VStack(alignment: .leading){
-            userProfile()
-            healthSummary()
+            userProfile(isLoading: $isLoading)
+            healthSummary(isLoading: $isLoading)
                 .frame(height: 150)
             NavigationStack{
                 VStack{
@@ -97,8 +98,8 @@ struct Homepage: View {
 
 struct healthSummary: View {
     @StateObject private var healthKitManager = HealthKitManager.shared
-    @State private var isLoading = false
-
+    @Binding var isLoading:Bool
+    
     
     var body: some View {
         VStack{
@@ -127,12 +128,27 @@ struct healthSummary: View {
             isLoading = false
         }
     }
-
-
+    
+    
 }
 
 
 struct userProfile: View {
+    @StateObject private var healthKitManager = HealthKitManager.shared
+    @Binding var isLoading:Bool
+    
+    func refreshSteps() {
+        isLoading = true
+        healthKitManager.readStepCountToday()
+        healthKitManager.readActiveEnergyBurnedToday()
+        
+        // Simulate loading completion
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            isLoading = false
+        }
+    }
+    
+    
     var body: some View {
         VStack {
             HStack {
@@ -157,6 +173,17 @@ struct userProfile: View {
                 }
                 .padding(10)
                 .background(Color.orange)
+                .foregroundColor(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                HStack{
+                    Button {
+                        refreshSteps()
+                    } label: {
+                        Text("Refresh")
+                    }
+                }
+                .padding(10)
+                .background(Color.green)
                 .foregroundColor(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 
