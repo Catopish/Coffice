@@ -33,6 +33,7 @@ class filterModel: ObservableObject {
 struct Homepage: View {
     @State private var streak: Int = 0
     @AppStorage("userName") var userName: String = ""
+    @StateObject private var healthViewModel = HealthDashboardViewModel()
     @State var isLoading: Bool = false
     
     
@@ -66,9 +67,7 @@ struct Homepage: View {
     var body: some View {
         VStack(alignment: .leading){
             userProfile()
-//            healthSummary(isLoading: $isLoading)
-//                .frame(height: 150)
-            HealthDashboardView(isLoading: $isLoading)
+            HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
             NavigationStack{
                 VStack{
                     List(filteredCoffeeshop.sorted(by: {$0.distance < $1.distance})) { shop in
@@ -88,7 +87,6 @@ struct Homepage: View {
                         .listRowSeparator(.hidden)
                         
                     }
-                    //                    .navigationTitle("Coffee Shops")
                     .searchable(text: $searchContent,placement: .navigationBarDrawer(displayMode: .always))
                 }
             }
@@ -106,37 +104,6 @@ struct Homepage: View {
         }
     }
 }
-
-
-//struct userProfile: View {
-//    var body: some View {
-//        VStack {
-//            HStack {
-//                Image("avatar")
-//                    .resizable()
-//                    .frame(width: 50, height: 50)
-//                    .clipShape(Circle())
-//                    .padding()
-//
-//                VStack (alignment: .leading) {
-//                    Text("User's Name")
-//                    Text("User's Location")
-//                        .foregroundColor(.secondary)
-//
-//                }
-//                Spacer()
-//
-//                HStack{
-//                    Text ("[X] Streak")
-//                    Image(systemName: "flame.fill")
-//                }
-//                .padding()
-//                .background(Color.brown2)
-//                .foregroundColor(.white)
-//                .clipShape(RoundedRectangle(cornerRadius: 10))
-//                .frame(width: 150, height: 20)
-//                .padding(.horizontal)
-
 
 struct ContentView: View {
     @AppStorage("userName") var userName: String = ""
