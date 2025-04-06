@@ -60,7 +60,7 @@ struct coffeeshopInformation: View{
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 300, height: 180) // Mengisi lebar penuh
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+//                            .clipShape(RoundedRectangle(cornerRadius: 12))
                             .padding(.top, 20)
                     }
                     
@@ -71,6 +71,7 @@ struct coffeeshopInformation: View{
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 30, height: 30)
+                                .frame(width: 30, height: 40)
                                 .foregroundStyle(Color(uiColor: .brown2))
                             HStack(alignment: .firstTextBaseline, spacing: 2) {
                                 Text("\(shop.distance, specifier: "%.1f")")
@@ -89,6 +90,7 @@ struct coffeeshopInformation: View{
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 30, height: 30)
+                                .frame(width: 30, height: 40)
                                 .foregroundStyle(Color(uiColor: .brown2))
                             HStack(alignment: .firstTextBaseline, spacing: 2) {
                                 Text("\(shop.calories)")
@@ -110,6 +112,9 @@ struct coffeeshopInformation: View{
                                 .frame(width: 30, height: 30)
                                 .foregroundStyle(Color(uiColor: .brown2))
                                 .foregroundColor(Color("brown3"))
+                                .frame(width: 30, height: 40)
+                                .foregroundStyle(Color(uiColor: .brown2))
+
                             HStack(alignment: .firstTextBaseline, spacing: 2) {
                                 Text("\(shop.steps)")
                                     .padding(.top, 5)
@@ -139,7 +144,7 @@ struct coffeeshopInformation: View{
                                 .background(Color(uiColor: .brown2))
                                 .cornerRadius(12)
                                 .padding(.horizontal)
-                                
+                                .cornerRadius(20)
                         }
                         .fullScreenCover(isPresented: $showMapView) {
                             MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
