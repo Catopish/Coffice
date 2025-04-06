@@ -8,7 +8,7 @@ struct ArrivalPopupView: View {
     var body: some View {
         VStack() {
             Text("You've Arrived!")
-                .font(.title2)
+                .font(.headline)
                 .fontWeight(.bold)
                 .foregroundColor(.brown3)
             
@@ -24,7 +24,7 @@ struct ArrivalPopupView: View {
                         .foregroundStyle(Color(uiColor: .brown2))
                     HStack {
                         Text("\(moveCalories)")
-                            .font(.title)
+                            .font(.title3)
                             .foregroundColor(.brown3)
                         Text("CAL")
                             .font(.subheadline)
@@ -39,7 +39,7 @@ struct ArrivalPopupView: View {
                         .foregroundStyle(Color(uiColor: .brown2))
                     HStack {
                         Text("\(steps)")
-                            .font(.title)
+                            .font(.title3)
                             .foregroundColor(.brown3)
                         Text("STEPS")
                             .font(.subheadline)

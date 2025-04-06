@@ -105,9 +105,3 @@ class HealthDashboardViewModel: ObservableObject {
     }
 }
 
-//// Preview
-//struct HealthDashboardView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HealthDashboardView()
-//    }
-//}

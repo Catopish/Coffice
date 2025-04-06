@@ -32,12 +32,16 @@ class filterModel: ObservableObject {
 
 struct Homepage: View {
     @State private var streak: Int = 0
+    @AppStorage("userName") var userName: String = ""
+    @StateObject private var healthViewModel = HealthDashboardViewModel()
     @State var isLoading: Bool = false
     
     
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
+    @State private var showOnboarding: Bool = false
+    
     
     let coffeeShop : [CoffeeShopStruct] = [
         CoffeeShopStruct(name: "Starbucks",location: "Lorem Ipsum", description: "lorem",distance: 127,steps: 123,calories: 123),
@@ -62,13 +66,10 @@ struct Homepage: View {
     
     var body: some View {
         VStack(alignment: .leading){
-            userProfile(isLoading: $isLoading)
-//            healthSummary(isLoading: $isLoading)
-//                .frame(height: 150)
-            HealthDashboardView(isLoading: $isLoading)
+            userProfile()
+            HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
             NavigationStack{
                 VStack{
-                    
                     List(filteredCoffeeshop.sorted(by: {$0.distance < $1.distance})) { shop in
                         Button(action: {
                             selectedCoffeeshop = shop
@@ -86,7 +87,6 @@ struct Homepage: View {
                         .listRowSeparator(.hidden)
                         
                     }
-//                    .navigationTitle("Coffee Shops")
                     .searchable(text: $searchContent,placement: .navigationBarDrawer(displayMode: .always))
                 }
             }
@@ -94,106 +94,61 @@ struct Homepage: View {
             coffeeshopInformation(showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
                 .animation(.easeInOut, value: showDetail)
         )
-    }
-}
-
-//struct healthSummary: View {
-//    @StateObject private var healthKitManager = HealthKitManager.shared
-//    @Binding var isLoading:Bool
-//    
-//    
-//    var body: some View {
-//        VStack{
-//            HStack{
-//                Text("Today's steps")
-//                Spacer()
-//                Text(isLoading ? "Loading..." : "\(healthKitManager.stepCountToday)")
-//            }
-//            .padding(.horizontal)
-//            HStack{
-//                Text("Todays calories")
-//                Spacer()
-//                Text(isLoading ? "Loading..." : "\(healthKitManager.activeEnergyBurnedToday) kcal")
-//            }
-//            .padding(.horizontal)
-//        }.onAppear(perform: refreshSteps)
-//    }
-//    
-//    func refreshSteps() {
-//        isLoading = true
-//        healthKitManager.readStepCountToday()
-//        healthKitManager.readActiveEnergyBurnedToday()
-//        
-//        // Simulate loading completion
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//            isLoading = false
-//        }
-//    }
-//    
-//    
-//}
-
-
-struct userProfile: View {
-//    @StateObject private var healthKitManager = HealthKitManager.shared
-    @StateObject private var healthDashboardManager = HealthDashboardViewModel()
-    @Binding var isLoading:Bool
-    
-    func refreshSteps() {
-        isLoading = true
-//        healthKitManager.readStepCountToday()
-//        healthKitManager.readActiveEnergyBurnedToday()
-        healthDashboardManager.fetchTodayData()
-        
-        // Simulate loading completion
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            isLoading = false
-        }
-    }
-    
-    
-    var body: some View {
-        VStack {
-            HStack {
-                Image("avatar")
-                    .resizable()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .padding()
-    
-                VStack (alignment: .leading) {
-                    Text("User")
-                    Text("User location")
-                        .foregroundColor(.secondary)
-                    
-                }
-                Spacer()
-                
-                HStack{
-                    Text ("[X] Streak")
-                    Image(systemName: "flame.fill")
-                }
-                .padding()
-                .background(Color.brown2)
-                .foregroundColor(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                HStack{
-                    Button {
-                        refreshSteps()
-                    } label: {
-                        Text("Refresh")
-                    }
-                }
-                .padding(10)
-                .background(Color.green)
-                .foregroundColor(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                
+        .onAppear {
+            if userName.isEmpty {
+                showOnboarding = true
             }
         }
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingView()
+        }
     }
 }
 
+struct ContentView: View {
+    @AppStorage("userName") var userName: String = ""
+    
+    var body: some View {
+        if userName.isEmpty {
+            OnboardingView()
+        } else {
+            Homepage()
+        }
+    }
+}
+
+struct userProfile: View {
+    @AppStorage("userName") var userName: String = ""
+    var body: some View {
+        HStack {
+            VStack (alignment: .leading) {
+                Text("Hi, \(userName)!")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                //                    .padding(.vertical)
+                
+                Text("Let’s walk and sip! ☕️")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .lineLimit(2)
+            }
+            .padding()
+            Spacer()
+            
+            HStack{
+                Text ("[X] Streak")
+                Image(systemName: "flame.fill")
+            }
+            
+            .padding()
+            .background(Color.brown2)
+            .foregroundColor(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .frame(width: 150, height: 20)
+            .padding(.horizontal)
+        }
+    }
+}
 
 
 #Preview {
