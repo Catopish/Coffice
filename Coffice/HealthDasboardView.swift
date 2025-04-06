@@ -37,31 +37,32 @@ struct DashboardCard: View {
                 ActivityRingView(progress: viewModel.moveGoalProgress)
                     .frame(width: 100, height: 100)
 
+
                 // Health Stats
                 VStack(alignment: .leading, spacing: 12) {
                     HealthStatRow(
                         icon: "flame.fill",
-                        color: .red,
+                        color: .brown2,
                         title: "Move",
                         value: "\(Int(viewModel.activeCalories))",
                         unit: "CAL"
                     )
                     
                     HealthStatRow(
-                        icon: "foot.fill",
-                        color: .green,
+                        icon: "figure.walk",
+                        color: .brown2,
                         title: "Steps",
                         value: "\(viewModel.steps)",
                         unit: "STEPS"
                     )
                     
-                    HealthStatRow(
-                        icon: "figure.walk",
-                        color: .blue,
-                        title: "Distance",
-                        value: String(format: "%.1f", viewModel.distance),
-                        unit: "KM"
-                    )
+//                    HealthStatRow(
+//                        icon: "figure.walk",
+//                        color: .blue,
+//                        title: "Distance",
+//                        value: String(format: "%.1f", viewModel.distance),
+//                        unit: "M"
+//                    )
                 }
                 .padding(.trailing)
             }
@@ -144,7 +145,7 @@ class HealthDashboardViewModel: ObservableObject {
     @Published var distance: Double = 0
     @Published var moveGoalProgress: Double = 0
     
-    private let moveGoalTarget: Double = 500 // Default move goal (calories)
+    private let moveGoalTarget: Double = 700 // Default move goal (calories)
     
     init() {
         isHealthKitAvailable = HKHealthStore.isHealthDataAvailable()
