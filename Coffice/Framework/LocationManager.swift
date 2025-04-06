@@ -43,6 +43,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         checkAuthorization()
     }
     
+   
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             print("Received new location: \(location.coordinate)")

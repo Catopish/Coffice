@@ -4,10 +4,7 @@ import MapKit
 struct MapViewWalking: View {
     @ObservedObject var locationManager: LocationManager
     @State private var mapPosition: MapCameraPosition = .automatic
-    @State private var routePolyline: MKPolyline?
-    @State private var routeCalculated = false
-//    @Binding var latCoffeShops: Double
-//    @Binding var longCoffeShops: Double
+    @ObservedObject var mapWalkingManager = MapWalkingManager()
     @Binding var selectedShop: CoffeeShopStruct?
     
 //    private let destinationCoordinate = CLLocationCoordinate2D(latitude: -7.777848720301518, longitude: 110.33756018305395)
@@ -25,9 +22,9 @@ struct MapViewWalking: View {
         VStack {
             if let userLocation = locationManager.userLocation {
                 Map(position: $mapPosition) {
-                    if let polyline = routePolyline {
-                        MapPolyline(polyline)
-                            .stroke(.blue, lineWidth: 4)
+                    if let polyline = mapWalkingManager.routePolyline {
+                                           MapPolyline(polyline)
+                                               .stroke(.blue, lineWidth: 4)
                     }
                     
                     // Optionally show annotations
@@ -42,32 +39,15 @@ struct MapViewWalking: View {
                     }
                 }
                 .onAppear {
-                    calculateRouteIfNeeded()
+                    mapWalkingManager.calculateRoute(from: userLocation.coordinate, to: destinationCoordinate) { success in
+                        if success, let routePolyline = mapWalkingManager.routePolyline {
+                            self.mapPosition = .rect(routePolyline.boundingMapRect.insetBy(dx: -50, dy: -50))
+                        }
+                        
+                    }
                 }
             } else {
                 ProgressView("Getting your location...")
-            }
-        }
-    }
-    
-    private func calculateRouteIfNeeded() {
-        guard !routeCalculated, let userLocation = locationManager.userLocation else { return }
-        fetchRoute(from: userLocation.coordinate, to: destinationCoordinate)
-    }
-
-    private func fetchRoute(from start: CLLocationCoordinate2D, to end: CLLocationCoordinate2D) {
-        let request = MKDirections.Request()
-        request.source = MKMapItem(placemark: MKPlacemark(coordinate: start))
-        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: end))
-        request.transportType = .walking
-        
-        MKDirections(request: request).calculate { response, error in
-            if let route = response?.routes.first {
-                DispatchQueue.main.async {
-                    self.routePolyline = route.polyline
-                    self.routeCalculated = true
-                    self.mapPosition = .rect(route.polyline.boundingMapRect.insetBy(dx: -50, dy: -50))
-                }
             }
         }
     }

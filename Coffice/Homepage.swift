@@ -132,42 +132,6 @@ struct Homepage: View {
     }
 }
 
-//struct healthSummary: View {
-//    @StateObject private var healthKitManager = HealthKitManager.shared
-//    @Binding var isLoading:Bool
-//    
-//    
-//    var body: some View {
-//        VStack{
-//            HStack{
-//                Text("Today's steps")
-//                Spacer()
-//                Text(isLoading ? "Loading..." : "\(healthKitManager.stepCountToday)")
-//            }
-//            .padding(.horizontal)
-//            HStack{
-//                Text("Todays calories")
-//                Spacer()
-//                Text(isLoading ? "Loading..." : "\(healthKitManager.activeEnergyBurnedToday) kcal")
-//            }
-//            .padding(.horizontal)
-//        }.onAppear(perform: refreshSteps)
-//    }
-//    
-//    func refreshSteps() {
-//        isLoading = true
-//        healthKitManager.readStepCountToday()
-//        healthKitManager.readActiveEnergyBurnedToday()
-//        
-//        // Simulate loading completion
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//            isLoading = false
-//        }
-//    }
-//    
-//    
-//}
-
 
 struct userProfile: View {
 //    @StateObject private var healthKitManager = HealthKitManager.shared
