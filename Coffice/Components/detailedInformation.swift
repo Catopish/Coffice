@@ -147,7 +147,9 @@ struct coffeeshopInformation: View{
                                 .cornerRadius(20)
                         }
                         .fullScreenCover(isPresented: $showMapView) {
-                            MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
+//                            MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
+//                            MapWalking()
+                            MapView(coffeShops: $selectedCoffeeshop)
                         }
                     }
                     .padding(.bottom)

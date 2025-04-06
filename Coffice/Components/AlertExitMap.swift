@@ -8,7 +8,7 @@ struct AlertExitMap: View {
     var body: some View {
         ZStack {
             VStack {
-                ActivitySummary()
+//                ActivitySummary()
             }
 
             Button(action: {
