@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import HealthKit
+import CoreLocation
 
 struct CoffeeShopStruct: Identifiable {
     var id = UUID()
@@ -17,6 +18,9 @@ struct CoffeeShopStruct: Identifiable {
     var distance: Double
     var steps: Int
     var calories: Int
+    var latitude: Double
+    var longitude: Double
+   
     
 }
 
@@ -34,19 +38,21 @@ struct Homepage: View {
     @State private var streak: Int = 0
     @State var isLoading: Bool = false
     
+    @StateObject var locationManager = LocationManager()
     
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
     
     let coffeeShop : [CoffeeShopStruct] = [
-        CoffeeShopStruct(name: "Starbucks",location: "Lorem Ipsum", description: "lorem",distance: 127,steps: 123,calories: 123),
-        CoffeeShopStruct(name: "Fore",location: "Lorem Ipsum", description: "lorem",distance: 45 ,steps: 54,calories: 134),
-        CoffeeShopStruct(name: "Tamper",location: "Lorem Ipsum", description: "lorem",distance: 431,steps: 887,calories: 1223),
-        CoffeeShopStruct(name: "Kopi Kenangan",location: "Lorem Ipsum", description: "lorem",distance: 134,steps: 412,calories: 531),
-        CoffeeShopStruct(name: "Dunkin Donuts",location: "Lorem Ipsum", description: "lorem",distance: 486,steps: 212,calories: 431),
-        CoffeeShopStruct(name: "Kenangan Signature",location: "Lorem Ipsum", description: "lorem",distance: 325,steps: 78,calories: 431),
-        CoffeeShopStruct(name: "Tabemori",location: "Lorem Ipsum", description: "lorem",distance: 256,steps: 102,calories: 45)
+//        CoffeeShopStruct(name: "Starbucks",location: "Lorem Ipsum", description: "lorem",distance: 127,steps: 123,calories: 123),
+//        CoffeeShopStruct(name: "Fore",location: "Lorem Ipsum", description: "lorem",distance: 45 ,steps: 54,calories: 134),
+//        CoffeeShopStruct(name: "Tamper",location: "Lorem Ipsum", description: "lorem",distance: 431,steps: 887,calories: 1223),
+//        CoffeeShopStruct(name: "Kopi Kenangan",location: "Lorem Ipsum", description: "lorem",distance: 134,steps: 412,calories: 531),
+//        CoffeeShopStruct(name: "Dunkin Donuts",location: "Lorem Ipsum", description: "lorem",distance: 486,steps: 212,calories: 431),
+//        CoffeeShopStruct(name: "Kenangan Signature",location: "Lorem Ipsum", description: "lorem",distance: 325,steps: 78,calories: 431),
+        CoffeeShopStruct(name: "Tabemori",location: "Lorem Ipsum", description: "lorem",distance: 256,steps: 102,calories: 45, latitude: -6.295003167414541, longitude: 106.6675050240924)
+        
     ]
     
     var filteredCoffeeshop: [CoffeeShopStruct] {
@@ -62,6 +68,20 @@ struct Homepage: View {
     
     var body: some View {
         VStack(alignment: .leading){
+            if let status = locationManager.authorizationStatus {
+                switch status {
+                case .notDetermined:
+                    Text("Requesting authorization...")
+                case .authorizedAlways, .authorizedWhenInUse:
+                    Text ("Authorized")
+                case .denied, .restricted:
+                    Text("Authorization denied.")
+                @unknown default:
+                    Text("Authorization status unknown.")
+                }
+            } else {
+                Text("Authorization status not yet determined.")
+            }
             userProfile(isLoading: $isLoading)
 //            healthSummary(isLoading: $isLoading)
 //                .frame(height: 150)
@@ -94,6 +114,21 @@ struct Homepage: View {
             coffeeshopInformation(showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
                 .animation(.easeInOut, value: showDetail)
         )
+        .onAppear{
+            locationManager.checkAuthorization()
+        }
+        .alert(isPresented: $locationManager.showSettingsAlert) {
+                    Alert(
+                        title: Text("Location Permission Needed"),
+                        message: Text("Please enable location access in Settings."),
+                        primaryButton: .default(Text("Open Settings"), action: {
+                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(url)
+                            }
+                        }),
+                        secondaryButton: .cancel()
+                    )
+                }
     }
 }
 
@@ -138,6 +173,7 @@ struct userProfile: View {
 //    @StateObject private var healthKitManager = HealthKitManager.shared
     @StateObject private var healthDashboardManager = HealthDashboardViewModel()
     @Binding var isLoading:Bool
+
     
     func refreshSteps() {
         isLoading = true
@@ -153,6 +189,8 @@ struct userProfile: View {
     
     
     var body: some View {
+       
+        
         VStack {
             HStack {
                 Image("avatar")
@@ -162,7 +200,7 @@ struct userProfile: View {
                     .padding()
     
                 VStack (alignment: .leading) {
-                    Text("User")
+                    Text("Arms")
                     Text("User location")
                         .foregroundColor(.secondary)
                     

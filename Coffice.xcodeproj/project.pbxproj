@@ -10,9 +10,22 @@
 		1794F45E2D8BCB6800CCFA1F /* Coffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		176EC91E2DA265A800EE0345 /* Exceptions for "Coffice" folder in "Coffice" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 1794F45D2D8BCB6800CCFA1F /* Coffice */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		1794F4602D8BCB6800CCFA1F /* Coffice */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				176EC91E2DA265A800EE0345 /* Exceptions for "Coffice" folder in "Coffice" target */,
+			);
 			path = Coffice;
 			sourceTree = "<group>";
 		};
@@ -253,12 +266,17 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Coffice/Preview Content\"";
-				DEVELOPMENT_TEAM = Q3MLBX8LNJ;
+				DEVELOPMENT_TEAM = 328G52T8K3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Coffice/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "To read health";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "to read health";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app required permission to make it works";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This app required permission to make it works";
+				INFOPLIST_KEY_NSLocationUsageDescription = "This app required permission to make it works";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app required permission to make it works";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -269,7 +287,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = AppleDevAcademy.Coffice;
+				PRODUCT_BUNDLE_IDENTIFIER = AppleDevAcademyCoreChal.Coffice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -286,12 +304,17 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Coffice/Preview Content\"";
-				DEVELOPMENT_TEAM = Q3MLBX8LNJ;
+				DEVELOPMENT_TEAM = 328G52T8K3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Coffice/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "To read health";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "to read health";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app required permission to make it works";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This app required permission to make it works";
+				INFOPLIST_KEY_NSLocationUsageDescription = "This app required permission to make it works";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app required permission to make it works";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -302,7 +325,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = AppleDevAcademy.Coffice;
+				PRODUCT_BUNDLE_IDENTIFIER = AppleDevAcademyCoreChal.Coffice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
