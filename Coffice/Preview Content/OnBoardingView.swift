@@ -2,6 +2,7 @@ import SwiftUI
 
 struct OnboardingView: View {
     @AppStorage("userName") var userName: String = ""
+    @Environment(\.dismiss) var dismiss
     @State private var tempName: String = ""
 
     var body: some View {
@@ -28,6 +29,7 @@ struct OnboardingView: View {
                 if !trimmed.isEmpty {
                     userName = trimmed
                 }
+                dismiss()
             }) {
                 Text("Continue")
                     .frame(maxWidth: .infinity)
@@ -38,7 +40,6 @@ struct OnboardingView: View {
             }
             .padding(.horizontal)
             .disabled(tempName.trimmingCharacters(in: .whitespaces).isEmpty)
-
             Spacer()
         }
     }
