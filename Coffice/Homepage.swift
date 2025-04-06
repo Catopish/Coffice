@@ -31,11 +31,14 @@ class filterModel: ObservableObject {
 
 struct Homepage: View {
     @State private var streak: Int = 0
+    @AppStorage("userName") var userName: String = ""
     
     
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
+    @State private var showOnboarding: Bool = false
+    
     
     
     let coffeeShop : [CoffeeShopStruct] = [
@@ -64,9 +67,9 @@ struct Homepage: View {
             userProfile()
             Color.red
                 .frame(height: 150)
+            
             NavigationStack{
                 VStack{
-                    
                     List(filteredCoffeeshop.sorted(by: {$0.distance < $1.distance})) { shop in
                         Button(action: {
                             selectedCoffeeshop = shop
@@ -84,7 +87,7 @@ struct Homepage: View {
                         .listRowSeparator(.hidden)
                         
                     }
-//                    .navigationTitle("Coffee Shops")
+                    //                    .navigationTitle("Coffee Shops")
                     .searchable(text: $searchContent,placement: .navigationBarDrawer(displayMode: .always))
                 }
             }
@@ -92,45 +95,92 @@ struct Homepage: View {
             coffeeshopInformation(showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
                 .animation(.easeInOut, value: showDetail)
         )
-    }
-}
-
-
-struct userProfile: View {
-    var body: some View {
-        VStack {
-            HStack {
-                Image("avatar")
-                    .resizable()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .padding()
-    
-                VStack (alignment: .leading) {
-                    Text("User's Name")
-                    Text("User's Location")
-                        .foregroundColor(.secondary)
-                    
-                }
-                Spacer()
-                
-                HStack{
-                    Text ("[X] Streak")
-                    Image(systemName: "flame.fill")
-                }
-                .padding()
-                .background(Color.brown2)
-                .foregroundColor(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .frame(width: 150, height: 20)
-                .padding(.horizontal)
-                
-                
+        .onAppear {
+            if userName.isEmpty {
+                showOnboarding = true
             }
+        }
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingView()
         }
     }
 }
 
+
+//struct userProfile: View {
+//    var body: some View {
+//        VStack {
+//            HStack {
+//                Image("avatar")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .clipShape(Circle())
+//                    .padding()
+//
+//                VStack (alignment: .leading) {
+//                    Text("User's Name")
+//                    Text("User's Location")
+//                        .foregroundColor(.secondary)
+//
+//                }
+//                Spacer()
+//
+//                HStack{
+//                    Text ("[X] Streak")
+//                    Image(systemName: "flame.fill")
+//                }
+//                .padding()
+//                .background(Color.brown2)
+//                .foregroundColor(.white)
+//                .clipShape(RoundedRectangle(cornerRadius: 10))
+//                .frame(width: 150, height: 20)
+//                .padding(.horizontal)
+
+
+struct ContentView: View {
+    @AppStorage("userName") var userName: String = ""
+    
+    var body: some View {
+        if userName.isEmpty {
+            OnboardingView()
+        } else {
+            Homepage()
+        }
+    }
+}
+
+struct userProfile: View {
+    @AppStorage("userName") var userName: String = ""
+    var body: some View {
+        HStack {
+            VStack (alignment: .leading) {
+                Text("Hi, \(userName)!")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                //                    .padding(.vertical)
+                
+                Text("Let’s walk and sip! ☕️")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .lineLimit(2)
+            }
+            .padding()
+            Spacer()
+            
+            HStack{
+                Text ("[X] Streak")
+                Image(systemName: "flame.fill")
+            }
+            
+            .padding()
+            .background(Color.brown2)
+            .foregroundColor(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .frame(width: 150, height: 20)
+            .padding(.horizontal)
+        }
+    }
+}
 
 
 #Preview {
