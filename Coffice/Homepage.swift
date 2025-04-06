@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import HealthKit
 
 struct CoffeeShopStruct: Identifiable {
     var id = UUID()
@@ -31,12 +32,12 @@ class filterModel: ObservableObject {
 
 struct Homepage: View {
     @State private var streak: Int = 0
+    @State var isLoading: Bool = false
     
     
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
-    
     
     let coffeeShop : [CoffeeShopStruct] = [
         CoffeeShopStruct(name: "Starbucks",location: "Lorem Ipsum", description: "lorem",distance: 127,steps: 123,calories: 123),
@@ -61,9 +62,10 @@ struct Homepage: View {
     
     var body: some View {
         VStack(alignment: .leading){
-            userProfile()
-            Color.red
-                .frame(height: 150)
+            userProfile(isLoading: $isLoading)
+//            healthSummary(isLoading: $isLoading)
+//                .frame(height: 150)
+            HealthDashboardView(isLoading: $isLoading)
             NavigationStack{
                 VStack{
                     
@@ -76,7 +78,7 @@ struct Homepage: View {
                                 Text(shop.name)
                                     .foregroundColor(.primary)
                                 Spacer()
-                                Text(String(shop.distance))
+                                Text("\(Int(shop.distance)) M")
                                     .foregroundColor(.primary)
                             }
                             
@@ -84,7 +86,7 @@ struct Homepage: View {
                         .listRowSeparator(.hidden)
                         
                     }
-                    .navigationTitle("Coffee Shops")
+//                    .navigationTitle("Coffee Shops")
                     .searchable(text: $searchContent,placement: .navigationBarDrawer(displayMode: .always))
                 }
             }
@@ -95,8 +97,61 @@ struct Homepage: View {
     }
 }
 
+//struct healthSummary: View {
+//    @StateObject private var healthKitManager = HealthKitManager.shared
+//    @Binding var isLoading:Bool
+//    
+//    
+//    var body: some View {
+//        VStack{
+//            HStack{
+//                Text("Today's steps")
+//                Spacer()
+//                Text(isLoading ? "Loading..." : "\(healthKitManager.stepCountToday)")
+//            }
+//            .padding(.horizontal)
+//            HStack{
+//                Text("Todays calories")
+//                Spacer()
+//                Text(isLoading ? "Loading..." : "\(healthKitManager.activeEnergyBurnedToday) kcal")
+//            }
+//            .padding(.horizontal)
+//        }.onAppear(perform: refreshSteps)
+//    }
+//    
+//    func refreshSteps() {
+//        isLoading = true
+//        healthKitManager.readStepCountToday()
+//        healthKitManager.readActiveEnergyBurnedToday()
+//        
+//        // Simulate loading completion
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//            isLoading = false
+//        }
+//    }
+//    
+//    
+//}
+
 
 struct userProfile: View {
+//    @StateObject private var healthKitManager = HealthKitManager.shared
+    @StateObject private var healthDashboardManager = HealthDashboardViewModel()
+    @Binding var isLoading:Bool
+    
+    func refreshSteps() {
+        isLoading = true
+//        healthKitManager.readStepCountToday()
+//        healthKitManager.readActiveEnergyBurnedToday()
+        healthDashboardManager.fetchTodayData()
+        
+        // Simulate loading completion
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            isLoading = false
+        }
+    }
+    
+    
     var body: some View {
         VStack {
             HStack {
@@ -105,22 +160,32 @@ struct userProfile: View {
                     .frame(width: 50, height: 50)
                     .clipShape(Circle())
                     .padding()
-                
+    
                 VStack (alignment: .leading) {
-                    Text("User's Name")
-                    Text("User's Location")
+                    Text("User")
+                    Text("User location")
                         .foregroundColor(.secondary)
-                    
                     
                 }
                 Spacer()
                 
                 HStack{
-                    Text ("25 Streak")
+                    Text ("[X] Streak")
                     Image(systemName: "flame.fill")
                 }
+                .padding()
+                .background(Color.brown2)
+                .foregroundColor(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                HStack{
+                    Button {
+                        refreshSteps()
+                    } label: {
+                        Text("Refresh")
+                    }
+                }
                 .padding(10)
-                .background(Color.orange)
+                .background(Color.green)
                 .foregroundColor(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 

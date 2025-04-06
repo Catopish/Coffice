@@ -22,12 +22,6 @@ struct MapView: View {
             AlertExitMap()
 
             Spacer()
-            VStack{
-
-                    
-                    ActivitySummary()
-
-            }
 //            Button("Dismiss") {
 //                dismiss()
 //            }
@@ -71,27 +65,25 @@ struct ActivitySummary: View {
                     
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
                         Text("258")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
+                            .font(.title)
                             .foregroundStyle(.primary)
                             .foregroundColor(Color("brown3"))
 
-                        Text("kcal")
-                            .font(.caption)
+                        Text("CAL")
+                            .font(.headline)
                             .foregroundStyle(.secondary)
 
                     }
                 }
                 
                 Spacer()
-                
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Steps")
                         .font(.headline)
                         .foregroundColor(Color("brown2"))
                     
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text("3672")
+                        Text("1072")
                             .font(.title)
                             .foregroundStyle(.primary)
                             .foregroundColor(Color("brown3"))
@@ -104,7 +96,7 @@ struct ActivitySummary: View {
             .padding(.horizontal)
         }
         .padding()
-        .frame(width: 350, height: 150)
+        .frame(width: 320, height: 130)
         .background(Color.white)
         .cornerRadius(12)
         .shadow(radius: 5)
