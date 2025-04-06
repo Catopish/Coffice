@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import HealthKit
 
 struct CoffeeShopStruct: Identifiable {
     var id = UUID()
@@ -32,13 +33,13 @@ class filterModel: ObservableObject {
 struct Homepage: View {
     @State private var streak: Int = 0
     @AppStorage("userName") var userName: String = ""
+    @State var isLoading: Bool = false
     
     
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
     @State private var showOnboarding: Bool = false
-    
     
     
     let coffeeShop : [CoffeeShopStruct] = [
@@ -65,9 +66,9 @@ struct Homepage: View {
     var body: some View {
         VStack(alignment: .leading){
             userProfile()
-            Color.red
-                .frame(height: 150)
-            
+//            healthSummary(isLoading: $isLoading)
+//                .frame(height: 150)
+            HealthDashboardView(isLoading: $isLoading)
             NavigationStack{
                 VStack{
                     List(filteredCoffeeshop.sorted(by: {$0.distance < $1.distance})) { shop in

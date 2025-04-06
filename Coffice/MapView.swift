@@ -76,7 +76,6 @@ struct ActivitySummary: View {
                 }
                 
                 Spacer()
-                
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Steps")
                         .font(.headline)
