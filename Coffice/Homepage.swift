@@ -39,10 +39,7 @@ struct Homepage: View {
     @AppStorage("userName") var userName: String = ""
     @StateObject private var healthViewModel = HealthDashboardViewModel()
     @State var isLoading: Bool = false
-    @StateObject private var healthViewModel = HealthDashboardViewModel()
-    @StateObject var locationManager = LocationManager()
-    @AppStorage("userName") var userName: String = ""
-    
+    @StateObject var locationManager = LocationManager()    
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
@@ -139,53 +136,53 @@ struct Homepage: View {
 }
 
 
-struct userProfile: View {
-    @AppStorage("userName") var userName: String = ""
-    var body: some View {
-        HStack {
-            VStack (alignment: .leading) {
-                Text("Hi, \(userName)!")
-                    .font(.title)
-                    .fontWeight(.semibold)
-                //                    .padding(.vertical)
-                
-                Text("Let’s walk and sip! ☕️")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .lineLimit(2)
-            }
-            .padding()
-            Spacer()
-            
-            HStack{
-                Text ("[X] Streak")
-                Image(systemName: "flame.fill")
-            }
-            
-            .padding()
-            .background(Color.brown2)
-            .foregroundColor(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .frame(width: 150, height: 20)
-            .padding(.horizontal)
-        }
-        .fullScreenCover(isPresented: $showOnboarding) {
-            OnboardingView()
-        }
-    }
-}
+//struct userProfile: View {
+//    @AppStorage("userName") var userName: String = ""
+//    var body: some View {
+//        HStack {
+//            VStack (alignment: .leading) {
+//                Text("Hi, \(userName)!")
+//                    .font(.title)
+//                    .fontWeight(.semibold)
+//                //                    .padding(.vertical)
+//                
+//                Text("Let’s walk and sip! ☕️")
+//                    .font(.subheadline)
+//                    .foregroundColor(.secondary)
+//                    .lineLimit(2)
+//            }
+//            .padding()
+//            Spacer()
+//            
+//            HStack{
+//                Text ("[X] Streak")
+//                Image(systemName: "flame.fill")
+//            }
+//            
+//            .padding()
+//            .background(Color.brown2)
+//            .foregroundColor(.white)
+//            .clipShape(RoundedRectangle(cornerRadius: 10))
+//            .frame(width: 150, height: 20)
+//            .padding(.horizontal)
+//        }
+////        .fullScreenCover(isPresented: $showOnboarding) {
+////            OnboardingView()
+////        }
+//    }
+//}
 
-struct ContentView: View {
-    @AppStorage("userName") var userName: String = ""
-    
-    var body: some View {
-        if userName.isEmpty {
-            OnboardingView()
-        } else {
-            Homepage()
-        }
-    }
-}
+//struct ContentView: View {
+//    @AppStorage("userName") var userName: String = ""
+//    
+//    var body: some View {
+//        if userName.isEmpty {
+//            OnboardingView()
+//        } else {
+//            Homepage()
+//        }
+//    }
+//}
 
 struct userProfile: View {
     @AppStorage("userName") var userName: String = ""
