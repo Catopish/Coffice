@@ -20,7 +20,7 @@ struct CoffeeShopStruct: Identifiable {
     var calories: Int
     var latitude: Double
     var longitude: Double
-   
+    
     
 }
 
@@ -37,20 +37,22 @@ class filterModel: ObservableObject {
 struct Homepage: View {
     @State private var streak: Int = 0
     @State var isLoading: Bool = false
-    
+    @StateObject private var healthViewModel = HealthDashboardViewModel()
     @StateObject var locationManager = LocationManager()
+    @AppStorage("userName") var userName: String = ""
     
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
+    @State private var showOnboarding: Bool = false
     
     let coffeeShop : [CoffeeShopStruct] = [
-//        CoffeeShopStruct(name: "Starbucks",location: "Lorem Ipsum", description: "lorem",distance: 127,steps: 123,calories: 123),
-//        CoffeeShopStruct(name: "Fore",location: "Lorem Ipsum", description: "lorem",distance: 45 ,steps: 54,calories: 134),
-//        CoffeeShopStruct(name: "Tamper",location: "Lorem Ipsum", description: "lorem",distance: 431,steps: 887,calories: 1223),
-//        CoffeeShopStruct(name: "Kopi Kenangan",location: "Lorem Ipsum", description: "lorem",distance: 134,steps: 412,calories: 531),
-//        CoffeeShopStruct(name: "Dunkin Donuts",location: "Lorem Ipsum", description: "lorem",distance: 486,steps: 212,calories: 431),
-//        CoffeeShopStruct(name: "Kenangan Signature",location: "Lorem Ipsum", description: "lorem",distance: 325,steps: 78,calories: 431),
+        //        CoffeeShopStruct(name: "Starbucks",location: "Lorem Ipsum", description: "lorem",distance: 127,steps: 123,calories: 123),
+        //        CoffeeShopStruct(name: "Fore",location: "Lorem Ipsum", description: "lorem",distance: 45 ,steps: 54,calories: 134),
+        //        CoffeeShopStruct(name: "Tamper",location: "Lorem Ipsum", description: "lorem",distance: 431,steps: 887,calories: 1223),
+        //        CoffeeShopStruct(name: "Kopi Kenangan",location: "Lorem Ipsum", description: "lorem",distance: 134,steps: 412,calories: 531),
+        //        CoffeeShopStruct(name: "Dunkin Donuts",location: "Lorem Ipsum", description: "lorem",distance: 486,steps: 212,calories: 431),
+        //        CoffeeShopStruct(name: "Kenangan Signature",location: "Lorem Ipsum", description: "lorem",distance: 325,steps: 78,calories: 431),
         CoffeeShopStruct(name: "Tabemori",location: "Lorem Ipsum", description: "lorem",distance: 256,steps: 102,calories: 45, latitude: -6.295003167414541, longitude: 106.6675050240924)
         
     ]
@@ -82,10 +84,8 @@ struct Homepage: View {
             } else {
                 Text("Authorization status not yet determined.")
             }
-            userProfile(isLoading: $isLoading)
-//            healthSummary(isLoading: $isLoading)
-//                .frame(height: 150)
-            HealthDashboardView(isLoading: $isLoading)
+            userProfile()
+            HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
             NavigationStack{
                 VStack{
                     
@@ -106,7 +106,6 @@ struct Homepage: View {
                         .listRowSeparator(.hidden)
                         
                     }
-//                    .navigationTitle("Coffee Shops")
                     .searchable(text: $searchContent,placement: .navigationBarDrawer(displayMode: .always))
                 }
             }
@@ -116,82 +115,58 @@ struct Homepage: View {
         )
         .onAppear{
             locationManager.checkAuthorization()
+            if userName.isEmpty {
+                showOnboarding = true
+            }
         }
-        .alert(isPresented: $locationManager.showSettingsAlert) {
-                    Alert(
-                        title: Text("Location Permission Needed"),
-                        message: Text("Please enable location access in Settings."),
-                        primaryButton: .default(Text("Open Settings"), action: {
-                            if let url = URL(string: UIApplication.openSettingsURLString) {
-                                UIApplication.shared.open(url)
-                            }
-                        }),
-                        secondaryButton: .cancel()
-                    )
+        .fullScreenCover(isPresented: $showOnboarding) {
+                    OnboardingView()
                 }
+        .alert(isPresented: $locationManager.showSettingsAlert) {
+            Alert(
+                title: Text("Location Permission Needed"),
+                message: Text("Please enable location access in Settings."),
+                primaryButton: .default(Text("Open Settings"), action: {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                }),
+                secondaryButton: .cancel()
+            )
+        }
     }
 }
 
 
 struct userProfile: View {
-//    @StateObject private var healthKitManager = HealthKitManager.shared
-    @StateObject private var healthDashboardManager = HealthDashboardViewModel()
-    @Binding var isLoading:Bool
-
-    
-    func refreshSteps() {
-        isLoading = true
-//        healthKitManager.readStepCountToday()
-//        healthKitManager.readActiveEnergyBurnedToday()
-        healthDashboardManager.fetchTodayData()
-        
-        // Simulate loading completion
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            isLoading = false
-        }
-    }
-    
-    
+    @AppStorage("userName") var userName: String = ""
     var body: some View {
-       
-        
-        VStack {
-            HStack {
-                Image("avatar")
-                    .resizable()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .padding()
-    
-                VStack (alignment: .leading) {
-                    Text("Arms")
-                    Text("User location")
-                        .foregroundColor(.secondary)
-                    
-                }
-                Spacer()
+        HStack {
+            VStack (alignment: .leading) {
+                Text("Hi, \(userName)!")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                //                    .padding(.vertical)
                 
-                HStack{
-                    Text ("[X] Streak")
-                    Image(systemName: "flame.fill")
-                }
-                .padding()
-                .background(Color.brown2)
-                .foregroundColor(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                HStack{
-                    Button {
-                        refreshSteps()
-                    } label: {
-                        Text("Refresh")
-                    }
-                }
-                .padding(10)
-                .background(Color.green)
-                .foregroundColor(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                
+                Text("Let’s walk and sip! ☕️")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .lineLimit(2)
             }
+            .padding()
+            Spacer()
+            
+            HStack{
+                Text ("[X] Streak")
+                Image(systemName: "flame.fill")
+            }
+            
+            .padding()
+            .background(Color.brown2)
+            .foregroundColor(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .frame(width: 150, height: 20)
+            .padding(.horizontal)
         }
     }
 }
