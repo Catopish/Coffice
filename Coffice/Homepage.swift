@@ -77,7 +77,7 @@ struct Homepage: View {
                                 Text(shop.name)
                                     .foregroundColor(.primary)
                                 Spacer()
-                                Text(String(shop.distance))
+                                Text("\(Int(shop.distance)) M")
                                     .foregroundColor(.primary)
                             }
                             
@@ -85,7 +85,7 @@ struct Homepage: View {
                         .listRowSeparator(.hidden)
                         
                     }
-                    .navigationTitle("Coffee Shops")
+//                    .navigationTitle("Coffee Shops")
                     .searchable(text: $searchContent,placement: .navigationBarDrawer(displayMode: .always))
                 }
             }
@@ -157,22 +157,21 @@ struct userProfile: View {
                     .frame(width: 50, height: 50)
                     .clipShape(Circle())
                     .padding()
-                
+    
                 VStack (alignment: .leading) {
                     Text("User")
                     Text("User location")
                         .foregroundColor(.secondary)
                     
-                    
                 }
                 Spacer()
                 
                 HStack{
-                    Text ("25 Streak")
+                    Text ("[X] Streak")
                     Image(systemName: "flame.fill")
                 }
-                .padding(10)
-                .background(Color.orange)
+                .padding()
+                .background(Color.brown2)
                 .foregroundColor(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 HStack{
