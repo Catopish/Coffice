@@ -24,7 +24,6 @@ struct CoffeeShopStruct: Identifiable {
     
 }
 
-//Contoh buat max range
 @Observable
 class filterModel: ObservableObject {
     var maxRange: Double
@@ -46,16 +45,16 @@ struct Homepage: View {
     @State private var showOnboarding: Bool = false
     
     let coffeeShop : [CoffeeShopStruct] = [
-        //        CoffeeShopStruct(name: "Starbucks",location: "Lorem Ipsum", description: "lorem",distance: 127,steps: 123,calories: 123),
-        //        CoffeeShopStruct(name: "Fore",location: "Lorem Ipsum", description: "lorem",distance: 45 ,steps: 54,calories: 134),
-        //        CoffeeShopStruct(name: "Tamper",location: "Lorem Ipsum", description: "lorem",distance: 431,steps: 887,calories: 1223),
-        //        CoffeeShopStruct(name: "Kopi Kenangan",location: "Lorem Ipsum", description: "lorem",distance: 134,steps: 412,calories: 531),
-        //        CoffeeShopStruct(name: "Dunkin Donuts",location: "Lorem Ipsum", description: "lorem",distance: 486,steps: 212,calories: 431),
-        //        CoffeeShopStruct(name: "Kenangan Signature",location: "Lorem Ipsum", description: "lorem",distance: 325,steps: 78,calories: 431),
-        CoffeeShopStruct(name: "Tabemori",location: "Lorem Ipsum", description: "lorem",distance: 256,steps: 102,calories: 45, latitude: -6.295003167414541, longitude: 106.6675050240924)
-        
-    ]
-    
+            CoffeeShopStruct(name: "Starbucks",location: "Lorem Ipsum", description: "lorem",distance: 127,steps: 123,calories: 123, latitude: -6.30191, longitude: 106.65438),
+            CoffeeShopStruct(name: "Fore",location: "Lorem Ipsum", description: "lorem",distance: 45 ,steps: 54,calories: 134, latitude: -6.302514, longitude: 106.654299),
+            CoffeeShopStruct(name: "36 Grams",location: "Lorem Ipsum", description: "lorem",distance: 45 ,steps: 54,calories: 134, latitude: -6.301446, longitude: 106.650023),
+            CoffeeShopStruct(name: "Tamper",location: "Lorem Ipsum", description: "lorem",distance: 431,steps: 887,calories: 1223, latitude: -6.301870, longitude: 106.654210),
+            CoffeeShopStruct(name: "% Arabica",location: "Lorem Ipsum", description: "lorem",distance: 431,steps: 887,calories: 1223, latitude: -6.30179, longitude: 106.65321),
+            CoffeeShopStruct(name: "Kenangan Signature",location: "Lorem Ipsum", description: "lorem",distance: 134,steps: 412,calories: 531, latitude: -6.301535, longitude: 106.653458),
+            CoffeeShopStruct(name: "Tabemori",location: "Lorem Ipsum", description: "lorem",distance: 256,steps: 102,calories: 45, latitude: -6.302768, longitude: 106.653470),
+            CoffeeShopStruct(name: "Lawson",location: "Lorem Ipsum", description: "lorem",distance: 256,steps: 102,calories: 45, latitude: -6.302592, longitude: 106.653380)
+
+        ]
     var filteredCoffeeshop: [CoffeeShopStruct] {
         guard !searchContent.isEmpty else {
             return coffeeShop
@@ -69,24 +68,28 @@ struct Homepage: View {
     
     var body: some View {
         VStack(alignment: .leading){
-            if let status = locationManager.authorizationStatus {
-                switch status {
-                case .notDetermined:
-                    Text("Requesting authorization...")
-                case .authorizedAlways, .authorizedWhenInUse:
-                    Text ("Authorized")
-                case .denied, .restricted:
-                    Text("Authorization denied.")
-                @unknown default:
-                    Text("Authorization status unknown.")
-                }
-            } else {
-                Text("Authorization status not yet determined.")
-            }
+//            if let status = locationManager.authorizationStatus {
+//                switch status {
+//                case .notDetermined:
+//                    Text("Requesting authorization...")
+//                case .authorizedAlways, .authorizedWhenInUse:
+//                    Text ("Authorized")
+//                case .denied, .restricted:
+//                    Text("Authorization denied.")
+//                @unknown default:
+//                    Text("Authorization status unknown.")
+//                }
+//            } else {
+//                Text("Authorization status not yet determined.")
+//            }
             userProfile()
             HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
+            Text("Where’s your coffee taking you today?")
+                .font(.headline)
+                .fontWeight(.semibold)
+                .padding()
             NavigationStack{
-                VStack{
+                VStack() {
                     List(filteredCoffeeshop.sorted(by: {$0.distance < $1.distance})) { shop in
                         Button(action: {
                             selectedCoffeeshop = shop
@@ -96,17 +99,23 @@ struct Homepage: View {
                                 Text(shop.name)
                                     .foregroundColor(.primary)
                                 Spacer()
-                                Text("\(Int(shop.distance)) M")
+                                Text("\(Int(shop.distance)) m")
                                     .foregroundColor(.primary)
+                                
                             }
-                            
                         }
                         .listRowSeparator(.hidden)
-                        
                     }
+                    
+                    .background(Color.white)
+                    .scrollContentBackground(.hidden)
+                    .shadow(radius: 4)
+//                    .navigationTitle("Coffee Shops")
                     .searchable(text: $searchContent,placement: .navigationBarDrawer(displayMode: .always))
+                    .padding(.top, -30)
                 }
             }
+            .padding(.top, -20)
         }.overlay(
             coffeeshopInformation(showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
                 .animation(.easeInOut, value: showDetail)
@@ -186,14 +195,13 @@ struct Homepage: View {
 
 struct userProfile: View {
     @AppStorage("userName") var userName: String = ""
+    @StateObject var streakManager = StreakManager()
     var body: some View {
         HStack {
             VStack (alignment: .leading) {
                 Text("Hi, \(userName)!")
                     .font(.title)
                     .fontWeight(.semibold)
-                //                    .padding(.vertical)
-                
                 Text("Let’s walk and sip! ☕️")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
@@ -203,7 +211,7 @@ struct userProfile: View {
             Spacer()
             
             HStack{
-                Text ("[X] Streak")
+                Text ("\(streakManager.streak) Streak")
                 Image(systemName: "flame.fill")
             }
             
@@ -212,7 +220,7 @@ struct userProfile: View {
             .foregroundColor(.white)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .frame(width: 150, height: 20)
-            .padding(.horizontal)
+            .padding(.horizontal, 5)
         }
     }
 }

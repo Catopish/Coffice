@@ -6,23 +6,27 @@ struct OnboardingView: View {
     @State private var tempName: String = ""
 
     var body: some View {
-        VStack(spacing: 30) {
+        VStack() {
             Spacer()
             
             Text("Welcome, Cofficer!")
-                .font(.largeTitle)
+                .font(.title)
                 .fontWeight(.bold)
-
+                .foregroundColor(.primary)
+    
             Text("Before we begin, what should we call you?")
-                .font(.headline)
+                .font(.body)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.secondary)
-                .padding(.horizontal)
+                .foregroundColor(.primary)
+                .padding(.bottom, 20)
 
             TextField("Enter your name", text: $tempName)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.horizontal)
-                .textInputAutocapitalization(.words)
+                .padding()
+                .frame(height: 50)
+                .frame(maxWidth: 330)
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+                .padding(.bottom, 5)
 
             Button(action: {
                 let trimmed = tempName.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -32,14 +36,15 @@ struct OnboardingView: View {
                 dismiss()
             }) {
                 Text("Continue")
-                    .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.brown)
+                    .frame(maxWidth: 330)
+                    .background(Color.brown2)
                     .foregroundColor(.white)
-                    .cornerRadius(12)
+                    .cornerRadius(10)
             }
             .padding(.horizontal)
             .disabled(tempName.trimmingCharacters(in: .whitespaces).isEmpty)
+
             Spacer()
         }
     }

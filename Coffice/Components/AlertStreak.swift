@@ -1,11 +1,12 @@
 import SwiftUI
 
 struct StreakPopupView: View {
+    @StateObject var streakManager = StreakManager()
     var onDismiss: () -> Void = {}
 
     var body: some View {
         VStack(spacing: 16) {
-            Text("[X] Day Streak")
+            Text("\(streakManager.streak) Day Streak")
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.brown3)
@@ -19,7 +20,7 @@ struct StreakPopupView: View {
                 .padding(.bottom)
                 
             
-            Text("Keep going! You’ve been unstoppable for [X] days!")
+            Text("Keep going! You’ve been unstoppable for \(streakManager.streak) days!")
                 .font(.body)
                 .foregroundColor(.brown3)
                 .multilineTextAlignment(.center)
