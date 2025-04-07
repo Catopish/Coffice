@@ -19,12 +19,13 @@ struct MapView: View {
         ZStack {
             
             Map(position: .constant(.region(region)))
-            AlertExitMap()
+//            AlertExitMap()
 
             Spacer()
             VStack{
                     ActivitySummary()
             }
+            AlertExitMap()
         }
     }
     
@@ -44,6 +45,7 @@ struct MapView: View {
 }
 
 struct ActivitySummary: View {
+    @StateObject var healthManager = HealthManager()
     var body: some View {
         Spacer()
         VStack(alignment: .leading, spacing: 10) {
@@ -63,7 +65,7 @@ struct ActivitySummary: View {
                         .foregroundColor(Color("brown2"))
                     
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text("258")
+                        Text("\(Int(healthManager.caloriesToday))")
                             .font(.title)
                             .foregroundStyle(.primary)
                             .foregroundColor(Color("brown3"))
@@ -82,7 +84,7 @@ struct ActivitySummary: View {
                         .foregroundColor(Color("brown2"))
                     
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text("1072")
+                        Text("\(Int(healthManager.stepsToday))")
                             .font(.title)
                             .foregroundStyle(.primary)
                             .foregroundColor(Color("brown3"))
