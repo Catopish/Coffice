@@ -2,9 +2,9 @@ import SwiftUI
 import MapKit
 
 struct MapViewWalking: View {
-    @ObservedObject var locationManager: LocationManager
+    @StateObject var locationManager: LocationManager
     @State private var mapPosition: MapCameraPosition = .automatic
-    @ObservedObject var mapWalkingManager = MapWalkingManager()
+    @StateObject var mapWalkingManager = MapWalkingManager()
     @Binding var selectedShop: CoffeeShopStruct?
     
 //    private let destinationCoordinate = CLLocationCoordinate2D(latitude: -7.777848720301518, longitude: 110.33756018305395)
@@ -39,6 +39,14 @@ struct MapViewWalking: View {
                     }
                 }
                 .onAppear {
+                    mapWalkingManager.calculateRoute(from: userLocation.coordinate, to: destinationCoordinate) { success in
+                        if success, let routePolyline = mapWalkingManager.routePolyline {
+                            self.mapPosition = .rect(routePolyline.boundingMapRect.insetBy(dx: -50, dy: -50))
+                        }
+                        
+                    }
+                }
+                .onChange(of: locationManager.userLocation ) {
                     mapWalkingManager.calculateRoute(from: userLocation.coordinate, to: destinationCoordinate) { success in
                         if success, let routePolyline = mapWalkingManager.routePolyline {
                             self.mapPosition = .rect(routePolyline.boundingMapRect.insetBy(dx: -50, dy: -50))
