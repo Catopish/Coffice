@@ -46,6 +46,14 @@ struct MapViewWalking: View {
                         
                     }
                 }
+                .onChange(of: locationManager.userLocation ) {
+                    mapWalkingManager.calculateRoute(from: userLocation.coordinate, to: destinationCoordinate) { success in
+                        if success, let routePolyline = mapWalkingManager.routePolyline {
+                            self.mapPosition = .rect(routePolyline.boundingMapRect.insetBy(dx: -50, dy: -50))
+                        }
+                        
+                    }
+                }
             } else {
                 ProgressView("Getting your location...")
             }
