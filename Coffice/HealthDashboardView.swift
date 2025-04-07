@@ -10,7 +10,7 @@ import HealthKit
 
 
 struct HealthDashboardView: View {
-    @ObservedObject private var viewModel = HealthDashboardViewModel()
+    @ObservedObject var viewModel = HealthDashboardViewModel()
     @Binding var isLoading: Bool
     
     var body: some View {

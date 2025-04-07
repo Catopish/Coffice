@@ -104,10 +104,3 @@ class HealthDashboardViewModel: ObservableObject {
         healthStore.execute(query)
     }
 }
-
-//// Preview
-//struct HealthDashboardView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HealthDashboardView()
-//    }
-//}

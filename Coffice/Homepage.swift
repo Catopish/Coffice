@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import HealthKit
+import CoreLocation
 
 struct CoffeeShopStruct: Identifiable {
     var id = UUID()
@@ -17,6 +18,9 @@ struct CoffeeShopStruct: Identifiable {
     var distance: Double
     var steps: Int
     var calories: Int
+    var latitude: Double
+    var longitude: Double
+    
     
 }
 
@@ -32,14 +36,13 @@ class filterModel: ObservableObject {
 struct Homepage: View {
     @State private var streak: Int = 0
     @AppStorage("userName") var userName: String = ""
+    @StateObject private var healthViewModel = HealthDashboardViewModel()
     @State var isLoading: Bool = false
-    
-    
+    @StateObject var locationManager = LocationManager()    
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
     @State private var showOnboarding: Bool = false
-    
     
     let coffeeShop : [CoffeeShopStruct] = [
         CoffeeShopStruct(name: "Starbucks",location: "Lorem Ipsum", description: "The Breeze BSD",distance: 127,steps: 123,calories: 123),
@@ -65,13 +68,26 @@ struct Homepage: View {
     
     var body: some View {
         VStack(alignment: .leading){
+            if let status = locationManager.authorizationStatus {
+                switch status {
+                case .notDetermined:
+                    Text("Requesting authorization...")
+                case .authorizedAlways, .authorizedWhenInUse:
+                    Text ("Authorized")
+                case .denied, .restricted:
+                    Text("Authorization denied.")
+                @unknown default:
+                    Text("Authorization status unknown.")
+                }
+            } else {
+                Text("Authorization status not yet determined.")
+            }
             userProfile()
-            HealthDashboardView(isLoading: $isLoading)
+            HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
             Text("Where’s your coffee taking you today?")
                 .font(.headline)
                 .fontWeight(.semibold)
                 .padding()
-                
             NavigationStack{
                 VStack() {
                     List(filteredCoffeeshop.sorted(by: {$0.distance < $1.distance})) { shop in
@@ -104,16 +120,66 @@ struct Homepage: View {
             coffeeshopInformation(showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
                 .animation(.easeInOut, value: showDetail)
         )
-        .onAppear {
+        .onAppear{
+            locationManager.checkAuthorization()
             if userName.isEmpty {
                 showOnboarding = true
             }
         }
         .fullScreenCover(isPresented: $showOnboarding) {
-            OnboardingView()
+                    OnboardingView()
+                }
+        .alert(isPresented: $locationManager.showSettingsAlert) {
+            Alert(
+                title: Text("Location Permission Needed"),
+                message: Text("Please enable location access in Settings."),
+                primaryButton: .default(Text("Open Settings"), action: {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                }),
+                secondaryButton: .cancel()
+            )
         }
     }
 }
+
+
+//struct userProfile: View {
+//    @AppStorage("userName") var userName: String = ""
+//    var body: some View {
+//        HStack {
+//            VStack (alignment: .leading) {
+//                Text("Hi, \(userName)!")
+//                    .font(.title)
+//                    .fontWeight(.semibold)
+//                //                    .padding(.vertical)
+//                
+//                Text("Let’s walk and sip! ☕️")
+//                    .font(.subheadline)
+//                    .foregroundColor(.secondary)
+//                    .lineLimit(2)
+//            }
+//            .padding()
+//            Spacer()
+//            
+//            HStack{
+//                Text ("[X] Streak")
+//                Image(systemName: "flame.fill")
+//            }
+//            
+//            .padding()
+//            .background(Color.brown2)
+//            .foregroundColor(.white)
+//            .clipShape(RoundedRectangle(cornerRadius: 10))
+//            .frame(width: 150, height: 20)
+//            .padding(.horizontal)
+//        }
+////        .fullScreenCover(isPresented: $showOnboarding) {
+////            OnboardingView()
+////        }
+//    }
+//}
 
 //struct ContentView: View {
 //    @AppStorage("userName") var userName: String = ""
