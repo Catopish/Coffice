@@ -94,6 +94,8 @@ struct Homepage: View {
                         Button(action: {
                             selectedCoffeeshop = shop
                             showDetail = true
+                            //ngilangin keyboard setelah ngeklik list
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         }){
                             HStack{
                                 Text(shop.name)
