@@ -63,7 +63,7 @@ struct MapViewWalking: View {
                     let destinationLocation = CLLocation(latitude: destinationCoordinate.latitude, longitude: destinationCoordinate.longitude)
                     let distance = newLocation.distance(from: destinationLocation) // distance in meters
                     
-                    if distance < 15 && !hasArrivedAtDestination {
+                    if distance < 5 && !hasArrivedAtDestination {
                         hasArrivedAtDestination = true
                         showArrivalAlert = true
                     }
@@ -73,7 +73,7 @@ struct MapViewWalking: View {
                         // Insert your navigation logic here, e.g., dismiss or navigate back.
                     }
                 } message: {
-                    Text("You are within 20 meters of your destination.")
+                    Text("You are within 5 meters of your destination.")
                 }
             } else {
                 ProgressView("Getting your location...")
