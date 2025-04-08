@@ -7,6 +7,9 @@ struct MapViewWalking: View {
     @StateObject var mapWalkingManager = MapWalkingManager()
     @Binding var selectedShop: CoffeeShopStruct?
     
+    @State private var hasArrivedAtDestination = false
+    @State private var showArrivalAlert = false
+    
 //    private let destinationCoordinate = CLLocationCoordinate2D(latitude: -7.777848720301518, longitude: 110.33756018305395)
     // Computed destination coordinate:
         private var destinationCoordinate: CLLocationCoordinate2D {
@@ -46,13 +49,31 @@ struct MapViewWalking: View {
                         
                     }
                 }
-                .onChange(of: locationManager.userLocation ) {
-                    mapWalkingManager.calculateRoute(from: userLocation.coordinate, to: destinationCoordinate) { success in
+                .onChange(of: locationManager.userLocation) { newLocation in
+                    guard let newLocation = newLocation else { return }
+                    
+                    // Calculate route and update map position
+                    mapWalkingManager.calculateRoute(from: newLocation.coordinate, to: destinationCoordinate) { success in
                         if success, let routePolyline = mapWalkingManager.routePolyline {
                             self.mapPosition = .rect(routePolyline.boundingMapRect.insetBy(dx: -50, dy: -50))
                         }
-                        
                     }
+                    
+                    // Check if user is close enough to the destination
+                    let destinationLocation = CLLocation(latitude: destinationCoordinate.latitude, longitude: destinationCoordinate.longitude)
+                    let distance = newLocation.distance(from: destinationLocation) // distance in meters
+                    
+                    if distance < 15 && !hasArrivedAtDestination {
+                        hasArrivedAtDestination = true
+                        showArrivalAlert = true
+                    }
+                }
+                .alert("You have arrived!", isPresented: $showArrivalAlert) {
+                    Button("Return Home") {
+                        // Insert your navigation logic here, e.g., dismiss or navigate back.
+                    }
+                } message: {
+                    Text("You are within 20 meters of your destination.")
                 }
             } else {
                 ProgressView("Getting your location...")

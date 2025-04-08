@@ -74,7 +74,7 @@ struct coffeeshopInformation: View{
                                 .frame(width: 30, height: 40)
                                 .foregroundStyle(Color(uiColor: .brown2))
                             HStack(alignment: .firstTextBaseline, spacing: 2) {
-                                Text("\(shop.distance, specifier: "%.1f")")
+                                Text("\(Int(shop.distance))")
                                     .padding(.top, 5)
                                     .font(.headline)
                                     .foregroundStyle(.primary)

@@ -27,4 +27,9 @@ class MapWalkingManager: ObservableObject {
             }
         }
     }
+    
+    func calculateCalories(for distance: CLLocationDistance, at walkingSpeed: Double, in time: TimeInterval) -> Int {
+        let caloriesBurned = Int(3 * walkingSpeed * 60 * time / 200)
+        return caloriesBurned
+    }
 }

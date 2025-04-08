@@ -20,14 +20,11 @@ struct CoffeeShopStruct: Identifiable {
     var calories: Int
     var latitude: Double
     var longitude: Double
-    
-    
 }
 
 @Observable
 class filterModel: ObservableObject {
     var maxRange: Double
-    
     init(maxRange: Double) {
         self.maxRange = maxRange
     }
@@ -39,189 +36,148 @@ struct Homepage: View {
     
     @StateObject private var healthViewModel = HealthDashboardViewModel()
     @StateObject var locationManager = LocationManager()
+    @StateObject var mapWalkingManager = MapWalkingManager()
     
-    @State private var streak: Int = 0
     @State var isLoading: Bool = false
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
     @State private var showOnboarding: Bool = false
     
-    let coffeeShop : [CoffeeShopStruct] = [
-            CoffeeShopStruct(name: "Starbucks",location: "Lorem Ipsum", description: "lorem",distance: 127,steps: 123,calories: 123, latitude: -6.30191, longitude: 106.65438),
-            CoffeeShopStruct(name: "Fore",location: "Lorem Ipsum", description: "lorem",distance: 45 ,steps: 54,calories: 134, latitude: -6.302514, longitude: 106.654299),
-            CoffeeShopStruct(name: "36 Grams",location: "Lorem Ipsum", description: "lorem",distance: 45 ,steps: 54,calories: 134, latitude: -6.301446, longitude: 106.650023),
-            CoffeeShopStruct(name: "Tamper",location: "Lorem Ipsum", description: "lorem",distance: 431,steps: 887,calories: 1223, latitude: -6.301870, longitude: 106.654210),
-            CoffeeShopStruct(name: "% Arabica",location: "Lorem Ipsum", description: "lorem",distance: 431,steps: 887,calories: 1223, latitude: -6.30179, longitude: 106.65321),
-            CoffeeShopStruct(name: "Kenangan Signature",location: "Lorem Ipsum", description: "lorem",distance: 134,steps: 412,calories: 531, latitude: -6.301535, longitude: 106.653458),
-            CoffeeShopStruct(name: "Tabemori",location: "Lorem Ipsum", description: "lorem",distance: 256,steps: 102,calories: 45, latitude: -6.302768, longitude: 106.653470),
-            CoffeeShopStruct(name: "Lawson",location: "Lorem Ipsum", description: "lorem",distance: 256,steps: 102,calories: 45, latitude: -6.302592, longitude: 106.653380)
-
-        ]
+    // Your original coffee shops array.
+    let coffeeShop: [CoffeeShopStruct] = [
+        CoffeeShopStruct(name: "Starbucks", location: "Lorem Ipsum", description: "lorem", distance: 0, steps: 123, calories: 0, latitude: -6.30191, longitude: 106.65438),
+        CoffeeShopStruct(name: "Fore", location: "Lorem Ipsum", description: "lorem", distance: 0, steps: 54, calories: 0, latitude: -6.302514, longitude: 106.654299),
+        CoffeeShopStruct(name: "36 Grams", location: "Lorem Ipsum", description: "lorem", distance: 0, steps: 54, calories: 0, latitude: -6.301446, longitude: 106.650023),
+        CoffeeShopStruct(name: "Tamper", location: "Lorem Ipsum", description: "lorem", distance: 0, steps: 887, calories: 0, latitude: -6.30187, longitude: 106.654210),
+        CoffeeShopStruct(name: "% Arabica", location: "Lorem Ipsum", description: "lorem", distance: 0, steps: 887, calories: 0, latitude: -6.30179, longitude: 106.65321),
+        CoffeeShopStruct(name: "Kenangan Signature", location: "Lorem Ipsum", description: "lorem", distance: 0, steps: 412, calories: 0, latitude: -6.301535, longitude: 106.653458),
+        CoffeeShopStruct(name: "Tabemori", location: "Lorem Ipsum", description: "lorem", distance: 0, steps: 102, calories: 0, latitude: -6.302768, longitude: 106.65347),
+        CoffeeShopStruct(name: "Lawson", location: "Lorem Ipsum", description: "lorem", distance: 0, steps: 102, calories: 0, latitude: -6.302592, longitude: 106.65338)
+    ]
+    
+    // Filter by the search text on the original array.
     var filteredCoffeeshop: [CoffeeShopStruct] {
         guard !searchContent.isEmpty else {
             return coffeeShop
         }
-        return coffeeShop
-            .filter {
-                $0.name.localizedCaseInsensitiveContains(searchContent)
-            }
+        return coffeeShop.filter { $0.name.localizedCaseInsensitiveContains(searchContent) }
     }
     
+    // This state variable holds the updated results (after route calculation).
+    @State private var updatedCoffeeShopsState: [CoffeeShopStruct] = []
+    
+    // A computed property to filter the updated results by the search text.
+    var filteredUpdatedCoffeeShops: [CoffeeShopStruct] {
+        guard !searchContent.isEmpty else {
+            return updatedCoffeeShopsState
+        }
+        return updatedCoffeeShopsState.filter {
+            $0.name.localizedCaseInsensitiveContains(searchContent)
+        }
+    }
+    
+    // Function that updates each coffee shop's distance (using route distance) and calories.
+    func updateCoffeeShopsWithCalories() {
+        guard let userLocation = locationManager.userLocation else { return }
+        
+        var newCoffeeShops: [CoffeeShopStruct] = []
+        let group = DispatchGroup()
+        
+        // Use the original filtered array (based on search) here.
+        for shop in filteredCoffeeshop {
+            var updatedShop = shop
+            let destinationCoordinate = CLLocationCoordinate2D(latitude: shop.latitude, longitude: shop.longitude)
+            
+            group.enter()
+            // Calculate the route asynchronously.
+            mapWalkingManager.calculateRoute(from: userLocation.coordinate, to: destinationCoordinate) { success in
+                if success,
+                   let travelTime = mapWalkingManager.travelTime,
+                   let routeDistance = mapWalkingManager.distance {
+                    updatedShop.distance = routeDistance
+                    let estimatedCalories = mapWalkingManager.calculateCalories(for: routeDistance, at: 4.0, in: travelTime)
+                    updatedShop.calories = estimatedCalories
+                } else {
+                    // Fallback to geodesic distance.
+                    let shopLocation = CLLocation(latitude: shop.latitude, longitude: shop.longitude)
+                    updatedShop.distance = userLocation.distance(from: shopLocation)
+                }
+                newCoffeeShops.append(updatedShop)
+                group.leave()
+            }
+        }
+        
+        group.notify(queue: .main) {
+            self.updatedCoffeeShopsState = newCoffeeShops.sorted { $0.distance < $1.distance }
+        }
+    }
     
     var body: some View {
-        VStack(alignment: .leading){
-//            if let status = locationManager.authorizationStatus {
-//                switch status {
-//                case .notDetermined:
-//                    Text("Requesting authorization...")
-//                case .authorizedAlways, .authorizedWhenInUse:
-//                    Text ("Authorized")
-//                case .denied, .restricted:
-//                    Text("Authorization denied.")
-//                @unknown default:
-//                    Text("Authorization status unknown.")
-//                }
-//            } else {
-//                Text("Authorization status not yet determined.")
-//            }
+        VStack(alignment: .leading) {
             userProfile()
             HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
             Text("Where’s your coffee taking you today?")
                 .font(.headline)
                 .fontWeight(.semibold)
                 .padding()
-            NavigationStack{
-                VStack() {
-                    List(filteredCoffeeshop.sorted(by: {$0.distance < $1.distance})) { shop in
+            NavigationStack {
+                VStack {
+                    // Use the filtered updated results.
+                    List(filteredUpdatedCoffeeShops) { shop in
                         Button(action: {
                             selectedCoffeeshop = shop
                             showDetail = true
-                        }){
-                            HStack{
+                        }) {
+                            HStack {
                                 Text(shop.name)
                                     .foregroundColor(.primary)
                                 Spacer()
                                 Text("\(Int(shop.distance)) m")
                                     .foregroundColor(.primary)
-                                
                             }
                         }
                         .listRowSeparator(.hidden)
                     }
-                    
                     .background(Color.white)
                     .scrollContentBackground(.hidden)
                     .shadow(radius: 4)
-//                    .navigationTitle("Coffee Shops")
-                    .searchable(text: $searchContent,placement: .navigationBarDrawer(displayMode: .always))
                     .padding(.top, -30)
                 }
             }
             .padding(.top, -20)
-        }.overlay(
+        }
+        .overlay(
             coffeeshopInformation(showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
                 .animation(.easeInOut, value: showDetail)
         )
-//        .onAppear{
-//            locationManager.checkAuthorization()
-//            healthViewModel.requestAuthorization()
-//        }
-//        .alert(isPresented: $locationManager.showSettingsAlert) {
-//            Alert(
-//                title: Text("Location Permission Needed"),
-//                message: Text("Please enable location access in Settings."),
-//                primaryButton: .default(Text("Open Settings"), action: {
-//                    if let url = URL(string: UIApplication.openSettingsURLString) {
-//                        UIApplication.shared.open(url)
-//                    }
-//                }),
-//                secondaryButton: .cancel()
-//            )
-//        }
-    }
-}
-
-
-//struct userProfile: View {
-//    @AppStorage("userName") var userName: String = ""
-//    var body: some View {
-//        HStack {
-//            VStack (alignment: .leading) {
-//                Text("Hi, \(userName)!")
-//                    .font(.title)
-//                    .fontWeight(.semibold)
-//                //                    .padding(.vertical)
-//                
-//                Text("Let’s walk and sip! ☕️")
-//                    .font(.subheadline)
-//                    .foregroundColor(.secondary)
-//                    .lineLimit(2)
-//            }
-//            .padding()
-//            Spacer()
-//            
-//            HStack{
-//                Text ("[X] Streak")
-//                Image(systemName: "flame.fill")
-//            }
-//            
-//            .padding()
-//            .background(Color.brown2)
-//            .foregroundColor(.white)
-//            .clipShape(RoundedRectangle(cornerRadius: 10))
-//            .frame(width: 150, height: 20)
-//            .padding(.horizontal)
-//        }
-////        .fullScreenCover(isPresented: $showOnboarding) {
-////            OnboardingView()
-////        }
-//    }
-//}
-
-//struct ContentView: View {
-//    @AppStorage("userName") var userName: String = ""
-//    
-//    var body: some View {
-//        if userName.isEmpty {
-//            OnboardingView()
-//        } else {
-//            Homepage()
-//        }
-//    }
-//}
-
-struct userProfile: View {
-    @AppStorage("userName") var userName: String = ""
-    @StateObject var streakManager = StreakManager()
-    var body: some View {
-        HStack {
-            VStack (alignment: .leading) {
-                Text("Hi, \(userName)!")
-                    .font(.title)
-                    .fontWeight(.semibold)
-                Text("Let’s walk and sip! ☕️")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .lineLimit(2)
+        .onAppear {
+            locationManager.checkAuthorization()
+            healthViewModel.requestAuthorization()
+            // Trigger update when the view appears.
+            updateCoffeeShopsWithCalories()
+        }
+        // Update the list if the user's location changes.
+        .onChange(of: locationManager.userLocation) { newLocation in
+            if newLocation != nil {
+                updateCoffeeShopsWithCalories()
             }
-            .padding()
-            Spacer()
-            
-            HStack{
-                Text ("\(streakManager.streak) Streak")
-                Image(systemName: "flame.fill")
-            }
-            
-            .padding()
-            .background(Color.brown2)
-            .foregroundColor(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .frame(width: 150, height: 20)
-            .padding(.horizontal, 5)
+        }
+        .alert(isPresented: $locationManager.showSettingsAlert) {
+            Alert(
+                title: Text("Location Permission Needed"),
+                message: Text("Please enable location access in Settings."),
+                primaryButton: .default(Text("Open Settings"), action: {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                }),
+                secondaryButton: .cancel()
+            )
         }
     }
 }
+
 
 
 #Preview {
