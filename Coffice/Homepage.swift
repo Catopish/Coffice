@@ -40,7 +40,6 @@ struct Homepage: View {
     @StateObject var mapWalkingManager = MapWalkingManager()
     
     @State var isLoading: Bool = false
-    @StateObject var locationManager = LocationManager()
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
@@ -58,14 +57,62 @@ struct Homepage: View {
         CoffeeShopStruct(name: "Lawson", location: "Lorem Ipsum", description: "lorem", distance: 256, steps: 102, calories: 45, latitude: -6.302592, longitude: 106.653380, logo: "lawson")
     ]
 
-    var filteredCoffeeShop: [CoffeeShopStruct] {
-        guard !searchContent.isEmpty else { return coffeeShop }
-        return coffeeShop.filter { $0.name.localizedCaseInsensitiveContains(searchContent) }
-    }
-
-    var sortedFilteredCoffeeShop: [CoffeeShopStruct] {
-        filteredCoffeeShop.sorted { $0.distance < $1.distance }
-    }
+    // Filter by the search text on the original array.
+        var filteredCoffeeshop: [CoffeeShopStruct] {
+            guard !searchContent.isEmpty else {
+                return coffeeShop
+            }
+            return coffeeShop.filter { $0.name.localizedCaseInsensitiveContains(searchContent) }
+        }
+        
+        // This state variable holds the updated results (after route calculation).
+        @State private var updatedCoffeeShopsState: [CoffeeShopStruct] = []
+        
+        // A computed property to filter the updated results by the search text.
+        var filteredUpdatedCoffeeShops: [CoffeeShopStruct] {
+            guard !searchContent.isEmpty else {
+                return updatedCoffeeShopsState
+            }
+            return updatedCoffeeShopsState.filter {
+                $0.name.localizedCaseInsensitiveContains(searchContent)
+            }
+        }
+        
+        // Function that updates each coffee shop's distance (using route distance) and calories.
+        func updateCoffeeShopsWithCalories() {
+            guard let userLocation = locationManager.userLocation else { return }
+            
+            var newCoffeeShops: [CoffeeShopStruct] = []
+            let group = DispatchGroup()
+            
+            // Use the original filtered array (based on search) here.
+            for shop in filteredCoffeeshop {
+                var updatedShop = shop
+                let destinationCoordinate = CLLocationCoordinate2D(latitude: shop.latitude, longitude: shop.longitude)
+                
+                group.enter()
+                // Calculate the route asynchronously.
+                mapWalkingManager.calculateRoute(from: userLocation.coordinate, to: destinationCoordinate) { success in
+                    if success,
+                       let travelTime = mapWalkingManager.travelTime,
+                       let routeDistance = mapWalkingManager.distance {
+                        updatedShop.distance = routeDistance
+                        let estimatedCalories = mapWalkingManager.calculateCalories(for: routeDistance, at: 4.0, in: travelTime)
+                        updatedShop.calories = estimatedCalories
+                    } else {
+                        // Fallback to geodesic distance.
+                        let shopLocation = CLLocation(latitude: shop.latitude, longitude: shop.longitude)
+                        updatedShop.distance = userLocation.distance(from: shopLocation)
+                    }
+                    newCoffeeShops.append(updatedShop)
+                    group.leave()
+                }
+            }
+            
+            group.notify(queue: .main) {
+                self.updatedCoffeeShopsState = newCoffeeShops.sorted { $0.distance < $1.distance }
+            }
+        }
 
     var body: some View {
         ZStack {
@@ -75,6 +122,7 @@ struct Homepage: View {
         .onAppear {
             locationManager.checkAuthorization()
             if userName.isEmpty { showOnboarding = true }
+            updateCoffeeShopsWithCalories()
         }
         .fullScreenCover(isPresented: $showOnboarding) { OnboardingView() }
         .alert(isPresented: $locationManager.showSettingsAlert) {
@@ -121,7 +169,7 @@ struct Homepage: View {
 
             NavigationStack {
                 CoffeeShopListView(
-                    coffeeShops: sortedFilteredCoffeeShop,
+                    coffeeShops: filteredUpdatedCoffeeShops,
                     selectedCoffeeshop: $selectedCoffeeshop,
                     showDetail: $showDetail
                 )
