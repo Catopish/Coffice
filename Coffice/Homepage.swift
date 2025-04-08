@@ -26,16 +26,19 @@ struct CoffeeShopStruct: Identifiable {
 @Observable
 class filterModel: ObservableObject {
     var maxRange: Double
-    
     init(maxRange: Double) {
         self.maxRange = maxRange
     }
 }
 
 struct Homepage: View {
-    @State private var streak: Int = 0
+    
     @AppStorage("userName") var userName: String = ""
+    
     @StateObject private var healthViewModel = HealthDashboardViewModel()
+    @StateObject var locationManager = LocationManager()
+    @StateObject var mapWalkingManager = MapWalkingManager()
+    
     @State var isLoading: Bool = false
     @StateObject var locationManager = LocationManager()
     @State private var searchContent: String = ""

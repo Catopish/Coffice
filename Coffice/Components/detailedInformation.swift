@@ -13,6 +13,8 @@ struct coffeeshopInformation: View{
     @State var showMapView: Bool = false
     @Binding var showDetail: Bool
     @Binding var selectedCoffeeshop: CoffeeShopStruct?
+    @StateObject var liveViewModel = LiveActivityViewModel()
+
     
     var body: some View {
         ZStack {
@@ -74,7 +76,7 @@ struct coffeeshopInformation: View{
                                 .frame(width: 30, height: 40)
                                 .foregroundStyle(Color(uiColor: .brown2))
                             HStack(alignment: .firstTextBaseline, spacing: 2) {
-                                Text("\(shop.distance, specifier: "%.1f")")
+                                Text("\(Int(shop.distance))")
                                     .padding(.top, 5)
                                     .font(.headline)
                                     .foregroundStyle(.primary)
@@ -135,6 +137,7 @@ struct coffeeshopInformation: View{
                     
                     VStack {
                         Button {
+                            liveViewModel.startLiveActivity()
                             showMapView = true
                         } label: {
                             Text("Get Started")
@@ -149,7 +152,7 @@ struct coffeeshopInformation: View{
                         .fullScreenCover(isPresented: $showMapView) {
 //                            MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
 //                            MapWalking()
-                            MapView(coffeShops: $selectedCoffeeshop)
+                            MapView(coffeShops: $selectedCoffeeshop,liveViewModel: liveViewModel)
                         }
                     }
                     .padding(.bottom)
