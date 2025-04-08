@@ -45,6 +45,8 @@ struct Homepage: View {
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
     @State private var showOnboarding: Bool = false
     @State var showAlertPopup: Bool = false
+    
+    @State private var updatedCoffeeShopsState: [CoffeeShopStruct] = []
 
     let coffeeShop: [CoffeeShopStruct] = [
         CoffeeShopStruct(name: "Starbucks", location: "Lorem Ipsum", description: "lorem", distance: 127, steps: 123, calories: 123, latitude: -6.30191, longitude: 106.65438, logo: "sbux"),
@@ -57,27 +59,6 @@ struct Homepage: View {
         CoffeeShopStruct(name: "Lawson", location: "Lorem Ipsum", description: "lorem", distance: 256, steps: 102, calories: 45, latitude: -6.302592, longitude: 106.653380, logo: "lawson")
     ]
 
-    // Filter by the search text on the original array.
-        var filteredCoffeeshop: [CoffeeShopStruct] {
-            guard !searchContent.isEmpty else {
-                return coffeeShop
-            }
-            return coffeeShop.filter { $0.name.localizedCaseInsensitiveContains(searchContent) }
-        }
-        
-        // This state variable holds the updated results (after route calculation).
-        @State private var updatedCoffeeShopsState: [CoffeeShopStruct] = []
-        
-        // A computed property to filter the updated results by the search text.
-        var filteredUpdatedCoffeeShops: [CoffeeShopStruct] {
-            guard !searchContent.isEmpty else {
-                return updatedCoffeeShopsState
-            }
-            return updatedCoffeeShopsState.filter {
-                $0.name.localizedCaseInsensitiveContains(searchContent)
-            }
-        }
-        
         // Function that updates each coffee shop's distance (using route distance) and calories.
         func updateCoffeeShopsWithCalories() {
             guard let userLocation = locationManager.userLocation else { return }
@@ -86,7 +67,7 @@ struct Homepage: View {
             let group = DispatchGroup()
             
             // Use the original filtered array (based on search) here.
-            for shop in filteredCoffeeshop {
+            for shop in coffeeShop {
                 var updatedShop = shop
                 let destinationCoordinate = CLLocationCoordinate2D(latitude: shop.latitude, longitude: shop.longitude)
                 
@@ -123,6 +104,11 @@ struct Homepage: View {
             locationManager.checkAuthorization()
             if userName.isEmpty { showOnboarding = true }
             updateCoffeeShopsWithCalories()
+        }
+        .onChange(of: locationManager.userLocation) { newLocation in
+            if newLocation != nil {
+                updateCoffeeShopsWithCalories()
+            }
         }
         .fullScreenCover(isPresented: $showOnboarding) { OnboardingView() }
         .alert(isPresented: $locationManager.showSettingsAlert) {
@@ -169,7 +155,7 @@ struct Homepage: View {
 
             NavigationStack {
                 CoffeeShopListView(
-                    coffeeShops: filteredUpdatedCoffeeShops,
+                    coffeeShops: updatedCoffeeShopsState,
                     selectedCoffeeshop: $selectedCoffeeshop,
                     showDetail: $showDetail
                 )
