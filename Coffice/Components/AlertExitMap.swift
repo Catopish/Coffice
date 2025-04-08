@@ -20,7 +20,8 @@ struct AlertExitMap: View {
                     .foregroundColor(.red)
                     .font(.title)
             }
-            .offset(x: 150, y: -360)
+            .frame(maxWidth: .infinity)
+            .offset(x: 130, y: 275)
 
             // Popup
             if showPopup {

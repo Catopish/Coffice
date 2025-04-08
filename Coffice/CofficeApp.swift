@@ -10,10 +10,16 @@ import SwiftData
 
 @main
 struct CofficeApp: App {
-
+    @AppStorage("userName") var userName: String = ""
+    
     var body: some Scene {
         WindowGroup {
-            Homepage()
+            if userName.isEmpty {
+                OnboardingView()
+            }
+            else {
+                Homepage()
+            }
         }
     }
 }
