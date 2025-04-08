@@ -2,7 +2,9 @@ import SwiftUI
 
 struct AlertExitMap: View {
     @State private var showPopup = false
+    @State private var showPopupArrived = false
     @State private var isYes = false
+    @ObservedObject var liveViewModel: LiveActivityViewModel
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -37,7 +39,9 @@ struct AlertExitMap: View {
 
                                 HStack(spacing: 20) {
                                     Button(action: {
+                                        liveViewModel.stopLiveActivity()
                                         dismiss()
+//                                        showPopupArrived = true
                                     }) {
                                         Text("Yes")
                                             .frame(width: 125, height: 40)
@@ -65,11 +69,15 @@ struct AlertExitMap: View {
                 }
             }
         }
+        //NOTE: testing arrived
+//        .fullScreenCover(isPresented: $showPopupArrived){
+//            ArrivalPopupView()
+//        }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        AlertExitMap()
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AlertExitMap()
+//    }
+//}

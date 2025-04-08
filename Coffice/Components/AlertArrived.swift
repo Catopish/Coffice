@@ -4,7 +4,10 @@ struct ArrivalPopupView: View {
     var moveCalories: Int = 258
     var steps: Int = 1072
     var onDismiss: () -> Void = {}
-
+    
+    let latestSteps = UserDefaults.standard.integer(forKey: "latestStepActivity")
+    let latestCalories = UserDefaults.standard.double(forKey: "latestCaloriesActivity")
+    
     var body: some View {
         VStack() {
             Text("You've Arrived!")
@@ -23,7 +26,7 @@ struct ArrivalPopupView: View {
                         .frame(width: 20, height: 28)
                         .foregroundStyle(Color(uiColor: .brown2))
                     HStack {
-                        Text("\(moveCalories)")
+                        Text("\(latestCalories, specifier: "%.1f")")
                             .font(.title3)
                             .foregroundColor(.brown3)
                         Text("CAL")
@@ -38,7 +41,7 @@ struct ArrivalPopupView: View {
                         .frame(width: 20, height: 28)
                         .foregroundStyle(Color(uiColor: .brown2))
                     HStack {
-                        Text("\(steps)")
+                        Text("\(latestSteps)")
                             .font(.title3)
                             .foregroundColor(.brown3)
                         Text("STEPS")

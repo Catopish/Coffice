@@ -13,6 +13,7 @@ struct MapView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject private var locationManager = LocationManager()
     @Binding var coffeShops: CoffeeShopStruct?
+    @ObservedObject var liveViewModel: LiveActivityViewModel
     
     var body: some View {
         ZStack {
@@ -38,9 +39,9 @@ struct MapView: View {
                 Text("Checking GPS permission...")
                     .font(.title2)
             }
-            AlertExitMap()
+            AlertExitMap(liveViewModel: liveViewModel)
             VStack{
-                ActivitySummary()
+                ActivitySummary(liveViewModel: liveViewModel)
             }
 
         }
@@ -48,9 +49,10 @@ struct MapView: View {
     
 }
 
-
 struct ActivitySummary: View {
-    @StateObject var healthManager = HealthManager()
+//    @StateObject var healthManager = HealthManager()
+    @ObservedObject var liveViewModel: LiveActivityViewModel
+    
     var body: some View {
         Spacer()
         VStack(alignment: .leading, spacing: 10) {
@@ -70,7 +72,7 @@ struct ActivitySummary: View {
                         .foregroundColor(Color("brown2"))
                     
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text("\(Int(healthManager.caloriesToday))")
+                        Text("\(liveViewModel.liveCalories, specifier: "%.1f")")
                             .font(.title)
                             .foregroundStyle(.primary)
                             .foregroundColor(Color("brown3"))
@@ -89,7 +91,7 @@ struct ActivitySummary: View {
                         .foregroundColor(Color("brown2"))
                     
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text("\(Int(healthManager.stepsToday))")
+                        Text("\(liveViewModel.liveSteps)")
                             .font(.title)
                             .foregroundStyle(.primary)
                             .foregroundColor(Color("brown3"))
@@ -108,15 +110,15 @@ struct ActivitySummary: View {
         .shadow(radius: 5)
     }
 }
-
-struct ActivitySummary_Previews: PreviewProvider {
-    static var previews: some View {
-        ActivitySummary()
-            .previewLayout(.sizeThatFits)
-            .padding()
-            .background(Color.gray.opacity(0.2))
-    }
-}
+//
+//struct ActivitySummary_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ActivitySummary()
+//            .previewLayout(.sizeThatFits)
+//            .padding()
+//            .background(Color.gray.opacity(0.2))
+//    }
+//}
 
 
 
