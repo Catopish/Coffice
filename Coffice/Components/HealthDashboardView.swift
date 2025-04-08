@@ -38,8 +38,7 @@ struct DashboardCard: View {
             HStack {
                 Text("Today's Activity")
                     .font(.headline)
-                    .padding(10)
-                    .padding(.horizontal)
+                    .padding(.leading)
                 Spacer()
             }
             
@@ -77,14 +76,14 @@ struct DashboardCard: View {
 //                        unit: "M"
 //                    )
                 }
+                .padding(.trailing)
             }
-            .padding(.bottom, 20)
+            .padding()
         }
         .background(Color(.systemBackground))
-        .cornerRadius(12)
+        .cornerRadius(16)
         .shadow(radius: 4)
         .padding()
-        .padding(.bottom, -20)
     }
 }
 
@@ -125,7 +124,7 @@ struct ActivityRingView: View {
             Circle()
                 .stroke(lineWidth: 12)
                 .opacity(0.3)
-                .foregroundColor(.brown2)
+                .foregroundColor(.red)
             
             // Progress Ring
             Circle()

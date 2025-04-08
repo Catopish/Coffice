@@ -23,7 +23,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     func checkAuthorization() {
         let status = locationManager.authorizationStatus
-        print("Authorization status: \(status.rawValue)")
+//        print("Authorization status Location: \(status.rawValue)")
         DispatchQueue.main.async {
             self.authorizationStatus = status
             switch status {
@@ -40,6 +40,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+//        print("Location authorization changed")
         checkAuthorization()
     }
     

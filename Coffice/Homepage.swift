@@ -34,11 +34,14 @@ class filterModel: ObservableObject {
 }
 
 struct Homepage: View {
-    @State private var streak: Int = 0
+    
     @AppStorage("userName") var userName: String = ""
+    
     @StateObject private var healthViewModel = HealthDashboardViewModel()
+    @StateObject var locationManager = LocationManager()
+    
+    @State private var streak: Int = 0
     @State var isLoading: Bool = false
-    @StateObject var locationManager = LocationManager()    
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
@@ -120,27 +123,22 @@ struct Homepage: View {
             coffeeshopInformation(showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
                 .animation(.easeInOut, value: showDetail)
         )
-        .onAppear{
-            locationManager.checkAuthorization()
-            if userName.isEmpty {
-                showOnboarding = true
-            }
-        }
-        .fullScreenCover(isPresented: $showOnboarding) {
-                    OnboardingView()
-                }
-        .alert(isPresented: $locationManager.showSettingsAlert) {
-            Alert(
-                title: Text("Location Permission Needed"),
-                message: Text("Please enable location access in Settings."),
-                primaryButton: .default(Text("Open Settings"), action: {
-                    if let url = URL(string: UIApplication.openSettingsURLString) {
-                        UIApplication.shared.open(url)
-                    }
-                }),
-                secondaryButton: .cancel()
-            )
-        }
+//        .onAppear{
+//            locationManager.checkAuthorization()
+//            healthViewModel.requestAuthorization()
+//        }
+//        .alert(isPresented: $locationManager.showSettingsAlert) {
+//            Alert(
+//                title: Text("Location Permission Needed"),
+//                message: Text("Please enable location access in Settings."),
+//                primaryButton: .default(Text("Open Settings"), action: {
+//                    if let url = URL(string: UIApplication.openSettingsURLString) {
+//                        UIApplication.shared.open(url)
+//                    }
+//                }),
+//                secondaryButton: .cancel()
+//            )
+//        }
     }
 }
 
