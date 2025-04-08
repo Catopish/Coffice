@@ -4,11 +4,13 @@
 //
 //  Created by Hafi on 08/04/25.
 //
-
 import SwiftUI
 
+
 struct ActivitySummary: View {
-    @StateObject var healthManager = HealthDashboardViewModel()
+//    @StateObject var healthManager = HealthManager()
+    @ObservedObject var liveViewModel: LiveActivityViewModel
+    
     var body: some View {
         Spacer()
         VStack(alignment: .leading, spacing: 10) {
@@ -28,7 +30,7 @@ struct ActivitySummary: View {
                         .foregroundColor(Color("brown2"))
                     
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text("\(Int(healthManager.caloriesToday))")
+                        Text("\(liveViewModel.liveCalories, specifier: "%.1f")")
                             .font(.title)
                             .foregroundStyle(.primary)
                             .foregroundColor(Color("brown3"))
@@ -47,7 +49,7 @@ struct ActivitySummary: View {
                         .foregroundColor(Color("brown2"))
                     
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text("\(Int(healthManager.stepsToday))")
+                        Text("\(liveViewModel.liveSteps)")
                             .font(.title)
                             .foregroundStyle(.primary)
                             .foregroundColor(Color("brown3"))
@@ -64,14 +66,5 @@ struct ActivitySummary: View {
         .background(Color.white)
         .cornerRadius(12)
         .shadow(radius: 5)
-    }
-}
-
-struct ActivitySummary_Previews: PreviewProvider {
-    static var previews: some View {
-        ActivitySummary()
-            .previewLayout(.sizeThatFits)
-            .padding()
-            .background(Color.gray.opacity(0.2))
     }
 }
