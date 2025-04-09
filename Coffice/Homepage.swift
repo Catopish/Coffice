@@ -110,12 +110,12 @@ struct Homepage: View {
             backgroundHeader()
             mainContent()
         }
-        .onAppear {
-            locationManager.checkAuthorization()
-//            if userName.isEmpty { showOnboarding = true }
-            updateCoffeeShopsWithCalories()
+//        .onAppear {
+//            locationManager.checkAuthorization()
+////            if userName.isEmpty { showOnboarding = true }
+//            updateCoffeeShopsWithCalories()
 //            streakManager.completeToday()
-        }
+//        }
 //        .onChange(of: scenePhase) { newPhase in
 //            if newPhase == .active {
 //                // Saat aplikasi kembali aktif, cek/update streak.
@@ -135,13 +135,10 @@ struct Homepage: View {
             MapView(coffeShops: $selectedCoffeeshop,liveViewModel: liveViewModel,hasArrivedAtDestination: $hasArrivedAtDestination)
         }
         .fullScreenCover(isPresented: $streakManager.shouldShowStreak, content: {
-//            if Calendar.current.isDate(today, equalTo: hariIni.addingTimeInterval(86400), toGranularity: .day) {
-                // Lanjutan dari kemarin → tambah streak
-                AlertStreak()
-                .onDisappear() {
-                    streakManager.shouldShowStreak = false
-                }
-//            }
+            AlertStreak()
+            .onDisappear() {
+                streakManager.shouldShowStreak = false
+            }
         })
 //        .fullScreenCover(isPresented: $showOnboarding) { OnboardingView() }
         .alert(isPresented: $locationManager.showSettingsAlert) {
