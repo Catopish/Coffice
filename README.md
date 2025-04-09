@@ -1,5 +1,5 @@
 # Coffice ☕📍
-
+![Logo](https://github.com/Catopish/Coffice/blob/main/Coffice/Assets.xcassets/AppIcon.appiconset/C%20ffice%20(1024%20x%201024%20piksel).png)
 An iOS app built with **SwiftUI** that helps users discover coffee shops within **Green Office Park, BSD – Tangerang**. Designed with privacy, efficiency, and user experience in mind using Apple-native frameworks: **CoreLocation**, **CoreMotion**, **MapKit**, and **HealthKit**.
 
 ---
