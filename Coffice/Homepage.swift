@@ -38,12 +38,14 @@ struct Homepage: View {
     @StateObject private var healthViewModel = HealthDashboardViewModel()
     @StateObject var locationManager = LocationManager()
     @StateObject var mapWalkingManager = MapWalkingManager()
+    @StateObject var liveViewModel = LiveActivityViewModel()
     
+    @State var showMapView: Bool = false
     @State var isLoading: Bool = false
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
-    @State private var showOnboarding: Bool = false
+//    @State private var showOnboarding: Bool = false
     @State var showAlertPopup: Bool = false
     
     @State private var updatedCoffeeShopsState: [CoffeeShopStruct] = []
@@ -56,6 +58,7 @@ struct Homepage: View {
         CoffeeShopStruct(name: "% Arabica", location: "Lorem Ipsum", description: "lorem", distance: 431, steps: 887, calories: 1223, latitude: -6.30179, longitude: 106.65321, logo: "arabica"),
         CoffeeShopStruct(name: "Kenangan Signature", location: "Lorem Ipsum", description: "lorem", distance: 134, steps: 412, calories: 531, latitude: -6.301535, longitude: 106.653458, logo: "kenangan"),
         CoffeeShopStruct(name: "Tabemori", location: "Lorem Ipsum", description: "lorem", distance: 256, steps: 102, calories: 45, latitude: -6.302768, longitude: 106.653470, logo: "tabemori"),
+        CoffeeShopStruct(name: "Dummy", location: "Lorem Ipsum", description: "lorem", distance: 0, steps: 123, calories: 123, latitude: -6.302141, longitude: 106.652327, logo: "sbux"),
         CoffeeShopStruct(name: "Lawson", location: "Lorem Ipsum", description: "lorem", distance: 256, steps: 102, calories: 45, latitude: -6.302592, longitude: 106.653380, logo: "lawson")
     ]
 
@@ -102,7 +105,7 @@ struct Homepage: View {
         }
         .onAppear {
             locationManager.checkAuthorization()
-            if userName.isEmpty { showOnboarding = true }
+//            if userName.isEmpty { showOnboarding = true }
             updateCoffeeShopsWithCalories()
         }
         .onChange(of: locationManager.userLocation) { newLocation in
@@ -110,7 +113,11 @@ struct Homepage: View {
                 updateCoffeeShopsWithCalories()
             }
         }
-        .fullScreenCover(isPresented: $showOnboarding) { OnboardingView() }
+        .fullScreenCover(isPresented: $showMapView) {
+//                            MapWalking()
+            MapView(coffeShops: $selectedCoffeeshop,liveViewModel: liveViewModel)
+        }
+//        .fullScreenCover(isPresented: $showOnboarding) { OnboardingView() }
         .alert(isPresented: $locationManager.showSettingsAlert) {
             Alert(
                 title: Text("Location Permission Needed"),
@@ -186,7 +193,7 @@ struct Homepage: View {
             }
         }
         .overlay(
-            coffeeshopInformation(showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
+            coffeeshopInformation(showMapView:$showMapView, showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
                 .animation(.easeInOut, value: showDetail)
         )
     }

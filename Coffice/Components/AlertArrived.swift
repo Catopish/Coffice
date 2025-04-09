@@ -7,6 +7,9 @@ struct AlertArrived: View {
     var onDismiss: () -> Void = {}
 
 
+    let latestSteps = UserDefaults.standard.integer(forKey: "latestStepActivity")
+    let latestCalories = UserDefaults.standard.double(forKey: "latestCaloriesActivity")
+
     var body: some View {
         ZStack {
             Color.black.opacity(0.3)
@@ -30,7 +33,7 @@ struct AlertArrived: View {
                             .frame(width: 20, height: 28)
                             .foregroundStyle(Color(uiColor: .brown2))
                         HStack {
-                            Text("\(moveCalories)")
+                            Text("\(latestCalories, specifier: "%.1f")")
                                 .font(.title3)
                                 .foregroundColor(.brown3)
                             Text("CAL")
@@ -45,7 +48,7 @@ struct AlertArrived: View {
                             .frame(width: 20, height: 28)
                             .foregroundStyle(Color(uiColor: .brown2))
                         HStack {
-                            Text("\(steps)")
+                            Text("\(latestSteps)")
                                 .font(.title3)
                                 .foregroundColor(.brown3)
                             Text("STEPS")
@@ -58,7 +61,7 @@ struct AlertArrived: View {
                 .padding(.vertical, 8)
                 
                 Button(action: {
-                    onDismiss()
+//                    onDismiss()
                     streakManager.completeToday()
                 }) {
                     Text("OK")

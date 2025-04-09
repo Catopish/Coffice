@@ -6,6 +6,7 @@ struct MapViewWalking: View {
     @State private var mapPosition: MapCameraPosition = .automatic
     @StateObject var mapWalkingManager = MapWalkingManager()
     @Binding var selectedShop: CoffeeShopStruct?
+    @Environment(\.dismiss) var dismiss
     
     @State private var hasArrivedAtDestination = false
     @State private var showArrivalAlert = false
@@ -63,7 +64,7 @@ struct MapViewWalking: View {
                     let destinationLocation = CLLocation(latitude: destinationCoordinate.latitude, longitude: destinationCoordinate.longitude)
                     let distance = newLocation.distance(from: destinationLocation) // distance in meters
                     
-                    if distance < 5 && !hasArrivedAtDestination {
+                    if distance < 20 && !hasArrivedAtDestination {
                         hasArrivedAtDestination = true
                         showArrivalAlert = true
                     }
@@ -71,9 +72,10 @@ struct MapViewWalking: View {
                 .alert("You have arrived!", isPresented: $showArrivalAlert) {
                     Button("Return Home") {
                         // Insert your navigation logic here, e.g., dismiss or navigate back.
+                        dismiss()
                     }
                 } message: {
-                    Text("You are within 5 meters of your destination.")
+                    Text("You are within 20 meters of your destination.")
                 }
             } else {
                 ProgressView("Getting your location...")

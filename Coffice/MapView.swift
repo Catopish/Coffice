@@ -46,6 +46,8 @@ struct MapView: View {
             AlertExitMap(liveViewModel: liveViewModel)
 //            AlertExitMap()
 
+        .onAppear() {
+            liveViewModel.startLiveActivity()
         }
     }
 }
