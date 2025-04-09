@@ -1,10 +1,13 @@
 import SwiftUI
 
 struct AlertArrived: View {
+    @ObservedObject var liveViewModel: LiveActivityViewModel
     @ObservedObject var streakManager = StreakManager()
     var moveCalories: Int = 258
     var steps: Int = 1072
     var onDismiss: () -> Void = {}
+    @Environment(\.dismiss) var dismiss
+
 
 
     let latestSteps = UserDefaults.standard.integer(forKey: "latestStepActivity")
@@ -62,7 +65,9 @@ struct AlertArrived: View {
                 
                 Button(action: {
 //                    onDismiss()
+                    dismiss()
                     streakManager.completeToday()
+                    liveViewModel.stopLiveActivity()
                 }) {
                     Text("OK")
                         .font(.headline)
@@ -84,8 +89,8 @@ struct AlertArrived: View {
     }
 }
 
-struct ArrivalArrived_Previews: PreviewProvider {
-    static var previews: some View {
-        AlertArrived()
-    }
-}
+//struct ArrivalArrived_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AlertArrived(liveViewModel: liveViewModel)
+//    }
+//}

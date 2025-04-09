@@ -14,13 +14,14 @@ struct MapView: View {
     @StateObject private var locationManager = LocationManager()
     @Binding var coffeShops: CoffeeShopStruct?
     @ObservedObject var liveViewModel: LiveActivityViewModel
+    @State var hasArrivedAtDestination : Bool = false
     
     var body: some View {
         ZStack {
             if let status = locationManager.authorizationStatus {
                 switch status {
                 case .authorizedAlways, .authorizedWhenInUse:
-                    MapViewWalking(locationManager: locationManager, selectedShop: $coffeShops)
+                    MapViewWalking(locationManager: locationManager, liveViewModel: liveViewModel, selectedShop: $coffeShops,hasArrivedAtDestination: $hasArrivedAtDestination)
                     
                 case .notDetermined:
                     Text("Requesting GPS permission...")
@@ -45,7 +46,13 @@ struct MapView: View {
             }
             AlertExitMap(liveViewModel: liveViewModel)
 //            AlertExitMap()
-
+        }
+        .overlay{
+            if hasArrivedAtDestination {
+                AlertArrived(liveViewModel: liveViewModel)
+                    
+            }
+        }
         .onAppear() {
             liveViewModel.startLiveActivity()
         }
