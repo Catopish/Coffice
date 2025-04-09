@@ -1,5 +1,4 @@
 # Coffice ☕📍
-
 An iOS app built with **SwiftUI** that helps users discover coffee shops within **Green Office Park, BSD – Tangerang**. Designed with privacy, efficiency, and user experience in mind using Apple-native frameworks: **CoreLocation**, **CoreMotion**, **MapKit**, and **HealthKit**.
 
 ---
