@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AlertStreak: View {
-    @StateObject var streakManager = StreakManager()
+    @ObservedObject var streakManager : StreakManager
 //    @Binding var showPopupAlert : Bool
     @State private var isYes = false
     @Environment(\.dismiss) var dismiss
@@ -32,7 +32,8 @@ struct AlertStreak: View {
                 
                 Button(action: {
 //                    showPopupAlert = false
-                    dismiss()
+//                    dismiss()
+                    streakManager.shouldShowStreak = false
                 }) {
                     Text("OK")
                         .font(.headline)
@@ -53,11 +54,11 @@ struct AlertStreak: View {
     }
 }
 
-struct AlertStreak_Previews: PreviewProvider {
-    static var previews: some View {
-        AlertStreak()
-    }
-}
+//struct AlertStreak_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AlertStreak()
+//    }
+//}
 
 //import SwiftUI
 //

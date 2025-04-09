@@ -2,7 +2,7 @@ import SwiftUI
 
 struct AlertArrived: View {
     @ObservedObject var liveViewModel: LiveActivityViewModel
-    @ObservedObject var streakManager = StreakManager()
+    @ObservedObject var streakManager : StreakManager
     var moveCalories: Int = 258
     var steps: Int = 1072
     var onDismiss: () -> Void = {}

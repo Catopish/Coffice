@@ -32,10 +32,9 @@ class filterModel: ObservableObject {
 }
 
 struct Homepage: View {
-    @Environment(\.scenePhase) var scenePhase
     @AppStorage("userName") var userName: String = ""
     
-    @ObservedObject var streakManager = StreakManager()
+    @StateObject var streakManager = StreakManager()
     @StateObject private var healthViewModel = HealthDashboardViewModel()
     @StateObject var locationManager = LocationManager()
     @StateObject var mapWalkingManager = MapWalkingManager()
@@ -51,11 +50,6 @@ struct Homepage: View {
     @State var showAlertPopup: Bool = false
     
     @State private var updatedCoffeeShopsState: [CoffeeShopStruct] = []
-    
-    
-    
-//    let hariIni = UserDefaults.standard.object(forKey: "lastDateKey") as? Date ?? Date.distantPast
-//    let today = Calendar.current.startOfDay(for: Date())
     
     let coffeeShop: [CoffeeShopStruct] = [
         CoffeeShopStruct(name: "Starbucks", location: "The Breeze", description: "lorem", distance: 127, steps: 123, calories: 123, latitude: -6.30191, longitude: 106.65438, logo: "sbux"),
@@ -118,30 +112,17 @@ struct Homepage: View {
 //            updateCoffeeShopsWithCalories()
 //            streakManager.completeToday()
 //        }
-//        .onChange(of: scenePhase) { newPhase in
-//            if newPhase == .active {
-//                // Saat aplikasi kembali aktif, cek/update streak.
-//                streakManager.completeToday()
-//            }
-//        }
-        .onChange(of: locationManager.userLocation) { newLocation in
+        .onChange(of: locationManager.userLocation) { _, newLocation in
             if newLocation != nil {
                 updateCoffeeShopsWithCalories()
             }
         }
-//        .onChange(of: streakManager.streak) { streak in
-//           
-//        }
         .fullScreenCover(isPresented: $showMapView) {
-//                            MapWalking()
-            MapView(coffeShops: $selectedCoffeeshop,liveViewModel: liveViewModel,hasArrivedAtDestination: $hasArrivedAtDestination)
+            MapView(streakManager: streakManager, coffeShops: $selectedCoffeeshop,liveViewModel: liveViewModel,hasArrivedAtDestination: $hasArrivedAtDestination)
         }
-        .fullScreenCover(isPresented: $hasArrivedAtDestination, content: {
-            AlertStreak()
-            .onDisappear() {
-                streakManager.shouldShowStreak = false
-            }
-        })
+        .fullScreenCover(isPresented: $streakManager.shouldShowStreak) {
+            AlertStreak(streakManager: streakManager)
+        }
 //        .fullScreenCover(isPresented: $showOnboarding) { OnboardingView() }
         .alert(isPresented: $locationManager.showSettingsAlert) {
             Alert(
@@ -179,7 +160,7 @@ struct Homepage: View {
 
     func mainContent() -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            userProfile()
+            userProfile(streakManager: streakManager)
             HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
             
             Text ("Where’s your coffee taking you today?")
@@ -276,7 +257,7 @@ struct CoffeeShopListView: View {
 
 struct userProfile: View {
     @AppStorage("userName") var userName: String = ""
-    @ObservedObject var streakManager = StreakManager()
+    @ObservedObject var streakManager : StreakManager
     
 
 //    let daysStreak = UserDefaults.standard.integer(forKey: "streak")

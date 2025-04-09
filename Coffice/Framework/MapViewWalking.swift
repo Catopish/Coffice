@@ -51,7 +51,7 @@ struct MapViewWalking: View {
                         
                     }
                 }
-                .onChange(of: locationManager.userLocation) { newLocation in
+                .onChange(of: locationManager.userLocation) { _, newLocation in
                     guard let newLocation = newLocation else { return }
                     
                     // Calculate route and update map position
@@ -70,20 +70,7 @@ struct MapViewWalking: View {
                         showArrivalAlert = true
                     }
                 }
-//                .overlay{
-//                    if hasArrivedAtDestination {
-//                        AlertArrived(liveViewModel: liveViewModel)
-//                            
-//                    }
-//                }
-                //                .alert("You have arrived!", isPresented: $showArrivalAlert) {
-                //                    Button("Return Home") {
-                //                        // Insert your navigation logic here, e.g., dismiss or navigate back.
-                //                        dismiss()
-                //                    }
-                //                } message: {
-                //                    Text("You are within 20 meters of your destination.")
-                //                }
+
             } else {
                 ProgressView("Getting your location...")
             }
