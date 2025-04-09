@@ -143,19 +143,43 @@ struct Homepage: View {
         .ignoresSafeArea()
     }
 
-    @ViewBuilder
+    @State private var searchText: String = ""
+
     func mainContent() -> some View {
         VStack(alignment: .leading, spacing: 0) {
             userProfile()
             HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
-            Text("Where’s your coffee taking you today?")
+            
+            Text ("Where’s your coffee taking you today?")
                 .font(.headline)
-                .fontWeight(.semibold)
-                .padding()
+                .padding(.leading, 18)
+            
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .font(.caption)
+                    .foregroundColor(.white)
+                    .padding(3)
+                    .background(Color.brown2)
+                    .cornerRadius(4)
+                    .padding(.trailing, 5)
 
+                TextField("Search", text: $searchText)
+                    .foregroundColor(.primary)
+                    .autocapitalization(.none)
+            }
+            .padding(7)
+            .background(Color.gray.opacity(0.1))
+            .cornerRadius(6)
+            .padding()
+            .padding(.vertical, -10)
+
+            let filteredCoffeeShops = updatedCoffeeShopsState.filter { shop in
+                searchText.isEmpty || shop.name.localizedCaseInsensitiveContains(searchText)
+            }
             NavigationStack {
                 CoffeeShopListView(
-                    coffeeShops: updatedCoffeeShopsState,
+//                    coffeeShops: updatedCoffeeShopsState,
+                    coffeeShops: filteredCoffeeShops,
                     selectedCoffeeshop: $selectedCoffeeshop,
                     showDetail: $showDetail
                 )
@@ -178,12 +202,13 @@ struct CoffeeShopListView: View {
             Button(action: {
                 selectedCoffeeshop = shop
                 showDetail = true
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }) {
                 HStack(alignment: .center, spacing: 8) {
                     Image(shop.logo)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 40, height: 40)
+                        .frame(width: 35, height: 35)
                         .clipShape(Circle())
                         .padding(.trailing, 5)
                     VStack(alignment: .leading) {
@@ -199,16 +224,18 @@ struct CoffeeShopListView: View {
                         }
                     }
                 }
-                .padding(10)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.white)
-                .cornerRadius(10)
-                .shadow(color: Color.black.opacity(0.3), radius: 3, x: 0, y: 1)
+//                .padding(10)
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//                .background(Color.white)
+//                .cornerRadius(8)
+//                .shadow(color: Color.black.opacity(0.3), radius: 3, x: 0, y: 1)
             }
             .listRowInsets(EdgeInsets())
-            .listRowSeparator(.hidden)
-            .padding(.horizontal, 16)
+//            .listRowSeparator(.hidden)
+            .padding(.horizontal, 15)
+            .padding(5)
             .padding(.vertical, 6)
+
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
@@ -226,21 +253,21 @@ struct userProfile: View {
                     .font(.title)
                     .foregroundColor(.white)
                     .fontWeight(.semibold)
-                    .padding(.leading, 10)
+                    .padding(.leading, 6)
                 Text("Let’s walk and sip! ☕️")
                     .font(.subheadline)
                     .foregroundColor(.white)
                     .lineLimit(2)
-                    .padding(.leading, 10)
+                    .padding(.leading, 6)
             }
             .padding()
             Spacer()
             VStack {
                 Image(systemName: "flame.fill")
                     .font(.title)
-                    .padding(.trailing, 10)
+                    .padding(.trailing, 6)
                 Text("\(streakManager.streak) streak")
-                    .padding(.trailing, 10)
+                    .padding(.trailing, 6)
             }
             .padding()
             .foregroundColor(.white)
