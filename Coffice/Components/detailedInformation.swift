@@ -58,7 +58,7 @@ struct coffeeshopInformation: View{
                     
 //                    Divider()
                     VStack {
-                        Image("Starbucks")
+                        Image("\(shop.name)")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 300, height: 180) // Mengisi lebar penuh
