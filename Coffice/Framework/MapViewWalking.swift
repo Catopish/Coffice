@@ -3,31 +3,33 @@ import MapKit
 
 struct MapViewWalking: View {
     @StateObject var locationManager: LocationManager
+    @ObservedObject var liveViewModel: LiveActivityViewModel
     @State private var mapPosition: MapCameraPosition = .automatic
     @StateObject var mapWalkingManager = MapWalkingManager()
     @Binding var selectedShop: CoffeeShopStruct?
+    @Environment(\.dismiss) var dismiss
     
-    @State private var hasArrivedAtDestination = false
+    @Binding var hasArrivedAtDestination : Bool
     @State private var showArrivalAlert = false
     
-//    private let destinationCoordinate = CLLocationCoordinate2D(latitude: -7.777848720301518, longitude: 110.33756018305395)
+    //    private let destinationCoordinate = CLLocationCoordinate2D(latitude: -7.777848720301518, longitude: 110.33756018305395)
     // Computed destination coordinate:
-        private var destinationCoordinate: CLLocationCoordinate2D {
-            if let shop = selectedShop {
-                return CLLocationCoordinate2D(latitude: shop.latitude, longitude: shop.longitude)
-            } else {
-                // Default coordinate if no shop is selected
-                return CLLocationCoordinate2D(latitude: -7.777848720301518, longitude: 110.33756018305395)
-            }
+    private var destinationCoordinate: CLLocationCoordinate2D {
+        if let shop = selectedShop {
+            return CLLocationCoordinate2D(latitude: shop.latitude, longitude: shop.longitude)
+        } else {
+            // Default coordinate if no shop is selected
+            return CLLocationCoordinate2D(latitude: -7.777848720301518, longitude: 110.33756018305395)
         }
+    }
     
     var body: some View {
         VStack {
             if let userLocation = locationManager.userLocation {
                 Map(position: $mapPosition) {
                     if let polyline = mapWalkingManager.routePolyline {
-                                           MapPolyline(polyline)
-                                               .stroke(.blue, lineWidth: 4)
+                        MapPolyline(polyline)
+                            .stroke(.blue, lineWidth: 4)
                     }
                     
                     // Optionally show annotations
@@ -63,18 +65,25 @@ struct MapViewWalking: View {
                     let destinationLocation = CLLocation(latitude: destinationCoordinate.latitude, longitude: destinationCoordinate.longitude)
                     let distance = newLocation.distance(from: destinationLocation) // distance in meters
                     
-                    if distance < 5 && !hasArrivedAtDestination {
+                    if distance < 100 && !hasArrivedAtDestination {
                         hasArrivedAtDestination = true
                         showArrivalAlert = true
                     }
                 }
-                .alert("You have arrived!", isPresented: $showArrivalAlert) {
-                    Button("Return Home") {
-                        // Insert your navigation logic here, e.g., dismiss or navigate back.
-                    }
-                } message: {
-                    Text("You are within 5 meters of your destination.")
-                }
+//                .overlay{
+//                    if hasArrivedAtDestination {
+//                        AlertArrived(liveViewModel: liveViewModel)
+//                            
+//                    }
+//                }
+                //                .alert("You have arrived!", isPresented: $showArrivalAlert) {
+                //                    Button("Return Home") {
+                //                        // Insert your navigation logic here, e.g., dismiss or navigate back.
+                //                        dismiss()
+                //                    }
+                //                } message: {
+                //                    Text("You are within 20 meters of your destination.")
+                //                }
             } else {
                 ProgressView("Getting your location...")
             }

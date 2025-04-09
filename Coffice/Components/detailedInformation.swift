@@ -10,10 +10,10 @@ import MapKit
 
 struct coffeeshopInformation: View{
     
-    @State var showMapView: Bool = false
+    @Binding var showMapView: Bool
     @Binding var showDetail: Bool
     @Binding var selectedCoffeeshop: CoffeeShopStruct?
-    @StateObject var liveViewModel = LiveActivityViewModel()
+//    @ObservedObject var liveViewModel = LiveActivityViewModel()
 
     
     var body: some View {
@@ -137,7 +137,8 @@ struct coffeeshopInformation: View{
                     
                     VStack {
                         Button {
-                            liveViewModel.startLiveActivity()
+//                            liveViewModel.startLiveActivity()
+                            showDetail = false
                             showMapView = true
                         } label: {
                             Text("Get Started")
@@ -149,11 +150,11 @@ struct coffeeshopInformation: View{
                                 .padding(.horizontal)
                                 .cornerRadius(20)
                         }
-                        .fullScreenCover(isPresented: $showMapView) {
-//                            MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
-//                            MapWalking()
-                            MapView(coffeShops: $selectedCoffeeshop,liveViewModel: liveViewModel)
-                        }
+//                        .fullScreenCover(isPresented: $showMapView) {
+////                            MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
+////                            MapWalking()
+//                            MapView(coffeShops: $selectedCoffeeshop,liveViewModel: liveViewModel)
+//                        }
                     }
                     .padding(.bottom)
                     
