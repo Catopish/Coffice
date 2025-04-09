@@ -52,15 +52,15 @@ struct Homepage: View {
     @State private var updatedCoffeeShopsState: [CoffeeShopStruct] = []
     
     let coffeeShop: [CoffeeShopStruct] = [
-        CoffeeShopStruct(name: "Starbucks", location: "Lorem Ipsum", description: "lorem", distance: 127, steps: 123, calories: 123, latitude: -6.30191, longitude: 106.65438, logo: "sbux"),
-        CoffeeShopStruct(name: "Fore", location: "Lorem Ipsum", description: "lorem", distance: 45, steps: 54, calories: 134, latitude: -6.302514, longitude: 106.654299, logo: "fore"),
+        CoffeeShopStruct(name: "Starbucks", location: "The Breeze", description: "lorem", distance: 127, steps: 123, calories: 123, latitude: -6.30191, longitude: 106.65438, logo: "sbux"),
+        CoffeeShopStruct(name: "Fore", location: "The Breeze", description: "lorem", distance: 45, steps: 54, calories: 134, latitude: -6.302514, longitude: 106.654299, logo: "forelogo"),
         CoffeeShopStruct(name: "36 Grams", location: "Lorem Ipsum", description: "lorem", distance: 45, steps: 54, calories: 134, latitude: -6.301446, longitude: 106.650023, logo: "36grams"),
-        CoffeeShopStruct(name: "Tamper", location: "Lorem Ipsum", description: "lorem", distance: 431, steps: 887, calories: 1223, latitude: -6.301870, longitude: 106.654210, logo: "tamper"),
+        CoffeeShopStruct(name: "Tamper", location: "The Breeze", description: "lorem", distance: 431, steps: 887, calories: 1223, latitude: -6.301870, longitude: 106.654210, logo: "tamperlogo"),
         CoffeeShopStruct(name: "% Arabica", location: "Lorem Ipsum", description: "lorem", distance: 431, steps: 887, calories: 1223, latitude: -6.30179, longitude: 106.65321, logo: "arabica"),
-        CoffeeShopStruct(name: "Kenangan Signature", location: "Lorem Ipsum", description: "lorem", distance: 134, steps: 412, calories: 531, latitude: -6.301535, longitude: 106.653458, logo: "kenangan"),
-        CoffeeShopStruct(name: "Tabemori", location: "Lorem Ipsum", description: "lorem", distance: 256, steps: 102, calories: 45, latitude: -6.302768, longitude: 106.653470, logo: "tabemori"),
-        CoffeeShopStruct(name: "Dummy", location: "Lorem Ipsum", description: "lorem", distance: 0, steps: 123, calories: 123, latitude: -6.301665274836154, longitude: 106.67237360591591, logo: "sbux"),
-        CoffeeShopStruct(name: "Lawson", location: "Lorem Ipsum", description: "lorem", distance: 256, steps: 102, calories: 45, latitude: -6.302592, longitude: 106.653380, logo: "lawson")
+        CoffeeShopStruct(name: "Kenangan Signature", location: "The Breeze", description: "lorem", distance: 134, steps: 412, calories: 531, latitude: -6.301535, longitude: 106.653458, logo: "kenangan"),
+        CoffeeShopStruct(name: "Tabemori", location: "GOP 6", description: "lorem", distance: 256, steps: 102, calories: 45, latitude: -6.302768, longitude: 106.653470, logo: "tabemorilogo"),
+        CoffeeShopStruct(name: "Dummy", location: "Lorem Ipsum", description: "lorem", distance: 0, steps: 123, calories: 123, latitude: -6.289458814825691, longitude: 106.62684104712467, logo: "sbux"),
+        CoffeeShopStruct(name: "Lawson", location: "GOP 6", description: "lorem", distance: 256, steps: 102, calories: 45, latitude: -6.302592, longitude: 106.653380, logo: "lawsonlogo")
     ]
 
         // Function that updates each coffee shop's distance (using route distance) and calories.
@@ -82,8 +82,10 @@ struct Homepage: View {
                        let travelTime = mapWalkingManager.travelTime,
                        let routeDistance = mapWalkingManager.distance {
                         updatedShop.distance = routeDistance
-                        let estimatedCalories = mapWalkingManager.calculateCalories(for: routeDistance, at: 4.0, in: travelTime)
+                        let estimatedCalories = mapWalkingManager.calculateCaloriesBurned(for: routeDistance, at: 4.0, in: travelTime)
                         updatedShop.calories = estimatedCalories
+                        let estimatedSteps = mapWalkingManager.calculateSteps(for: routeDistance)
+                        updatedShop.steps = estimatedSteps
                     } else {
                         // Fallback to geodesic distance.
                         let shopLocation = CLLocation(latitude: shop.latitude, longitude: shop.longitude)
