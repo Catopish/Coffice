@@ -32,10 +32,9 @@ class filterModel: ObservableObject {
 }
 
 struct Homepage: View {
-    @Environment(\.scenePhase) var scenePhase
     @AppStorage("userName") var userName: String = ""
     
-    @ObservedObject var streakManager = StreakManager()
+    @StateObject var streakManager = StreakManager()
     @StateObject private var healthViewModel = HealthDashboardViewModel()
     @StateObject var locationManager = LocationManager()
     @StateObject var mapWalkingManager = MapWalkingManager()
@@ -52,11 +51,6 @@ struct Homepage: View {
     
     @State private var updatedCoffeeShopsState: [CoffeeShopStruct] = []
     
-    
-    
-//    let hariIni = UserDefaults.standard.object(forKey: "lastDateKey") as? Date ?? Date.distantPast
-//    let today = Calendar.current.startOfDay(for: Date())
-    
     let coffeeShop: [CoffeeShopStruct] = [
         CoffeeShopStruct(name: "Starbucks", location: "Lorem Ipsum", description: "lorem", distance: 127, steps: 123, calories: 123, latitude: -6.30191, longitude: 106.65438, logo: "sbux"),
         CoffeeShopStruct(name: "Fore", location: "Lorem Ipsum", description: "lorem", distance: 45, steps: 54, calories: 134, latitude: -6.302514, longitude: 106.654299, logo: "fore"),
@@ -65,7 +59,7 @@ struct Homepage: View {
         CoffeeShopStruct(name: "% Arabica", location: "Lorem Ipsum", description: "lorem", distance: 431, steps: 887, calories: 1223, latitude: -6.30179, longitude: 106.65321, logo: "arabica"),
         CoffeeShopStruct(name: "Kenangan Signature", location: "Lorem Ipsum", description: "lorem", distance: 134, steps: 412, calories: 531, latitude: -6.301535, longitude: 106.653458, logo: "kenangan"),
         CoffeeShopStruct(name: "Tabemori", location: "Lorem Ipsum", description: "lorem", distance: 256, steps: 102, calories: 45, latitude: -6.302768, longitude: 106.653470, logo: "tabemori"),
-        CoffeeShopStruct(name: "Dummy", location: "Lorem Ipsum", description: "lorem", distance: 0, steps: 123, calories: 123, latitude: -6.302141, longitude: 106.652327, logo: "sbux"),
+        CoffeeShopStruct(name: "Dummy", location: "Lorem Ipsum", description: "lorem", distance: 0, steps: 123, calories: 123, latitude: -6.301665274836154, longitude: 106.67237360591591, logo: "sbux"),
         CoffeeShopStruct(name: "Lawson", location: "Lorem Ipsum", description: "lorem", distance: 256, steps: 102, calories: 45, latitude: -6.302592, longitude: 106.653380, logo: "lawson")
     ]
 
@@ -116,30 +110,17 @@ struct Homepage: View {
 //            updateCoffeeShopsWithCalories()
 //            streakManager.completeToday()
 //        }
-//        .onChange(of: scenePhase) { newPhase in
-//            if newPhase == .active {
-//                // Saat aplikasi kembali aktif, cek/update streak.
-//                streakManager.completeToday()
-//            }
-//        }
-        .onChange(of: locationManager.userLocation) { newLocation in
+        .onChange(of: locationManager.userLocation) { _, newLocation in
             if newLocation != nil {
                 updateCoffeeShopsWithCalories()
             }
         }
-//        .onChange(of: streakManager.streak) { streak in
-//           
-//        }
         .fullScreenCover(isPresented: $showMapView) {
-//                            MapWalking()
-            MapView(coffeShops: $selectedCoffeeshop,liveViewModel: liveViewModel,hasArrivedAtDestination: $hasArrivedAtDestination)
+            MapView(streakManager: streakManager, coffeShops: $selectedCoffeeshop,liveViewModel: liveViewModel,hasArrivedAtDestination: $hasArrivedAtDestination)
         }
-        .fullScreenCover(isPresented: $streakManager.shouldShowStreak, content: {
-            AlertStreak()
-            .onDisappear() {
-                streakManager.shouldShowStreak = false
-            }
-        })
+        .fullScreenCover(isPresented: $streakManager.shouldShowStreak) {
+            AlertStreak(streakManager: streakManager)
+        }
 //        .fullScreenCover(isPresented: $showOnboarding) { OnboardingView() }
         .alert(isPresented: $locationManager.showSettingsAlert) {
             Alert(
@@ -177,7 +158,7 @@ struct Homepage: View {
 
     func mainContent() -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            userProfile()
+            userProfile(streakManager: streakManager)
             HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
             
             Text ("Where’s your coffee taking you today?")
@@ -274,7 +255,7 @@ struct CoffeeShopListView: View {
 
 struct userProfile: View {
     @AppStorage("userName") var userName: String = ""
-    @ObservedObject var streakManager = StreakManager()
+    @ObservedObject var streakManager : StreakManager
     
 
 //    let daysStreak = UserDefaults.standard.integer(forKey: "streak")

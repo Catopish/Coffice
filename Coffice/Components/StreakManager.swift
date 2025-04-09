@@ -12,23 +12,21 @@ class StreakManager: ObservableObject {
     }
     
     func completeToday() {
-        let today = Calendar.current.startOfDay(for: Date())
-        let lastDate = UserDefaults.standard.object(forKey: lastDateKey) as? Date ?? Date.distantPast
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let lastDate = UserDefaults.standard.object(forKey: lastDateKey) as? Date
+
         //        var showStreak : Bool = false
         
-        if Calendar.current.isDateInToday(lastDate) {
-            // Udah diselesaikan hari ini → jangan tambah streak
+        if let last = lastDate, calendar.isDate(last, inSameDayAs: today) {
             return
-        }
-        // Check if today is consecutive to the last streak day.
-        if lastDate != Date.distantPast,
-           let nextDate = Calendar.current.date(byAdding: .day, value: 1, to: lastDate),
-           Calendar.current.isDate(today, inSameDayAs: nextDate) {
-            // It is a consecutive day.
+        }        // Check if today is consecutive to the last streak day.
+        if let last = lastDate,
+           let yesterday = calendar.date(byAdding: .day, value: 1, to: last),
+           calendar.isDate(yesterday, inSameDayAs: today) {
             print(1)
             streak += 1
         } else {
-            // It's either the first time or not consecutive.
             streak = 1
             print(2)
         }
@@ -39,22 +37,9 @@ class StreakManager: ObservableObject {
         
         // Signal to the UI that the streak page should be shown.
         shouldShowStreak = true
-        print(3)
-        print(shouldShowStreak)
-        //        if Calendar.current.isDate(today, equalTo: lastDate.addingTimeInterval(86400), toGranularity: .day) {
-        //            // Lanjutan dari kemarin → tambah streak
-        //            streak += 1
-        //            shouldShowStreak = true
-        //            print(shouldShowStreak)
-        //        } else {
-        //            // Bukan hari setelahnya → reset
-        //            print("test")
-        //            streak = 1
-        //        }
-        
         UserDefaults.standard.set(streak, forKey: streakKey)
         UserDefaults.standard.set(today, forKey: lastDateKey)
-        //        UserDefaults.standard.set(showStreak, forKey: showStreakKey)
+
     }
     
     private func loadStreak() {
