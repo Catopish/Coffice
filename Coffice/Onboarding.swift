@@ -1,22 +1,22 @@
 import SwiftUI
 
-enum AuthAlert: Identifiable {
-    case location
-    case health
-    
-    var id: Int {
-        switch self {
-        case .location: return 0
-        case .health: return 1
-        }
-    }
-}
+//enum AuthAlert: Identifiable {
+//    case location
+//    case health
+//    
+//    var id: Int {
+//        switch self {
+//        case .location: return 0
+//        case .health: return 1
+//        }
+//    }
+//}
 
 struct OnboardingView: View {
     @AppStorage("userName") var userName: String = ""
     
-    @StateObject private var healthViewModel = HealthDashboardViewModel()
-    @StateObject var locationManager = LocationManager()
+//    @StateObject private var healthViewModel = HealthDashboardViewModel()
+//    @StateObject var locationManager = LocationManager()
     
     @Environment(\.dismiss) var dismiss
     @State private var tempName: String = ""
@@ -65,7 +65,7 @@ struct OnboardingView: View {
                     if !trimmed.isEmpty {
                         userName = trimmed
                     }
-                    dismiss()
+//                    dismiss()
                 }) {
                     Text("Continue")
                         .padding()
@@ -81,10 +81,10 @@ struct OnboardingView: View {
             }
             .foregroundColor(.brown1)
         }
-        }
-}
-struct OnboardingView_Previews: PreviewProvider {
-    static var previews: some View {
-        OnboardingView()
     }
 }
+//struct OnboardingView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        OnboardingView()
+//    }
+//}

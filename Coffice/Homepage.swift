@@ -112,6 +112,14 @@ struct Homepage: View {
 //            updateCoffeeShopsWithCalories()
 //            streakManager.completeToday()
 //        }
+        .onChange(of: userName) { _, newName in
+            guard !newName.isEmpty else { return }
+            // 1) Location auth
+            locationManager.checkAuthorization()
+            // 2) HealthKit auth (you’ll want to make this async in your VM)
+            healthViewModel.requestAuthorization()
+            // 3) Any other startup tasks
+        }
         .onChange(of: locationManager.userLocation) { _, newLocation in
             if newLocation != nil {
                 updateCoffeeShopsWithCalories()
