@@ -14,7 +14,7 @@ struct MapView: View {
     @StateObject private var locationManager = LocationManager()
     @Binding var coffeShops: CoffeeShopStruct?
     @ObservedObject var liveViewModel: LiveActivityViewModel
-    @State var hasArrivedAtDestination : Bool = false
+    @Binding var hasArrivedAtDestination : Bool
     
     var body: some View {
         ZStack {

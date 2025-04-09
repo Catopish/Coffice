@@ -65,7 +65,7 @@ struct MapViewWalking: View {
                     let destinationLocation = CLLocation(latitude: destinationCoordinate.latitude, longitude: destinationCoordinate.longitude)
                     let distance = newLocation.distance(from: destinationLocation) // distance in meters
                     
-                    if distance < 20 && !hasArrivedAtDestination {
+                    if distance < 100 && !hasArrivedAtDestination {
                         hasArrivedAtDestination = true
                         showArrivalAlert = true
                     }
