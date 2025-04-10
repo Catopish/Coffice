@@ -51,6 +51,10 @@ struct Homepage: View {
     
     @State private var updatedCoffeeShopsState: [CoffeeShopStruct] = []
     
+    init(){
+        UITextField.appearance().clearButtonMode = .whileEditing
+    }
+    
     let coffeeShop: [CoffeeShopStruct] = [
         CoffeeShopStruct(name: "Starbucks", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.30191, longitude: 106.65438, logo: "sbux"),
         CoffeeShopStruct(name: "Fore", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302514, longitude: 106.654299, logo: "forelogo"),
@@ -104,9 +108,12 @@ struct Homepage: View {
     var body: some View {
         ZStack {
             backgroundHeader()
+                .onTapGesture {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
             mainContent()
         }
-//        .onAppear {
+        //        .onAppear {
 //            locationManager.checkAuthorization()
 ////            if userName.isEmpty { showOnboarding = true }
 //            updateCoffeeShopsWithCalories()
@@ -170,6 +177,10 @@ struct Homepage: View {
         VStack(alignment: .leading, spacing: 0) {
             userProfile(streakManager: streakManager)
             HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
+                .onTapGesture {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
+
             
             Text ("Where’s your coffee taking you today?")
                 .font(.headline)
