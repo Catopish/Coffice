@@ -3,6 +3,7 @@ import SwiftUI
 struct AlertArrived: View {
     @ObservedObject var liveViewModel: LiveActivityViewModel
     @ObservedObject var streakManager : StreakManager
+    @Binding var hasArrived: Bool
     var moveCalories: Int = 258
     var steps: Int = 1072
     var onDismiss: () -> Void = {}
@@ -68,6 +69,7 @@ struct AlertArrived: View {
                     dismiss()
                     streakManager.completeToday()
                     liveViewModel.stopLiveActivity()
+                    hasArrived = false
                 }) {
                     Text("OK")
                         .font(.headline)
