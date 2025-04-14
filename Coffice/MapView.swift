@@ -50,7 +50,7 @@ struct MapView: View {
         }
         .overlay{
             if hasArrivedAtDestination {
-                AlertArrived(liveViewModel: liveViewModel, streakManager: streakManager)
+                AlertArrived(liveViewModel: liveViewModel, streakManager: streakManager, hasArrived: $hasArrivedAtDestination)
                     
             }
         }

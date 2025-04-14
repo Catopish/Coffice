@@ -51,16 +51,20 @@ struct Homepage: View {
     
     @State private var updatedCoffeeShopsState: [CoffeeShopStruct] = []
     
+    init(){
+        UITextField.appearance().clearButtonMode = .whileEditing
+    }
+    
     let coffeeShop: [CoffeeShopStruct] = [
-        CoffeeShopStruct(name: "Starbucks", location: "The Breeze", description: "lorem", distance: 127, steps: 123, calories: 123, latitude: -6.30191, longitude: 106.65438, logo: "sbux"),
-        CoffeeShopStruct(name: "Fore", location: "The Breeze", description: "lorem", distance: 45, steps: 54, calories: 134, latitude: -6.302514, longitude: 106.654299, logo: "forelogo"),
-        CoffeeShopStruct(name: "36 Grams", location: "Lorem Ipsum", description: "lorem", distance: 45, steps: 54, calories: 134, latitude: -6.301446, longitude: 106.650023, logo: "36grams"),
-        CoffeeShopStruct(name: "Tamper", location: "The Breeze", description: "lorem", distance: 431, steps: 887, calories: 1223, latitude: -6.301870, longitude: 106.654210, logo: "tamperlogo"),
-        CoffeeShopStruct(name: "% Arabica", location: "Lorem Ipsum", description: "lorem", distance: 431, steps: 887, calories: 1223, latitude: -6.30179, longitude: 106.65321, logo: "arabica"),
-        CoffeeShopStruct(name: "Kenangan Signature", location: "The Breeze", description: "lorem", distance: 134, steps: 412, calories: 531, latitude: -6.301535, longitude: 106.653458, logo: "kenangan"),
-        CoffeeShopStruct(name: "Tabemori", location: "GOP 6", description: "lorem", distance: 256, steps: 102, calories: 45, latitude: -6.302768, longitude: 106.653470, logo: "tabemorilogo"),
-        CoffeeShopStruct(name: "Dummy", location: "Lorem Ipsum", description: "lorem", distance: 0, steps: 123, calories: 123, latitude: -6.289458814825691, longitude: 106.62684104712467, logo: "sbux"),
-        CoffeeShopStruct(name: "Lawson", location: "GOP 6", description: "lorem", distance: 256, steps: 102, calories: 45, latitude: -6.302592, longitude: 106.653380, logo: "lawsonlogo")
+        CoffeeShopStruct(name: "Starbucks", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.30191, longitude: 106.65438, logo: "sbux"),
+        CoffeeShopStruct(name: "Fore", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302514, longitude: 106.654299, logo: "forelogo"),
+        CoffeeShopStruct(name: "36 Grams", location: "GOP 1", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.301446, longitude: 106.650023, logo: "36grams"),
+        CoffeeShopStruct(name: "Tamper", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.301870, longitude: 106.654210, logo: "tamperlogo"),
+        CoffeeShopStruct(name: "% Arabica", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.30179, longitude: 106.65321, logo: "arabica"),
+        CoffeeShopStruct(name: "Kenangan Signature", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 531, latitude: -6.301535, longitude: 106.653458, logo: "kenangan"),
+        CoffeeShopStruct(name: "Tabemori", location: "GOP 6", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302768, longitude: 106.653470, logo: "tabemorilogo"),
+        CoffeeShopStruct(name: "Apple Academy", location: "GOP 9", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302168805766506, longitude: 106.65218820473441, logo: "sbux"),
+        CoffeeShopStruct(name: "Lawson", location: "GOP 6", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302592, longitude: 106.653380, logo: "lawsonlogo")
     ]
 
         // Function that updates each coffee shop's distance (using route distance) and calories.
@@ -104,14 +108,25 @@ struct Homepage: View {
     var body: some View {
         ZStack {
             backgroundHeader()
+                .onTapGesture {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
             mainContent()
         }
-//        .onAppear {
+        //        .onAppear {
 //            locationManager.checkAuthorization()
 ////            if userName.isEmpty { showOnboarding = true }
 //            updateCoffeeShopsWithCalories()
 //            streakManager.completeToday()
 //        }
+        .onChange(of: userName) { _, newName in
+            guard !newName.isEmpty else { return }
+            // 1) Location auth
+            locationManager.checkAuthorization()
+            // 2) HealthKit auth (you’ll want to make this async in your VM)
+            healthViewModel.requestAuthorization()
+            // 3) Any other startup tasks
+        }
         .onChange(of: locationManager.userLocation) { _, newLocation in
             if newLocation != nil {
                 updateCoffeeShopsWithCalories()
@@ -162,6 +177,10 @@ struct Homepage: View {
         VStack(alignment: .leading, spacing: 0) {
             userProfile(streakManager: streakManager)
             HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
+                .onTapGesture {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
+
             
             Text ("Where’s your coffee taking you today?")
                 .font(.headline)
