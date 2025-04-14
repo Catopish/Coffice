@@ -23,7 +23,7 @@ struct SplashScreenView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 16) {
-                Image("logocoffice")
+                Image("logoCoffice")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 300, height: 300)
@@ -34,8 +34,8 @@ struct SplashScreenView: View {
     }
 }
 
-struct SplashScreenView_Previews: PreviewProvider {
-    static var previews: some View {
-        SplashScreenView()
-    }
-}
+//struct SplashScreenView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SplashScreenView()
+//    }
+//}
