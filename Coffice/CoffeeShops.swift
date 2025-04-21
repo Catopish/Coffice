@@ -18,4 +18,16 @@ struct CoffeeShops: Codable ,Identifiable {
     var latitude: Double
     var longitude: Double
     var logo: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case location
+        case description
+        case distance
+        case steps
+        case calories
+        case latitude
+        case longitude
+        case logo
+    }
 }

@@ -20,7 +20,6 @@ class filterModel: ObservableObject {
 
 struct Homepage: View {
     @AppStorage("userName") var userName: String = ""
-    
     @State private var viewModel = ViewModel()
     
     @State var hasArrivedAtDestination : Bool = false
@@ -29,64 +28,11 @@ struct Homepage: View {
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
     @State private var selectedCoffeeshop: CoffeeShops? = nil
-//    @State private var showOnboarding: Bool = false
     @State var showAlertPopup: Bool = false
-    
-    @State private var updatedCoffeeShopsState: [CoffeeShops] = []
     
     init(){
         UITextField.appearance().clearButtonMode = .whileEditing
     }
-    
-//    let coffeeShop: [CoffeeShops] = [
-//        CoffeeShops(name: "Starbucks", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.30191, longitude: 106.65438, logo: "sbux"),
-//        CoffeeShops(name: "Fore", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302514, longitude: 106.654299, logo: "forelogo"),
-//        CoffeeShops(name: "36 Grams", location: "GOP 1", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.301446, longitude: 106.650023, logo: "36grams"),
-//        CoffeeShops(name: "Tamper", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.301870, longitude: 106.654210, logo: "tamperlogo"),
-//        CoffeeShops(name: "% Arabica", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.30179, longitude: 106.65321, logo: "arabica"),
-//        CoffeeShops(name: "Kenangan Signature", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 531, latitude: -6.301535, longitude: 106.653458, logo: "kenangan"),
-//        CoffeeShops(name: "Tabemori", location: "GOP 6", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302768, longitude: 106.653470, logo: "tabemorilogo"),
-//        CoffeeShops(name: "Apple Academy", location: "GOP 9", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302168805766506, longitude: 106.65218820473441, logo: "sbux"),
-//        CoffeeShops(name: "Lawson", location: "GOP 6", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302592, longitude: 106.653380, logo: "lawsonlogo")
-//    ]
-
-        // Function that updates each coffee shop's distance (using route distance) and calories.
-        func updateCoffeeShopsWithCalories() {
-            guard let userLocation = viewModel.locationManager.userLocation else { return }
-            
-            var newCoffeeShops: [CoffeeShops] = []
-            let group = DispatchGroup()
-            
-            // Use the original filtered array (based on search) here.
-            for shop in viewModel.coffeeShops {
-                var updatedShop = shop
-                let destinationCoordinate = CLLocationCoordinate2D(latitude: shop.latitude, longitude: shop.longitude)
-                
-                group.enter()
-                // Calculate the route asynchronously.
-                viewModel.mapWalkingManager.calculateRoute(from: userLocation.coordinate, to: destinationCoordinate) { success in
-                    if success,
-                       let travelTime = viewModel.mapWalkingManager.travelTime,
-                       let routeDistance = viewModel.mapWalkingManager.distance {
-                        updatedShop.distance = routeDistance
-                        let estimatedCalories = viewModel.mapWalkingManager.calculateCaloriesBurned(for: routeDistance, at: 4.0, in: travelTime)
-                        updatedShop.calories = estimatedCalories
-                        let estimatedSteps = viewModel.mapWalkingManager.calculateSteps(for: routeDistance)
-                        updatedShop.steps = estimatedSteps
-                    } else {
-                        // Fallback to geodesic distance.
-                        let shopLocation = CLLocation(latitude: shop.latitude, longitude: shop.longitude)
-                        updatedShop.distance = userLocation.distance(from: shopLocation)
-                    }
-                    newCoffeeShops.append(updatedShop)
-                    group.leave()
-                }
-            }
-            
-            group.notify(queue: .main) {
-                self.updatedCoffeeShopsState = newCoffeeShops.sorted { $0.distance < $1.distance }
-            }
-        }
 
     var body: some View {
         ZStack {
@@ -96,23 +42,16 @@ struct Homepage: View {
                 }
             mainContent()
         }
-        //        .onAppear {
-//            locationManager.checkAuthorization()
-////            if userName.isEmpty { showOnboarding = true }
-//            updateCoffeeShopsWithCalories()
-//            streakManager.completeToday()
-//        }
         .onChange(of: userName) { _, newName in
             guard !newName.isEmpty else { return }
-            // 1) Location auth
+            
             viewModel.locationManager.checkAuthorization()
-            // 2) HealthKit auth (you’ll want to make this async in your VM)
             viewModel.healthViewModel.requestAuthorization()
-            // 3) Any other startup tasks
+    
         }
         .onChange(of: viewModel.locationManager.userLocation) { _, newLocation in
             if newLocation != nil {
-                updateCoffeeShopsWithCalories()
+                viewModel.updateCoffeeShopsWithCalories()
             }
         }
         .fullScreenCover(isPresented: $showMapView) {
@@ -188,7 +127,7 @@ struct Homepage: View {
             .padding()
             .padding(.vertical, -10)
 
-            let filteredCoffeeShops = updatedCoffeeShopsState.filter { shop in
+            let filteredCoffeeShops = viewModel.updatedCoffeeShopsState.filter { shop in
                 searchText.isEmpty || shop.name.localizedCaseInsensitiveContains(searchText)
             }
             NavigationStack {
