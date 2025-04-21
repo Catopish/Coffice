@@ -13,7 +13,7 @@ struct MapView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject private var locationManager = LocationManager()
     @ObservedObject var streakManager: StreakManager
-    @Binding var coffeShops: CoffeeShopStruct?
+    @Binding var coffeShops: CoffeeShops?
     @ObservedObject var liveViewModel: LiveActivityViewModel
     @Binding var hasArrivedAtDestination : Bool
     

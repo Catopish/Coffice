@@ -10,19 +10,6 @@ import SwiftData
 import HealthKit
 import CoreLocation
 
-struct CoffeeShopStruct: Identifiable {
-    var id = UUID()
-    var name: String
-    var location: String
-    var description: String
-    var distance: Double
-    var steps: Int
-    var calories: Int
-    var latitude: Double
-    var longitude: Double
-    var logo: String
-}
-
 @Observable
 class filterModel: ObservableObject {
     var maxRange: Double
@@ -34,61 +21,57 @@ class filterModel: ObservableObject {
 struct Homepage: View {
     @AppStorage("userName") var userName: String = ""
     
-    @StateObject var streakManager = StreakManager()
-    @StateObject private var healthViewModel = HealthDashboardViewModel()
-    @StateObject var locationManager = LocationManager()
-    @StateObject var mapWalkingManager = MapWalkingManager()
-    @StateObject var liveViewModel = LiveActivityViewModel()
+    @State private var viewModel = ViewModel()
     
     @State var hasArrivedAtDestination : Bool = false
     @State var showMapView: Bool = false
     @State var isLoading: Bool = false
     @State private var searchContent: String = ""
     @State private var showDetail: Bool = false
-    @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
+    @State private var selectedCoffeeshop: CoffeeShops? = nil
 //    @State private var showOnboarding: Bool = false
     @State var showAlertPopup: Bool = false
     
-    @State private var updatedCoffeeShopsState: [CoffeeShopStruct] = []
+    @State private var updatedCoffeeShopsState: [CoffeeShops] = []
     
     init(){
         UITextField.appearance().clearButtonMode = .whileEditing
     }
     
-    let coffeeShop: [CoffeeShopStruct] = [
-        CoffeeShopStruct(name: "Starbucks", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.30191, longitude: 106.65438, logo: "sbux"),
-        CoffeeShopStruct(name: "Fore", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302514, longitude: 106.654299, logo: "forelogo"),
-        CoffeeShopStruct(name: "36 Grams", location: "GOP 1", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.301446, longitude: 106.650023, logo: "36grams"),
-        CoffeeShopStruct(name: "Tamper", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.301870, longitude: 106.654210, logo: "tamperlogo"),
-        CoffeeShopStruct(name: "% Arabica", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.30179, longitude: 106.65321, logo: "arabica"),
-        CoffeeShopStruct(name: "Kenangan Signature", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 531, latitude: -6.301535, longitude: 106.653458, logo: "kenangan"),
-        CoffeeShopStruct(name: "Tabemori", location: "GOP 6", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302768, longitude: 106.653470, logo: "tabemorilogo"),
-        CoffeeShopStruct(name: "Apple Academy", location: "GOP 9", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302168805766506, longitude: 106.65218820473441, logo: "sbux"),
-        CoffeeShopStruct(name: "Lawson", location: "GOP 6", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302592, longitude: 106.653380, logo: "lawsonlogo")
-    ]
+//    let coffeeShop: [CoffeeShops] = [
+//        CoffeeShops(name: "Starbucks", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.30191, longitude: 106.65438, logo: "sbux"),
+//        CoffeeShops(name: "Fore", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302514, longitude: 106.654299, logo: "forelogo"),
+//        CoffeeShops(name: "36 Grams", location: "GOP 1", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.301446, longitude: 106.650023, logo: "36grams"),
+//        CoffeeShops(name: "Tamper", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.301870, longitude: 106.654210, logo: "tamperlogo"),
+//        CoffeeShops(name: "% Arabica", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.30179, longitude: 106.65321, logo: "arabica"),
+//        CoffeeShops(name: "Kenangan Signature", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 531, latitude: -6.301535, longitude: 106.653458, logo: "kenangan"),
+//        CoffeeShops(name: "Tabemori", location: "GOP 6", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302768, longitude: 106.653470, logo: "tabemorilogo"),
+//        CoffeeShops(name: "Apple Academy", location: "GOP 9", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302168805766506, longitude: 106.65218820473441, logo: "sbux"),
+//        CoffeeShops(name: "Lawson", location: "GOP 6", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302592, longitude: 106.653380, logo: "lawsonlogo")
+//    ]
 
         // Function that updates each coffee shop's distance (using route distance) and calories.
         func updateCoffeeShopsWithCalories() {
-            guard let userLocation = locationManager.userLocation else { return }
+            guard let userLocation = viewModel.locationManager.userLocation else { return }
             
-            var newCoffeeShops: [CoffeeShopStruct] = []
+            var newCoffeeShops: [CoffeeShops] = []
             let group = DispatchGroup()
             
             // Use the original filtered array (based on search) here.
-            for shop in coffeeShop {
+            for shop in viewModel.coffeeShops {
                 var updatedShop = shop
                 let destinationCoordinate = CLLocationCoordinate2D(latitude: shop.latitude, longitude: shop.longitude)
                 
                 group.enter()
                 // Calculate the route asynchronously.
-                mapWalkingManager.calculateRoute(from: userLocation.coordinate, to: destinationCoordinate) { success in
+                viewModel.mapWalkingManager.calculateRoute(from: userLocation.coordinate, to: destinationCoordinate) { success in
                     if success,
-                       let travelTime = mapWalkingManager.travelTime,
-                       let routeDistance = mapWalkingManager.distance {
+                       let travelTime = viewModel.mapWalkingManager.travelTime,
+                       let routeDistance = viewModel.mapWalkingManager.distance {
                         updatedShop.distance = routeDistance
-                        let estimatedCalories = mapWalkingManager.calculateCaloriesBurned(for: routeDistance, at: 4.0, in: travelTime)
+                        let estimatedCalories = viewModel.mapWalkingManager.calculateCaloriesBurned(for: routeDistance, at: 4.0, in: travelTime)
                         updatedShop.calories = estimatedCalories
-                        let estimatedSteps = mapWalkingManager.calculateSteps(for: routeDistance)
+                        let estimatedSteps = viewModel.mapWalkingManager.calculateSteps(for: routeDistance)
                         updatedShop.steps = estimatedSteps
                     } else {
                         // Fallback to geodesic distance.
@@ -122,24 +105,24 @@ struct Homepage: View {
         .onChange(of: userName) { _, newName in
             guard !newName.isEmpty else { return }
             // 1) Location auth
-            locationManager.checkAuthorization()
+            viewModel.locationManager.checkAuthorization()
             // 2) HealthKit auth (you’ll want to make this async in your VM)
-            healthViewModel.requestAuthorization()
+            viewModel.healthViewModel.requestAuthorization()
             // 3) Any other startup tasks
         }
-        .onChange(of: locationManager.userLocation) { _, newLocation in
+        .onChange(of: viewModel.locationManager.userLocation) { _, newLocation in
             if newLocation != nil {
                 updateCoffeeShopsWithCalories()
             }
         }
         .fullScreenCover(isPresented: $showMapView) {
-            MapView(streakManager: streakManager, coffeShops: $selectedCoffeeshop,liveViewModel: liveViewModel,hasArrivedAtDestination: $hasArrivedAtDestination)
+            MapView(streakManager: viewModel.streakManager, coffeShops: $selectedCoffeeshop,liveViewModel: viewModel.liveViewModel,hasArrivedAtDestination: $hasArrivedAtDestination)
         }
-        .fullScreenCover(isPresented: $streakManager.shouldShowStreak) {
-            AlertStreak(streakManager: streakManager)
+        .fullScreenCover(isPresented: $viewModel.streakManager.shouldShowStreak) {
+            AlertStreak(streakManager: viewModel.streakManager)
         }
 //        .fullScreenCover(isPresented: $showOnboarding) { OnboardingView() }
-        .alert(isPresented: $locationManager.showSettingsAlert) {
+        .alert(isPresented: $viewModel.locationManager.showSettingsAlert) {
             Alert(
                 title: Text("Location Permission Needed"),
                 message: Text("Please enable location access in Settings."),
@@ -175,8 +158,8 @@ struct Homepage: View {
 
     func mainContent() -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            userProfile(streakManager: streakManager)
-            HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
+            userProfile(streakManager: viewModel.streakManager)
+            HealthDashboardView(viewModel: viewModel.healthViewModel, isLoading: $isLoading)
                 .onTapGesture {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
@@ -219,14 +202,14 @@ struct Homepage: View {
         }
         .overlay(
             coffeeshopInformation(showMapView:$showMapView, showDetail: $showDetail, selectedCoffeeshop: $selectedCoffeeshop)
-                .animation(.easeInOut, value: showDetail)
+                .animation(Animation.easeInOut, value: showDetail)
         )
     }
 }
 
 struct CoffeeShopListView: View {
-    var coffeeShops: [CoffeeShopStruct]
-    @Binding var selectedCoffeeshop: CoffeeShopStruct?
+    var coffeeShops: [CoffeeShops]
+    @Binding var selectedCoffeeshop: CoffeeShops?
     @Binding var showDetail: Bool
 
     var body: some View {

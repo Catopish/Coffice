@@ -12,7 +12,7 @@ struct coffeeshopInformation: View{
     
     @Binding var showMapView: Bool
     @Binding var showDetail: Bool
-    @Binding var selectedCoffeeshop: CoffeeShopStruct?
+    @Binding var selectedCoffeeshop: CoffeeShops?
 //    @ObservedObject var liveViewModel = LiveActivityViewModel()
 
     

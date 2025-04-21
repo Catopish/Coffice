@@ -1,0 +1,101 @@
+[
+  {
+    "name": "Starbucks",
+    "location": "The Breeze",
+    "description": "lorem",
+    "distance": 0,
+    "steps": 0,
+    "calories": 0,
+    "latitude": -6.30191,
+    "longitude": 106.65438,
+    "logo": "sbux"
+  },
+  {
+    "name": "Fore",
+    "location": "The Breeze",
+    "description": "lorem",
+    "distance": 0,
+    "steps": 0,
+    "calories": 0,
+    "latitude": -6.302514,
+    "longitude": 106.654299,
+    "logo": "forelogo"
+  },
+  {
+    "name": "36 Grams",
+    "location": "GOP 1",
+    "description": "lorem",
+    "distance": 0,
+    "steps": 0,
+    "calories": 0,
+    "latitude": -6.301446,
+    "longitude": 106.650023,
+    "logo": "36grams"
+  },
+  {
+    "name": "Tamper",
+    "location": "The Breeze",
+    "description": "lorem",
+    "distance": 0,
+    "steps": 0,
+    "calories": 0,
+    "latitude": -6.30187,
+    "longitude": 106.65421,
+    "logo": "tamperlogo"
+  },
+  {
+    "name": "% Arabica",
+    "location": "The Breeze",
+    "description": "lorem",
+    "distance": 0,
+    "steps": 0,
+    "calories": 0,
+    "latitude": -6.30179,
+    "longitude": 106.65321,
+    "logo": "arabica"
+  },
+  {
+    "name": "Kenangan Signature",
+    "location": "The Breeze",
+    "description": "lorem",
+    "distance": 0,
+    "steps": 0,
+    "calories": 531,
+    "latitude": -6.301535,
+    "longitude": 106.653458,
+    "logo": "kenangan"
+  },
+  {
+    "name": "Tabemori",
+    "location": "GOP 6",
+    "description": "lorem",
+    "distance": 0,
+    "steps": 0,
+    "calories": 0,
+    "latitude": -6.302768,
+    "longitude": 106.65347,
+    "logo": "tabemorilogo"
+  },
+  {
+    "name": "Apple Academy",
+    "location": "GOP 9",
+    "description": "lorem",
+    "distance": 0,
+    "steps": 0,
+    "calories": 0,
+    "latitude": -6.302168805766506,
+    "longitude": 106.65218820473441,
+    "logo": "sbux"
+  },
+  {
+    "name": "Lawson",
+    "location": "GOP 6",
+    "description": "lorem",
+    "distance": 0,
+    "steps": 0,
+    "calories": 0,
+    "latitude": -6.302592,
+    "longitude": 106.65338,
+    "logo": "lawsonlogo"
+  }
+]
