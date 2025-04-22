@@ -21,6 +21,9 @@ extension Homepage {
         
         init() {
             loadCoffeeShops()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.updateCoffeeShopsWithCalories()
+            }
         }
         
         func updateCoffeeShopsWithCalories() {
