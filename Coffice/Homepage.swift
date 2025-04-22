@@ -10,14 +10,6 @@ import SwiftData
 import HealthKit
 import CoreLocation
 
-@Observable
-class filterModel: ObservableObject {
-    var maxRange: Double
-    init(maxRange: Double) {
-        self.maxRange = maxRange
-    }
-}
-
 struct Homepage: View {
     @AppStorage("userName") var userName: String = ""
     @State private var viewModel = ViewModel()
@@ -97,7 +89,7 @@ struct Homepage: View {
 
     func mainContent() -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            userProfile(streakManager: viewModel.streakManager)
+            UserProfile(streakManager: viewModel.streakManager)
             HealthDashboardView(viewModel: viewModel.healthViewModel, isLoading: $isLoading)
                 .onTapGesture {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -146,92 +138,9 @@ struct Homepage: View {
     }
 }
 
-struct CoffeeShopListView: View {
-    var coffeeShops: [CoffeeShops]
-    @Binding var selectedCoffeeshop: CoffeeShops?
-    @Binding var showDetail: Bool
 
-    var body: some View {
-        List(coffeeShops) { shop in
-            Button(action: {
-                selectedCoffeeshop = shop
-                showDetail = true
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-            }) {
-                HStack(alignment: .center, spacing: 8) {
-                    Image(shop.logo)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 35, height: 35)
-                        .clipShape(Circle())
-                        .padding(.trailing, 5)
-                    VStack(alignment: .leading) {
-                        HStack{
-                            Text(shop.name)
-                                .font(.subheadline)
-                            
-                            Spacer()
-                            Text("\(Int(shop.distance)) m")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                                .padding(.trailing, 5)
-                        }
-                    }
-                }
-//                .padding(10)
-//                .frame(maxWidth: .infinity, alignment: .leading)
-//                .background(Color.white)
-//                .cornerRadius(8)
-//                .shadow(color: Color.black.opacity(0.3), radius: 3, x: 0, y: 1)
-            }
-            .listRowInsets(EdgeInsets())
-//            .listRowSeparator(.hidden)
-            .padding(.horizontal, 15)
-            .padding(5)
-            .padding(.vertical, 6)
 
-        }
-        .listStyle(.plain)
-        .scrollContentBackground(.hidden)
-    }
-}
 
-struct userProfile: View {
-    @AppStorage("userName") var userName: String = ""
-    @ObservedObject var streakManager : StreakManager
-    
-
-//    let daysStreak = UserDefaults.standard.integer(forKey: "streak")
-    
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text("Hi, \(userName)!")
-                    .font(.title)
-                    .foregroundColor(.white)
-                    .fontWeight(.semibold)
-                    .padding(.leading, 6)
-                Text("Let’s walk and sip! ☕️")
-                    .font(.subheadline)
-                    .foregroundColor(.white)
-                    .lineLimit(2)
-                    .padding(.leading, 6)
-            }
-            .padding()
-            Spacer()
-            VStack {
-                Image(systemName: "flame.fill")
-                    .font(.title)
-                    .padding(.trailing, 6)
-                Text("\(streakManager.streak) streak")
-                    .padding(.trailing, 6)
-            }
-            .padding()
-            .foregroundColor(.white)
-            .padding(.horizontal, 5)
-        }
-    }
-}
 
 #Preview {
     Homepage()
