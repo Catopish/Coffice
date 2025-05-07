@@ -40,6 +40,7 @@ struct Homepage: View {
     @StateObject var mapWalkingManager = MapWalkingManager()
     @StateObject var liveViewModel = LiveActivityViewModel()
     
+    @State var openSearch: Bool = false
     @State var hasArrivedAtDestination : Bool = false
     @State var showMapView: Bool = false
     @State var isLoading: Bool = false
@@ -58,9 +59,9 @@ struct Homepage: View {
     let coffeeShop: [CoffeeShopStruct] = [
         CoffeeShopStruct(name: "Starbucks", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.30191, longitude: 106.65438, logo: "sbux"),
         CoffeeShopStruct(name: "Fore", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302514, longitude: 106.654299, logo: "forelogo"),
-        CoffeeShopStruct(name: "36 Grams", location: "GOP 1", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.301446, longitude: 106.650023, logo: "36grams"),
+        CoffeeShopStruct(name: "36 Grams", location: "GOP 1", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.301446, longitude: 106.650023, logo: "logo36grams"),
         CoffeeShopStruct(name: "Tamper", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.301870, longitude: 106.654210, logo: "tamperlogo"),
-        CoffeeShopStruct(name: "% Arabica", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.30179, longitude: 106.65321, logo: "arabica"),
+        CoffeeShopStruct(name: "% Arabica", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.30179, longitude: 106.65321, logo: "logoarabica"),
         CoffeeShopStruct(name: "Kenangan Signature", location: "The Breeze", description: "lorem", distance: 0, steps: 0, calories: 531, latitude: -6.301535, longitude: 106.653458, logo: "kenangan"),
         CoffeeShopStruct(name: "Tabemori", location: "GOP 6", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302768, longitude: 106.653470, logo: "tabemorilogo"),
         CoffeeShopStruct(name: "Apple Academy", location: "GOP 9", description: "lorem", distance: 0, steps: 0, calories: 0, latitude: -6.302168805766506, longitude: 106.65218820473441, logo: "sbux"),
@@ -180,13 +181,21 @@ struct Homepage: View {
                 .onTapGesture {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
-
+            let filteredCoffeeShops = updatedCoffeeShopsState.filter { shop in
+                searchText.isEmpty || shop.name.localizedCaseInsensitiveContains(searchText)
+            }
             
             Text ("Where’s your coffee taking you today?")
                 .font(.headline)
                 .padding(.leading, 18)
             
             HStack {
+                Button {
+                    openSearch = true
+                } label: {
+                    Text ("aslkdladjladsjadsljalsdj")
+                }
+
                 Image(systemName: "magnifyingglass")
                     .font(.caption)
                     .foregroundColor(.white)
@@ -195,19 +204,23 @@ struct Homepage: View {
                     .cornerRadius(4)
                     .padding(.trailing, 5)
 
-                TextField("Search", text: $searchText)
-                    .foregroundColor(.primary)
-                    .autocapitalization(.none)
+                Text("ahdslasdjlasdjlasdjljk")
+//                TextField("Search", text: $searchText)
+//                    .foregroundColor(.primary)
+//                    .autocapitalization(.none)
             }
             .padding(7)
             .background(Color.gray.opacity(0.1))
             .cornerRadius(6)
             .padding()
             .padding(.vertical, -10)
+            .sheet(isPresented: $openSearch, content:{
+                SearchListView(coffeeShops: filteredCoffeeShops)
+            })
+// NOTE:
+//            . klo dipencet pindah ke page search
 
-            let filteredCoffeeShops = updatedCoffeeShopsState.filter { shop in
-                searchText.isEmpty || shop.name.localizedCaseInsensitiveContains(searchText)
-            }
+
             NavigationStack {
                 CoffeeShopListView(
 //                    coffeeShops: updatedCoffeeShopsState,
@@ -224,55 +237,55 @@ struct Homepage: View {
     }
 }
 
-struct CoffeeShopListView: View {
-    var coffeeShops: [CoffeeShopStruct]
-    @Binding var selectedCoffeeshop: CoffeeShopStruct?
-    @Binding var showDetail: Bool
-
-    var body: some View {
-        List(coffeeShops) { shop in
-            Button(action: {
-                selectedCoffeeshop = shop
-                showDetail = true
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-            }) {
-                HStack(alignment: .center, spacing: 8) {
-                    Image(shop.logo)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 35, height: 35)
-                        .clipShape(Circle())
-                        .padding(.trailing, 5)
-                    VStack(alignment: .leading) {
-                        HStack{
-                            Text(shop.name)
-                                .font(.subheadline)
-                            
-                            Spacer()
-                            Text("\(Int(shop.distance)) m")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                                .padding(.trailing, 5)
-                        }
-                    }
-                }
-//                .padding(10)
-//                .frame(maxWidth: .infinity, alignment: .leading)
-//                .background(Color.white)
-//                .cornerRadius(8)
-//                .shadow(color: Color.black.opacity(0.3), radius: 3, x: 0, y: 1)
-            }
-            .listRowInsets(EdgeInsets())
-//            .listRowSeparator(.hidden)
-            .padding(.horizontal, 15)
-            .padding(5)
-            .padding(.vertical, 6)
-
-        }
-        .listStyle(.plain)
-        .scrollContentBackground(.hidden)
-    }
-}
+//struct CoffeeShopListView: View {
+//    var coffeeShops: [CoffeeShopStruct]
+//    @Binding var selectedCoffeeshop: CoffeeShopStruct?
+//    @Binding var showDetail: Bool
+//
+//    var body: some View {
+//        List(coffeeShops) { shop in
+//            Button(action: {
+//                selectedCoffeeshop = shop
+//                showDetail = true
+//                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+//            }) {
+//                HStack(alignment: .center, spacing: 8) {
+//                    Image(shop.logo)
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 35, height: 35)
+//                        .clipShape(Circle())
+//                        .padding(.trailing, 5)
+//                    VStack(alignment: .leading) {
+//                        HStack{
+//                            Text(shop.name)
+//                                .font(.subheadline)
+//                            
+//                            Spacer()
+//                            Text("\(Int(shop.distance)) m")
+//                                .font(.subheadline)
+//                                .foregroundColor(.gray)
+//                                .padding(.trailing, 5)
+//                        }
+//                    }
+//                }
+////                .padding(10)
+////                .frame(maxWidth: .infinity, alignment: .leading)
+////                .background(Color.white)
+////                .cornerRadius(8)
+////                .shadow(color: Color.black.opacity(0.3), radius: 3, x: 0, y: 1)
+//            }
+//            .listRowInsets(EdgeInsets())
+////            .listRowSeparator(.hidden)
+//            .padding(.horizontal, 15)
+//            .padding(5)
+//            .padding(.vertical, 6)
+//
+//        }
+//        .listStyle(.plain)
+//        .scrollContentBackground(.hidden)
+//    }
+//}
 
 struct userProfile: View {
     @AppStorage("userName") var userName: String = ""
