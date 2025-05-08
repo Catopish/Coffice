@@ -40,7 +40,7 @@ struct AlertExitMap: View {
 
                                 HStack(spacing: 20) {
                                     Button(action: {
-                                        liveViewModel.stopLiveActivity()
+//                                        liveViewModel.stopLiveActivity()
                                         dismiss()
 //                                        showPopupArrived = true
                                     }) {
@@ -73,6 +73,7 @@ struct AlertExitMap: View {
         //NOTE: testing arrived
 //        .fullScreenCover(isPresented: $showPopupArrived){
 //            ArrivalPopupView()
+//            AlertArrived()
 //        }
     }
 }

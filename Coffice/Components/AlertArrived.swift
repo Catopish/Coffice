@@ -1,11 +1,18 @@
 import SwiftUI
 
 struct AlertArrived: View {
-    @ObservedObject var streakManager = StreakManager()
+    @ObservedObject var liveViewModel: LiveActivityViewModel
+    @ObservedObject var streakManager : StreakManager
+    @Binding var hasArrived: Bool
     var moveCalories: Int = 258
     var steps: Int = 1072
     var onDismiss: () -> Void = {}
+    @Environment(\.dismiss) var dismiss
 
+
+
+    let latestSteps = UserDefaults.standard.integer(forKey: "latestStepActivity")
+    let latestCalories = UserDefaults.standard.double(forKey: "latestCaloriesActivity")
 
     var body: some View {
         ZStack {
@@ -30,7 +37,7 @@ struct AlertArrived: View {
                             .frame(width: 20, height: 28)
                             .foregroundStyle(Color(uiColor: .brown2))
                         HStack {
-                            Text("\(moveCalories)")
+                            Text("\(latestCalories, specifier: "%.1f")")
                                 .font(.title3)
                                 .foregroundColor(.brown3)
                             Text("CAL")
@@ -45,7 +52,7 @@ struct AlertArrived: View {
                             .frame(width: 20, height: 28)
                             .foregroundStyle(Color(uiColor: .brown2))
                         HStack {
-                            Text("\(steps)")
+                            Text("\(latestSteps)")
                                 .font(.title3)
                                 .foregroundColor(.brown3)
                             Text("STEPS")
@@ -58,8 +65,11 @@ struct AlertArrived: View {
                 .padding(.vertical, 8)
                 
                 Button(action: {
-                    onDismiss()
+//                    onDismiss()
+                    dismiss()
                     streakManager.completeToday()
+                    liveViewModel.stopLiveActivity()
+                    hasArrived = false
                 }) {
                     Text("OK")
                         .font(.headline)
@@ -81,8 +91,8 @@ struct AlertArrived: View {
     }
 }
 
-struct ArrivalArrived_Previews: PreviewProvider {
-    static var previews: some View {
-        AlertArrived()
-    }
-}
+//struct ArrivalArrived_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AlertArrived(liveViewModel: liveViewModel)
+//    }
+//}
