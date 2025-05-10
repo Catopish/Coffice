@@ -37,7 +37,8 @@ struct DashboardCard: View {
         VStack(alignment:.leading) {
             HStack {
                 Text("Today's Activity")
-                    .font(.subheadline)
+                    .font(.caption2)
+                    .fontWeight(.medium)
                     .foregroundColor(Color(red: 0.66, green: 0.36, blue: 0.18))
                 Spacer()
             }
@@ -56,7 +57,6 @@ struct DashboardCard: View {
                     )
                     
                 }
-                Spacer()
                 VStack(alignment: .leading, spacing: 12) {
                     HealthStatRow(
                         icon: "figure.walk",
@@ -90,6 +90,8 @@ struct HealthStatRow: View {
     var body: some View {
         VStack(alignment:.leading) {
             Text(title)
+                .font(.subheadline)
+                .fontWeight(.medium)
                 .foregroundColor(Color(red: 0.66, green: 0.36, blue: 0.18))
             //                .foregroundColor(.secondary)
                 .frame(alignment: .leading)
@@ -97,7 +99,7 @@ struct HealthStatRow: View {
             
             HStack(alignment: .firstTextBaseline, spacing: 2){
                 Text(isLoading ? "Loading..." :"3245/3762")
-                    .font(.title3)
+                    .font(.title2)
                     .fontWeight(.semibold)
                     .foregroundColor(Color(red: 0.28, green: 0.23, blue: 0.16))
                 //                    .frame(alignment: .leading)
