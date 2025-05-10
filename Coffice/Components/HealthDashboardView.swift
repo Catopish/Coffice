@@ -34,56 +34,47 @@ struct DashboardCard: View {
     @ObservedObject var viewModel: HealthDashboardViewModel
     
     var body: some View {
-        VStack {
+        VStack(alignment:.leading) {
             HStack {
                 Text("Today's Activity")
-                    .font(.headline)
-                    .padding(.leading, 10)
-                    .padding(.top, 10)
+                    .font(.subheadline)
+                    .foregroundColor(Color(red: 0.66, green: 0.36, blue: 0.18))
                 Spacer()
             }
+            .padding(.leading, 20)
+            .padding(.top, 10)
             
             HStack(spacing: 20) {
-                // Activity Ring
-                ActivityRingView(progress: viewModel.moveGoalProgress)
-                    .frame(width: 100, height: 100)
-
-                // Health Stats
                 VStack(alignment: .leading, spacing: 12) {
                     HealthStatRow(
                         icon: "flame.fill",
                         color: .brown2,
                         title: "Move",
                         value: "\(Int(viewModel.activeCalories))",
-                        unit: "CAL",
+                        unit: "kcal",
                         isLoading: $isLoading
                     )
                     
+                }
+                Spacer()
+                VStack(alignment: .leading, spacing: 12) {
                     HealthStatRow(
                         icon: "figure.walk",
                         color: .brown2,
-                        title: "Steps",
+                        title: "Exercises",
                         value: "\(viewModel.steps)",
-                        unit: "STEPS",
+                        unit: "steps",
                         isLoading: $isLoading
                     )
-                    
-//                    HealthStatRow(
-//                        icon: "figure.walk",
-//                        color: .blue,
-//                        title: "Distance",
-//                        value: String(format: "%.1f", viewModel.distance),
-//                        unit: "M"
-//                    )
                 }
-//                .padding(.top, -40)
-            }
-            .padding(.top, -10)
+                .frame(maxWidth: .infinity, alignment: .center)            }
+            .padding(.top, -20)
             .padding(20)
+            .padding(.bottom,-5)
         }
         .background(Color(.systemBackground))
         .cornerRadius(12)
-        .shadow(radius: 4)
+        //        .shadow(radius: 4)
         .padding()
     }
 }
@@ -97,23 +88,33 @@ struct HealthStatRow: View {
     @Binding var isLoading: Bool
     
     var body: some View {
-        HStack {
-            Image(systemName: icon)
-                .foregroundColor(color)
-                .frame(width: 30)
-            
+        VStack(alignment:.leading) {
             Text(title)
-                .foregroundColor(.secondary)
-                .frame(width: 60, alignment: .leading)
+                .foregroundColor(Color(red: 0.66, green: 0.36, blue: 0.18))
+            //                .foregroundColor(.secondary)
+                .frame(alignment: .leading)
             
-            Text(isLoading ? "Loading..." :value)
-                .bold()
             
-            Text(unit)
-                .foregroundColor(.secondary)
-                .font(.caption)
+            HStack(alignment: .firstTextBaseline, spacing: 2){
+                Text(isLoading ? "Loading..." :"3245/3762")
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .foregroundColor(Color(red: 0.28, green: 0.23, blue: 0.16))
+                //                    .frame(alignment: .leading)
+                
+                //                Text(isLoading ? "Loading..." :value)
+                //                    .bold()
+                
+                Text(unit)
+                    .foregroundColor(Color(red: 0.28, green: 0.23, blue: 0.16))
+                    .font(.caption)
+            }
         }
     }
+}
+
+#Preview{
+    DashboardCard(isLoading: .constant(false), viewModel: .init())
 }
 
 struct ActivityRingView: View {
@@ -148,3 +149,4 @@ struct ActivityRingView: View {
         }
     }
 }
+
