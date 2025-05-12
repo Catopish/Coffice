@@ -1,0 +1,62 @@
+//
+//  SlimCoffeeCard.swift
+//  Coffice
+//
+//  Created by Al Amin Dwiesta on 12/05/25.
+//
+
+import SwiftUI
+import Foundation
+
+struct MediumCoffeeCard: View {
+    var body: some View {
+        ZStack(){
+            Rectangle()
+                .foregroundColor(Color(red: 0.66, green: 0.36, blue: 0.18))
+                .frame(width: 179, height: 167)
+                .cornerRadius(20)
+            Image("KenanganChocoOrange")
+            //            Image("AmericanoPlaceholder")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 87, height: 132)
+            Rectangle()
+                .foregroundColor(.clear)
+                .frame(width: 179, height: 167)
+                .background(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            .black,
+                            .clear
+                        ]),
+                        startPoint: .bottom,
+                        endPoint: .top
+                    )
+                )
+                .opacity(0.6)
+                .cornerRadius(20)
+            
+            VStack(alignment: .leading, spacing: -1) {
+                Text("Capuccino")
+                    .font(Font.custom("SF Pro", size: 20).weight(.bold))
+                    .lineSpacing(20)
+                    .foregroundColor(.white)
+                HStack(spacing: 4) {
+                    Image(systemName: "tag.fill")
+                        .font(Font.custom("SF Pro", size: 9).weight(.bold))
+                        .lineSpacing(22)
+                        .foregroundColor(.white)
+                    Text("Bitter | V60 | Aren")
+                        .font(Font.custom("SF Pro", size: 11).weight(.bold))
+                        .lineSpacing(22)
+                        .foregroundColor(.white)
+                }            }
+            .offset(x: -23, y: 60)
+        }
+    }
+}
+
+
+#Preview {
+    MediumCoffeeCard()
+}
