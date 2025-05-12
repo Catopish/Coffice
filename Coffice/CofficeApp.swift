@@ -30,7 +30,7 @@ struct CofficeApp: App {
                     OnboardingView()
                 }
                 else {
-                    Homepage()
+                    HomepageV2()
                 }
             }
         }
