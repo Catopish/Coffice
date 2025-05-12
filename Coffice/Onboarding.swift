@@ -14,20 +14,9 @@ import SwiftUI
 
 struct OnboardingView: View {
     @AppStorage("userName") var userName: String = ""
-    
-//    @StateObject private var healthViewModel = HealthDashboardViewModel()
-//    @StateObject var locationManager = LocationManager()
-    
     @Environment(\.dismiss) var dismiss
     @State private var tempName: String = ""
     @State private var nameEntered: Bool = false
-    
-//    @State private var isLocationAuthorized = false
-//    @State private var isHealthAuthorized = false
-    
-    // Flag to trigger the alert if permissions are missing
-//    @State private var showAuthAlert: Bool = false
-    
     
     var body: some View {
         ZStack {

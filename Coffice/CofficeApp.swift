@@ -26,7 +26,6 @@ struct CofficeApp: App {
                         }
                     }
             } else {
-                
                 if userName.isEmpty {
                     OnboardingView()
                 }
