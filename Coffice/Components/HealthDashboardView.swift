@@ -98,7 +98,7 @@ struct HealthStatRow: View {
             
             
             HStack(alignment: .firstTextBaseline, spacing: 2){
-                Text(isLoading ? "Loading..." :"3245/3762")
+                Text(isLoading ? "Loading..." :"\(value)/3274")
                     .font(.title2)
                     .fontWeight(.semibold)
                     .foregroundColor(Color(red: 0.28, green: 0.23, blue: 0.16))

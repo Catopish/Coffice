@@ -21,9 +21,6 @@ struct HomepageV2: View {
     @State private var showDetail: Bool = false
     
     var body: some View {
-        let filteredCoffeeShops = viewModel.updatedCoffeeShopsState.filter { shop in
-            searchText.isEmpty || shop.name.localizedCaseInsensitiveContains(searchText)
-        }
         
         NavigationStack{
             ZStack(alignment: .leading) {
@@ -39,61 +36,65 @@ struct HomepageV2: View {
                 
                 VStack(alignment: .leading) {
                     userProfileV2()
-                    HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
-                    Text("Recommendation Sweet")
-                        .foregroundStyle(.black)
-                        .padding(.leading,20)
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 16) {
-                            //                        ForEach(coffeeItems, id: \.self) { _ in
-                            SlimCoffeeCard()
-                            SlimCoffeeCard()
-                            SlimCoffeeCard()
-                            SlimCoffeeCard()
-                            SlimCoffeeCard()
-                            //                        }
+//                    ScrollView(.vertical, showsIndicators: false){
+                        HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
+                        Text("Recommendation Sweet")
+                            .foregroundStyle(.black)
+                            .padding(.leading,20)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                //                        ForEach(coffeeItems, id: \.self) { _ in
+                                SlimCoffeeCard()
+                                SlimCoffeeCard()
+                                SlimCoffeeCard()
+                                SlimCoffeeCard()
+                                SlimCoffeeCard()
+                                //                        }
+                            }
+                            .padding(.horizontal, 20)
                         }
-                        .padding(.horizontal, 20)
-                    }
-                    Text("Recommendation black")
-                        .foregroundStyle(.black)
-                        .padding(.leading,20)
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 16) {
-                            //                        ForEach(coffeeItems, id: \.self) { _ in
-                            SlimCoffeeCard()
-                            SlimCoffeeCard()
-                            SlimCoffeeCard()
-                            SlimCoffeeCard()
-                            SlimCoffeeCard()
-                            //                        }
+                        Text("Recommendation black")
+                            .foregroundStyle(.black)
+                            .padding(.leading,20)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                //                        ForEach(coffeeItems, id: \.self) { _ in
+                                SlimCoffeeCard()
+                                SlimCoffeeCard()
+                                SlimCoffeeCard()
+                                SlimCoffeeCard()
+                                SlimCoffeeCard()
+                                //                        }
+                            }
+                            .padding(.horizontal, 20)
                         }
-                        .padding(.horizontal, 20)
-                    }
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                            .font(.caption)
-                            .foregroundColor(.white)
-                            .padding(3)
-                            .background(Color.brown2)
-                            .cornerRadius(4)
-                            .padding(.trailing, 5)
-                        
-                        TextField("Search", text: $searchText)
-                            .foregroundColor(.primary)
-                            .autocapitalization(.none)
-                    }
-                    .padding(7)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(6)
-                    .padding()
-                    .padding(.vertical, -10)
-                    CoffeeShopListView(
-                        //                    coffeeShops: updatedCoffeeShopsState,
-                        coffeeShops: filteredCoffeeShops,
-                        selectedCoffeeshop: $selectedCoffeeshop,
-                        showDetail: $showDetail
-                    )
+                        HStack {
+                            Image(systemName: "magnifyingglass")
+                                .font(.caption)
+                                .foregroundColor(.white)
+                                .padding(3)
+                                .background(Color.brown2)
+                                .cornerRadius(4)
+                                .padding(.trailing, 5)
+                            
+                            TextField("Search", text: $searchText)
+                                .foregroundColor(.primary)
+                                .autocapitalization(.none)
+                        }
+                        .padding(7)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(6)
+                        .padding()
+                        .padding(.vertical, -10)
+                        let filteredCoffeeShops = viewModel.updatedCoffeeShopsState.filter { shop in
+                            searchText.isEmpty || shop.name.localizedCaseInsensitiveContains(searchText)
+                        }
+                        CoffeeShopListView(
+                            coffeeShops: filteredCoffeeShops,
+                            selectedCoffeeshop: $selectedCoffeeshop,
+                            showDetail: $showDetail
+                        )
+//                    }
                 }
                 
             }
@@ -136,11 +137,11 @@ struct CoffeeShopListView: View {
     var coffeeShops: [CoffeeShopStruct]
     @Binding var selectedCoffeeshop: CoffeeShopStruct?
     @Binding var showDetail: Bool
-
+    
     var body: some View {
         List(coffeeShops) { shop in
             NavigationLink(
-                destination: CoffeeShopDetailView(coffeeShop: shop)
+                destination: CoffeeShopDetailView(/*coffeeShop: shop*/)
             ) {
                 HStack {
                     Text(shop.name)
