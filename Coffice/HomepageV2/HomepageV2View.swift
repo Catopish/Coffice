@@ -43,7 +43,6 @@ struct HomepageV2: View {
                 
                 VStack(alignment: .leading) {
                     userProfileV2()
-                                        ScrollView(.vertical, showsIndicators: false){
                     HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
                     if featuredTags.count > 0 {
                         let recommendedForFirstTag = getRecommendedMenus(for: featuredTags[0], from: coffeeShopV2)
@@ -64,7 +63,6 @@ struct HomepageV2: View {
                                 
                             }
                             .padding(.horizontal, 20)
-                        }
                     }
                     if featuredTags.count > 1 {
                         let recommendedForSecondTag = featuredTags.count > 1 ? getRecommendedMenus(for: featuredTags[1], from: coffeeShopV2) : []
