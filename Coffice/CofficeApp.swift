@@ -12,6 +12,8 @@ import SwiftData
 struct CofficeApp: App {
     @State private var isSplashActive = true
     @AppStorage("userName") var userName: String = ""
+    @AppStorage("completedPreferences") var hasCompletedPreferences: Bool = false
+    @StateObject private var preferencesManager = PreferencesManager()
     
     var body: some Scene {
         WindowGroup {
@@ -28,11 +30,13 @@ struct CofficeApp: App {
             } else {
                 if userName.isEmpty {
                     OnboardingView()
-                }
-                else {
+                } else if !hasCompletedPreferences {
+                    PreferencesQuestionView()
+                } else {
                     HomepageV2()
                 }
             }
         }
+        .environmentObject(preferencesManager)
     }
 }

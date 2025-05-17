@@ -9,6 +9,9 @@ import SwiftUI
 import Foundation
 
 struct SlimCoffeeCard: View {
+    var coffee:CoffeeMenuStruct
+    var shopName: String
+    
     var body: some View {
         ZStack(){
             Rectangle()
@@ -37,16 +40,17 @@ struct SlimCoffeeCard: View {
                 .cornerRadius(20)
             
             VStack(alignment: .leading, spacing: -3) {
-                Text("Capuccino")
+                Text("\(coffee.name)")
                     .font(Font.custom("SF Pro", size: 16).weight(.semibold))
-                    .lineSpacing(20)
+//                    .lineSpacing(20)
                     .foregroundColor(.white)
-                Text("Kopi Kenangan")
+//                    .frame(width: 70)
+                Text("\(shopName)")
                     .font(Font.custom("SF Pro", size: 10).weight(.light))
                     .lineSpacing(20)
                     .foregroundColor(.white)
             }
-            .frame(width: 82, height: 30)
+            .frame(width: 82, height: 100)
             .offset(x: 0, y: 46.50)
             
         }
@@ -54,6 +58,6 @@ struct SlimCoffeeCard: View {
 }
 
 
-#Preview {
-    SlimCoffeeCard()
-}
+//#Preview {
+//    SlimCoffeeCard()
+//}
