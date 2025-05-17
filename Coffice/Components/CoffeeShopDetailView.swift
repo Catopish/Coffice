@@ -86,9 +86,12 @@ struct CoffeeShopDetailView: View {
                             GridItem(.flexible(), spacing: 16),
                             GridItem(.flexible(), spacing: 16)
                         ], spacing: 16) {
-                            ForEach(0..<8) { _ in
-                                MediumCoffeeCard()
+                            ForEach(shop.menu, id: \.id){ menu in
+                                MediumCoffeeCard(coffee: menu)
                             }
+//                            ForEach(0..<8) { _ in
+//                                MediumCoffeeCard()
+//                            }
                         }
                         .padding(.horizontal, 16)
                         .padding(.top, 16)
