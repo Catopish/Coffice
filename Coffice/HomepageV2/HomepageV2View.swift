@@ -11,28 +11,22 @@ import Foundation
 struct HomepageV2: View {
     @AppStorage("userName") var userName: String = ""
     @EnvironmentObject var preferencesManager: PreferencesManager
-    
     @StateObject private var healthViewModel = HealthDashboardViewModel()
     @StateObject var locationManager = LocationManager()
     @StateObject private var viewModel = HomepageV2ViewModel()
-    
     @State private var featuredTags: [CoffeeTag] = []
     @State var isLoading: Bool = false
     @State private var searchText: String = ""
     @State private var selectedCoffeeshop: CoffeeShopStruct? = nil
     @State private var showDetail: Bool = false
-    
     func tagLine(for tag: CoffeeTag) -> String {
         return preferenceTagLines.first(where: { $0.associatedTag == tag })?.tagLine ?? ""
     }
-    
     func getRecommendedMenus(for tag: CoffeeTag, from shops: [CoffeeShopStruct]) -> [CoffeeMenuStruct] {
         return shops
             .flatMap { $0.menu }
             .filter { $0.tag1 == tag || $0.tag2 == tag || $0.tag3 == tag }
     }
-    
-    
     var body: some View {
         
         NavigationStack{
@@ -49,7 +43,7 @@ struct HomepageV2: View {
                 
                 VStack(alignment: .leading) {
                     userProfileV2()
-                    //                    ScrollView(.vertical, showsIndicators: false){
+                                        ScrollView(.vertical, showsIndicators: false){
                     HealthDashboardView(viewModel: healthViewModel, isLoading: $isLoading)
                     if featuredTags.count > 0 {
                         let recommendedForFirstTag = getRecommendedMenus(for: featuredTags[0], from: coffeeShopV2)
@@ -119,7 +113,7 @@ struct HomepageV2: View {
                         selectedCoffeeshop: $selectedCoffeeshop,
                         showDetail: $showDetail
                     )
-                    //                    }
+                                        }
                 }
                 
             }
@@ -129,11 +123,8 @@ struct HomepageV2: View {
             }
             .onChange(of: userName) { _, newName in
                 guard !newName.isEmpty else { return }
-                // 1) Location auth
                 locationManager.checkAuthorization()
-                // 2) HealthKit auth (you’ll want to make this async in your VM)
                 healthViewModel.requestAuthorization()
-                // 3) Any other startup tasks
             }
             .onChange(of: locationManager.userLocation) { _, newLocation in
                 if newLocation != nil {
@@ -148,7 +139,9 @@ struct HomepageV2: View {
 
 struct userProfileV2: View {
     @AppStorage("userName") var userName: String = ""
-    
+    @AppStorage("completedPreferences") var hasCompletedPreferences: Bool = false
+    @AppStorage("userPreferences") var storedPreferences: String = ""
+
     var body: some View {
         HStack()  {
             VStack(alignment: .leading) {
@@ -159,8 +152,17 @@ struct userProfileV2: View {
                 //                    .padding(.leading, 6)
             }
             .padding(.leading,20)
+            Spacer()
+            Button {
+                userName = ""
+                hasCompletedPreferences = false
+                storedPreferences = ""
+            } label: {
+                Text("Reset")
+                    .foregroundColor(.red)
+            }
         }
-    }
+        }
 }
 struct CoffeeShopListView: View {
     var coffeeShops: [CoffeeShopStruct]
@@ -192,4 +194,5 @@ struct CoffeeShopListView: View {
 
 #Preview {
     HomepageV2()
+        .environmentObject(PreferencesManager())
 }

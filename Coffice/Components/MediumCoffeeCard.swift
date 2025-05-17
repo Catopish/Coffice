@@ -17,7 +17,7 @@ struct MediumCoffeeCard: View {
                 .foregroundColor(Color(red: 0.66, green: 0.36, blue: 0.18))
                 .frame(width: 179, height: 167)
                 .cornerRadius(20)
-            Image("KenanganChocoOrange")
+            Image("\(coffee.image)")
             //            Image("AmericanoPlaceholder")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
@@ -41,19 +41,18 @@ struct MediumCoffeeCard: View {
             VStack(alignment: .leading, spacing: -1) {
                 Text("\(coffee.name)")
                     .font(Font.custom("SF Pro", size: 20).weight(.bold))
-                    .lineSpacing(20)
                     .foregroundColor(.white)
                 HStack(spacing: 4) {
                     Image(systemName: "tag.fill")
                         .font(Font.custom("SF Pro", size: 9).weight(.bold))
-                        .lineSpacing(22)
                         .foregroundColor(.white)
                     Text("\(coffee.tag1) | \(coffee.tag2) | \(coffee.tag3)")
                         .font(Font.custom("SF Pro", size: 11).weight(.bold))
-                        .lineSpacing(22)
                         .foregroundColor(.white)
-                }            }
-            .offset(x: -23, y: 60)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+            .padding([.leading, .bottom], 12)
         }
     }
 }

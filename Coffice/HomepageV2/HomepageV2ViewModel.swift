@@ -12,9 +12,10 @@ import CoreLocation
 class HomepageV2ViewModel:ObservableObject {
     @Published var updatedCoffeeShopsState: [CoffeeShopStruct] = []
     
+    let coffeeShop = coffeeShopV2
     let locationManager = LocationManager()
     let mapWalkingManager = MapWalkingManager()
-        
+    
     func updateCoffeeShopsByDistance(coffeeshops: [CoffeeShopStruct]) {
         
         guard let userLocation = locationManager.userLocation else { return }
