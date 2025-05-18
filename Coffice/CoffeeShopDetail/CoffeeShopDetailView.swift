@@ -10,7 +10,8 @@ import MapKit
 struct CoffeeShopDetailView: View {
     var selectedCoffeeShop: CoffeeShopStruct?
     @State var showMapView: Bool = false
-   
+    @ObservedObject var liveViewModel = LiveActivityViewModel()
+    @State var hasArrivedAtDestination : Bool = false
     
     var body: some View {
         if let shop = selectedCoffeeShop {
@@ -121,9 +122,9 @@ struct CoffeeShopDetailView: View {
                 }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
-//            .fullScreenCover(isPresented: $showMapView){
-//                MapView(streakManager: <#T##StreakManager#>, coffeShops: <#T##Binding<CoffeeShopStruct?>#>, liveViewModel: <#T##LiveActivityViewModel#>, hasArrivedAtDestination: <#T##Binding<Bool>#>)
-//            }
+            .fullScreenCover(isPresented: $showMapView){
+                MapView(coffeShops: selectedCoffeeShop, liveViewModel: liveViewModel, hasArrivedAtDestination: $hasArrivedAtDestination)
+            }
         } else {
             Text("No coffee shop selected")
         }

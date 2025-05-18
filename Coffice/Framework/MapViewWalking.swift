@@ -6,7 +6,7 @@ struct MapViewWalking: View {
     @ObservedObject var liveViewModel: LiveActivityViewModel
     @State private var mapPosition: MapCameraPosition = .automatic
     @StateObject var mapWalkingManager = MapWalkingManager()
-    @Binding var selectedShop: CoffeeShopStruct?
+    var selectedShop: CoffeeShopStruct?
     @Environment(\.dismiss) var dismiss
     
     @Binding var hasArrivedAtDestination : Bool

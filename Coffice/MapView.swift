@@ -12,8 +12,8 @@ import HealthKit
 struct MapView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject private var locationManager = LocationManager()
-    @ObservedObject var streakManager: StreakManager
-    @Binding var coffeShops: CoffeeShopStruct?
+//    @ObservedObject var streakManager: StreakManager
+    var coffeShops: CoffeeShopStruct?
     @ObservedObject var liveViewModel: LiveActivityViewModel
     @Binding var hasArrivedAtDestination : Bool
     
@@ -22,7 +22,7 @@ struct MapView: View {
             if let status = locationManager.authorizationStatus {
                 switch status {
                 case .authorizedAlways, .authorizedWhenInUse:
-                    MapViewWalking(locationManager: locationManager, liveViewModel: liveViewModel, selectedShop: $coffeShops,hasArrivedAtDestination: $hasArrivedAtDestination)
+                    MapViewWalking(locationManager: locationManager, liveViewModel: liveViewModel, selectedShop: coffeShops,hasArrivedAtDestination: $hasArrivedAtDestination)
                     
                 case .notDetermined:
                     Text("Requesting GPS permission...")
@@ -50,7 +50,7 @@ struct MapView: View {
         }
         .overlay{
             if hasArrivedAtDestination {
-                AlertArrived(liveViewModel: liveViewModel, streakManager: streakManager)
+                AlertArrived(liveViewModel: liveViewModel/*, streakManager: streakManager*/)
                     
             }
         }

@@ -115,22 +115,22 @@ struct HomepageV2: View {
                 }
                 
             }
-            .onAppear {
-                featuredTags = preferencesManager.getRandomPreferredTags()
-                print(featuredTags)
-            }
-            .onChange(of: userName) { _, newName in
-                guard !newName.isEmpty else { return }
-                locationManager.checkAuthorization()
-                healthViewModel.requestAuthorization()
-            }
-            .onChange(of: locationManager.userLocation) { _, newLocation in
-                if newLocation != nil {
-                    viewModel.updateCoffeeShopsByDistance(coffeeshops: coffeeShopV2)
-                }
+        }
+        .onAppear {
+            featuredTags = preferencesManager.getRandomPreferredTags()
+            print(featuredTags)
+        }
+        .onChange(of: userName) { _, newName in
+            guard !newName.isEmpty else { return }
+            locationManager.checkAuthorization()
+            healthViewModel.requestAuthorization()
+        }
+        .onChange(of: locationManager.userLocation) { _, newLocation in
+            if newLocation != nil {
+                viewModel.updateCoffeeShopsByDistance(coffeeshops: coffeeShopV2)
             }
         }
-        
+
     }
 }
 
