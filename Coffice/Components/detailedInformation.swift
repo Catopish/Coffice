@@ -1,173 +1,135 @@
-////
-////  Overlay.swift
-////  Coffice
-////
-////  Created by Al Amin Dwiesta on 24/03/25.
-////
-
 import SwiftUI
 import MapKit
 
-struct coffeeshopInformation: View{
-    
+struct DetailedInformation: View {
+    var shop: CoffeeShopStruct
     @Binding var showMapView: Bool
-    @Binding var showDetail: Bool
-    @Binding var selectedCoffeeshop: CoffeeShopStruct?
-//    @ObservedObject var liveViewModel = LiveActivityViewModel()
-
+    //        @Binding var showDetail: Bool
+    //        @Binding var selectedCoffeeshop: CoffeeShopStruct?
     
     var body: some View {
-        ZStack {
-            if showDetail, let shop = selectedCoffeeshop {
-                // Shadow overlay
-                Rectangle()
-                    .fill(Color.black.opacity(0.3))
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        showDetail = false
-                    }
+        ScrollView {
+            VStack() {
+                Image("\(shop.name)")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: 224)
+                    .clipped()
                 
-                VStack(spacing: 12) {
-                    ZStack {
-                        VStack{
+                VStack(alignment: .leading) {
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading, spacing: 8) {
                             Text(shop.name)
-                                .font(.title2)
-                                .foregroundColor(Color("brown3"))
-                                .bold()
-                                .frame(maxWidth: .infinity)
-                            Text(shop.location)
-                                .font(.body)
-                                .bold()
-                                .foregroundStyle(.secondary)
-                                .frame(maxWidth: .infinity)
-                        }
-                        
-                        Button(action: {
-                            showDetail = false
-                        }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.gray)
                                 .font(.title)
+                                .bold()
                             
-                        }
-                        .frame(maxWidth: .infinity)
-                        .offset(x: 140, y: -15)
-                        
-                        
-                    }
-                    
-//                    Divider()
-                    VStack {
-                        Image("\(shop.name)")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 300, height: 180) // Mengisi lebar penuh
-//                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                            .padding(.top, 20)
-                    }
-                    
-                    HStack(spacing: 30) {
-                        Spacer()
-                        VStack {
-                            Image(systemName: "location.north.line.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 30, height: 30)
-                                .frame(width: 30, height: 40)
-                                .foregroundStyle(Color(uiColor: .brown2))
-                            HStack(alignment: .firstTextBaseline, spacing: 2) {
-                                Text("\(Int(shop.distance))")
-                                    .padding(.top, 5)
-                                    .font(.headline)
-                                    .foregroundStyle(.primary)
-                                    .foregroundColor(Color("brown3"))
-                                Text("M")
-                                    .font(.footnote)
-                                    .foregroundColor(Color("brown3"))
+                            Text(shop.location)
+                                .font(.subheadline)
+                            
+                            HStack (spacing: 16){
+                                HStack(spacing: 4) {
+                                    Image(systemName: "location.north.line.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 18, height: 18)
+                                        .foregroundStyle(Color(uiColor: .brown1))
+                                    Text("\(Int(shop.distance)) m")
+                                        .font(.subheadline)
+                                }
                                 
-                            }
-                        }
-                        VStack {
-                            Image(systemName: "flame.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 30, height: 30)
-                                .frame(width: 30, height: 40)
-                                .foregroundStyle(Color(uiColor: .brown2))
-                            HStack(alignment: .firstTextBaseline, spacing: 2) {
-                                Text("\(shop.calories)")
-                                    .padding(.top, 5)
-                                    .font(.headline)
-                                    .foregroundStyle(.primary)
-                                    .foregroundColor(Color("brown3"))
-                                Text("CAL")
-                                    .font(.footnote)
-                                    .foregroundColor(Color("brown3"))
+                                HStack(spacing: 4) {
+                                    Image(systemName: "flame.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 18, height: 18)
+                                        .foregroundStyle(Color(uiColor: .brown1))
+                                    Text("\(shop.calories) kcal")
+                                        .font(.subheadline)
+                                }
                                 
+                                HStack(spacing: 4) {
+                                    Image(systemName: "figure.walk")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 18, height: 18)
+                                        .foregroundStyle(Color(uiColor: .brown1))
+                                    Text("\(shop.steps) steps")
+                                        .font(.subheadline)
+                                }
                             }
-                            
                         }
-                        VStack {
-                            Image(systemName: "figure.walk")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 30, height: 30)
-                                .foregroundStyle(Color(uiColor: .brown2))
-                                .foregroundColor(Color("brown3"))
-                                .frame(width: 30, height: 40)
-                                .foregroundStyle(Color(uiColor: .brown2))
-
-                            HStack(alignment: .firstTextBaseline, spacing: 2) {
-                                Text("\(shop.steps)")
-                                    .padding(.top, 5)
-                                    .font(.headline)
-                                    .foregroundStyle(.primary)
-                                    .foregroundColor(Color("brown3"))
-                                Text("STEPS")
-                                    .font(.footnote)
-                                    .foregroundColor(Color("brown3"))
-                            }
-                            
-                        }
+                        
                         Spacer()
-                    }
-                    .padding(.vertical, 20)
-                    
-//                    Divider()
-                    
-                    VStack {
+                        
                         Button {
-//                            liveViewModel.startLiveActivity()
-                            showDetail = false
+                            //                             Action
+                            //                        showDetail = false
                             showMapView = true
                         } label: {
-                            Text("Get Started")
-                                .frame(maxWidth: .infinity, maxHeight: 20)
-                                .padding()
+                            Text("Go")
+                                .frame(width: 90, height: 80)
+                                .background(Color(uiColor: .brown1))
                                 .foregroundColor(.white)
-                                .background(Color(uiColor: .brown2))
-                                .cornerRadius(12)
-                                .padding(.horizontal)
                                 .cornerRadius(20)
+                                .font(.title2)
+                                .fontWeight(.bold)
                         }
-//                        .fullScreenCover(isPresented: $showMapView) {
-////                            MapView(coordinate: CLLocationCoordinate2D(latitude: -6.3019094, longitude: 106.6517333))
-////                            MapWalking()
-//                            MapView(coffeShops: $selectedCoffeeshop,liveViewModel: liveViewModel)
-//                        }
                     }
-                    .padding(.bottom)
                     
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("About")
+                            .font(.title3)
+                            .bold()
+                        Text(shop.description)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                     }
-                    .padding(.top, 20)
-                    .background(Color.white)
-                    .cornerRadius(12)
-                    .shadow(radius: 10)
-                    .padding(.horizontal, 20)
-                    .transition(.scale)
-                    .frame(width: 380, height: 460)
+                    .padding(.vertical, 24)
+                    
+                    
+                    Text("Menu")
+                        .font(.title3)
+                        .bold()
+                    VStack(alignment: .leading, spacing: 16) {
+                        ForEach(shop.menu) { item in
+                            HStack(spacing: 12) {
+                                Image(item.imageName)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 60, height: 60)
+                                    .clipShape(
+                                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                    )
+                                    .overlay(                                            // (opsional) border di sekeliling
+                                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                                    )
+                                
+                                VStack(alignment: .leading) {
+                                    Text(item.name)
+                                        .font(.subheadline)
+                                    Text("Rp \(Int(item.price)).000")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
+                                Spacer()
+                            }
+                            .padding(.vertical, 8)
+                        }
+                    }
                 }
+                .padding()
             }
+        }
+        .navigationTitle("Details")
+        .navigationBarTitleDisplayMode(.inline)
         }
     }
 
+
+
+#Preview {
+    Homepage()
+}
+//   

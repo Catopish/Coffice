@@ -8,23 +8,21 @@ import SwiftUI
 
 
 struct ActivitySummary: View {
-//    @StateObject var healthManager = HealthManager()
+    //    @StateObject var healthManager = HealthManager()
     @ObservedObject var liveViewModel: LiveActivityViewModel
     
     var body: some View {
         Spacer()
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Image (systemName: "figure.walk")
-                    .padding(.bottom)
-                Text("Your Activity")
-                    .foregroundColor(Color("brown3"))
-                    .padding(.bottom)
-                    .fontWeight(.bold)
-            }
+        VStack(alignment: .leading, spacing: 8) {
+            
+            Text("Your coffee walk")
+                .foregroundColor(.black)
+                .padding(.bottom)
+                .font(.headline)
+                .fontWeight(.bold)
             
             HStack {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text("Move")
                         .font(.headline)
                         .foregroundColor(Color("brown2"))
@@ -43,7 +41,7 @@ struct ActivitySummary: View {
                 }
                 
                 Spacer()
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text("Steps")
                         .font(.headline)
                         .foregroundColor(Color("brown2"))
@@ -58,13 +56,18 @@ struct ActivitySummary: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+                
             }
-            .padding(.horizontal)
+//            .padding(.horizontal)
         }
-        .padding()
-        .frame(width: 320, height: 130)
+        .padding(24)
+        .frame(width: 320, height: 140)
         .background(Color.white)
         .cornerRadius(12)
         .shadow(radius: 5)
     }
+}
+
+#Preview {
+    Homepage()
 }

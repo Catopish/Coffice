@@ -13,17 +13,24 @@ struct AlertExitMap: View {
 //                ActivitySummary()
             }
 
-            Button(action: {
-                showPopup = true
-            }) {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundColor(.red)
-                    .font(.title)
-            }
-            .frame(maxWidth: .infinity)
-            .offset(x: 130, y: 275)
+            VStack {
+                            HStack {
+                                Button(action: {
+                                    showPopup = true
+                                }) {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.white)
+                                        .font(.title)
+                                }
+                                .padding(.leading, 16)
 
-            // Popup
+                                Spacer()
+                            }
+                            .padding(.top, 16)
+
+                            Spacer()
+                        }
+           
             if showPopup {
                 ZStack {
                     Color.black.opacity(0.3)
@@ -31,23 +38,25 @@ struct AlertExitMap: View {
 
                     RoundedRectangle(cornerRadius: 15)
                         .fill(Color.white)
-                        .frame(width: 320, height: 160)
+                        .frame(width: 320, height: 180)
                         .overlay(
                             VStack(spacing: 20) {
-                                Text("Are you sure you want to cancel this journey?")
+                                Text("Exit Journey?")
+                                    .font(.headline)
+                                    .multilineTextAlignment(.center)
+                                
+                                Text("If you exit now, you’ll be returned\nto the home page.")
                                     .font(.callout)
                                     .multilineTextAlignment(.center)
 
-                                HStack(spacing: 20) {
+                                HStack(spacing: 16) {
                                     Button(action: {
-//                                        liveViewModel.stopLiveActivity()
                                         dismiss()
-//                                        showPopupArrived = true
                                     }) {
                                         Text("Yes")
-                                            .frame(width: 125, height: 40)
+                                            .frame(width: 130, height: 40)
                                             .font(.callout)
-                                            .foregroundColor(.brown2)
+                                            .foregroundColor(.brown1)
                                             .overlay(
                                                 RoundedRectangle(cornerRadius: 12)
                                                     .stroke(Color.brown, lineWidth: 2)
@@ -58,9 +67,9 @@ struct AlertExitMap: View {
                                         showPopup = false
                                     }) {
                                         Text("No")
-                                            .frame(width: 125, height: 40)
+                                            .frame(width: 130, height: 40)
                                             .font(.callout)
-                                            .background(Color.brown2)
+                                            .background(Color.brown1)
                                             .foregroundColor(.white)
                                             .clipShape(RoundedRectangle(cornerRadius: 12))
                                     }
@@ -70,16 +79,6 @@ struct AlertExitMap: View {
                 }
             }
         }
-        //NOTE: testing arrived
-//        .fullScreenCover(isPresented: $showPopupArrived){
-//            ArrivalPopupView()
-//            AlertArrived()
-//        }
     }
 }
 
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AlertExitMap()
-//    }
-//}

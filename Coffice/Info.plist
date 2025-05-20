@@ -8,3 +8,12 @@
 	</array>
 </dict>
 </plist>
+<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>coffice</string>
+        </array>
+    </dict>
+</array>

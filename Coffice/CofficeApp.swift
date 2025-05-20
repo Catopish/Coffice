@@ -1,24 +1,18 @@
-//
-//  CofficeApp.swift
-//  Coffice
-//
-//  Created by Hafi on 20/03/25.
-//
-
 import SwiftUI
-import SwiftData
 
 @main
 struct CofficeApp: App {
     @State private var isSplashActive = true
     @AppStorage("userName") var userName: String = ""
-    
+    @StateObject var nav = NavigationManager.shared
+    @State private var showMapView = false
+    @State private var coffeeShops: [CoffeeShopStruct] = coffeeShop
+
     var body: some Scene {
         WindowGroup {
             if isSplashActive {
                 SplashScreenView()
                     .onAppear {
-                        // Delay 2 detik sebelum masuk ke main view
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             withAnimation {
                                 isSplashActive = false
@@ -26,14 +20,34 @@ struct CofficeApp: App {
                         }
                     }
             } else {
-                
-                if userName.isEmpty {
-                    OnboardingView()
+
+                NavigationStack {
+                    VStack {
+                        NavigationLink(
+                            destination: SearchListView(
+                                showMapView: $showMapView,
+                                coffeeShops: coffeeShops
+                            ),
+                            isActive: $nav.navigateToSearch
+                        ) {
+                            EmptyView()
+                        }
+
+
+                        if userName.isEmpty {
+                            OnboardingView()
+                        } else {
+                            Homepage()
+                        }
+                    }
                 }
-                else {
-                    Homepage()
+                .onOpenURL { url in
+                    if url.absoluteString == "coffice://search" {
+                        nav.navigateToSearch = true
+                    }
                 }
             }
         }
     }
 }
+

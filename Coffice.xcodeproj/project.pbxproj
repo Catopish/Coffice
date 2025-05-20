@@ -6,11 +6,58 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		0B5E80C42DD8A71B0024D108 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0B2FC22DD43BB3006160C7 /* WidgetKit.framework */; };
+		0B5E80C52DD8A71B0024D108 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0B2FC42DD43BB3006160C7 /* SwiftUI.framework */; };
+		0B5E80D62DD8A71C0024D108 /* cofficewidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 0B5E80C32DD8A71B0024D108 /* cofficewidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0B5E80D42DD8A71C0024D108 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1794F4562D8BCB6800CCFA1F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0B5E80C22DD8A71B0024D108;
+			remoteInfo = cofficewidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0B0B2FD72DD43BB4006160C7 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				0B5E80D62DD8A71C0024D108 /* cofficewidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		0B0B2FC22DD43BB3006160C7 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		0B0B2FC42DD43BB3006160C7 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		0B5E80C32DD8A71B0024D108 /* cofficewidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = cofficewidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1794F45E2D8BCB6800CCFA1F /* Coffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0B5E80DA2DD8A71C0024D108 /* Exceptions for "cofficewidget" folder in "cofficewidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 0B5E80C22DD8A71B0024D108 /* cofficewidgetExtension */;
+		};
+		0B5E80DE2DD8AD2A0024D108 /* Exceptions for "cofficewidget" folder in "Coffice" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				NavigationManager.swift,
+			);
+			target = 1794F45D2D8BCB6800CCFA1F /* Coffice */;
+		};
 		176EC91E2DA265A800EE0345 /* Exceptions for "Coffice" folder in "Coffice" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -21,6 +68,20 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		0B5E80C62DD8A71B0024D108 /* cofficewidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0B5E80DE2DD8AD2A0024D108 /* Exceptions for "cofficewidget" folder in "Coffice" target */,
+				0B5E80DA2DD8A71C0024D108 /* Exceptions for "cofficewidget" folder in "cofficewidgetExtension" target */,
+			);
+			path = cofficewidget;
+			sourceTree = "<group>";
+		};
+		0BB831CF2DD1C59F00FA7C2F /* New Folder */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "New Folder";
+			sourceTree = "<group>";
+		};
 		1794F4602D8BCB6800CCFA1F /* Coffice */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -32,6 +93,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0B5E80C02DD8A71B0024D108 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0B5E80C52DD8A71B0024D108 /* SwiftUI.framework in Frameworks */,
+				0B5E80C42DD8A71B0024D108 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1794F45B2D8BCB6800CCFA1F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -42,10 +112,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B0B2FC12DD43BB3006160C7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0B0B2FC22DD43BB3006160C7 /* WidgetKit.framework */,
+				0B0B2FC42DD43BB3006160C7 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		1794F4552D8BCB6800CCFA1F = {
 			isa = PBXGroup;
 			children = (
+				0BB831CF2DD1C59F00FA7C2F /* New Folder */,
 				1794F4602D8BCB6800CCFA1F /* Coffice */,
+				0B5E80C62DD8A71B0024D108 /* cofficewidget */,
+				0B0B2FC12DD43BB3006160C7 /* Frameworks */,
 				1794F45F2D8BCB6800CCFA1F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				1794F45E2D8BCB6800CCFA1F /* Coffice.app */,
+				0B5E80C32DD8A71B0024D108 /* cofficewidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,6 +144,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0B5E80C22DD8A71B0024D108 /* cofficewidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0B5E80D92DD8A71C0024D108 /* Build configuration list for PBXNativeTarget "cofficewidgetExtension" */;
+			buildPhases = (
+				0B5E80BF2DD8A71B0024D108 /* Sources */,
+				0B5E80C02DD8A71B0024D108 /* Frameworks */,
+				0B5E80C12DD8A71B0024D108 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				0B5E80C62DD8A71B0024D108 /* cofficewidget */,
+			);
+			name = cofficewidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = cofficewidgetExtension;
+			productReference = 0B5E80C32DD8A71B0024D108 /* cofficewidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		1794F45D2D8BCB6800CCFA1F /* Coffice */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1794F46E2D8BCB6800CCFA1F /* Build configuration list for PBXNativeTarget "Coffice" */;
@@ -68,12 +173,15 @@
 				1794F45A2D8BCB6800CCFA1F /* Sources */,
 				1794F45B2D8BCB6800CCFA1F /* Frameworks */,
 				1794F45C2D8BCB6800CCFA1F /* Resources */,
+				0B0B2FD72DD43BB4006160C7 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				0B5E80D52DD8A71C0024D108 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
+				0BB831CF2DD1C59F00FA7C2F /* New Folder */,
 				1794F4602D8BCB6800CCFA1F /* Coffice */,
 			);
 			name = Coffice;
@@ -93,6 +201,9 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					0B5E80C22DD8A71B0024D108 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					1794F45D2D8BCB6800CCFA1F = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -113,11 +224,19 @@
 			projectRoot = "";
 			targets = (
 				1794F45D2D8BCB6800CCFA1F /* Coffice */,
+				0B5E80C22DD8A71B0024D108 /* cofficewidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0B5E80C12DD8A71B0024D108 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1794F45C2D8BCB6800CCFA1F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -128,6 +247,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0B5E80BF2DD8A71B0024D108 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1794F45A2D8BCB6800CCFA1F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -137,7 +263,69 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		0B5E80D52DD8A71C0024D108 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0B5E80C22DD8A71B0024D108 /* cofficewidgetExtension */;
+			targetProxy = 0B5E80D42DD8A71C0024D108 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		0B5E80D72DD8A71C0024D108 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = H33A949N8W;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = cofficewidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = cofficewidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AppleDevAcademyCoreChal.CofficeAngel.cofficewidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0B5E80D82DD8A71C0024D108 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = H33A949N8W;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = cofficewidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = cofficewidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AppleDevAcademyCoreChal.CofficeAngel.cofficewidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		1794F46C2D8BCB6800CCFA1F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -338,6 +526,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0B5E80D92DD8A71C0024D108 /* Build configuration list for PBXNativeTarget "cofficewidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0B5E80D72DD8A71C0024D108 /* Debug */,
+				0B5E80D82DD8A71C0024D108 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1794F4592D8BCB6800CCFA1F /* Build configuration list for PBXProject "Coffice" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -16,10 +16,13 @@ struct MapViewWalking: View {
     // Computed destination coordinate:
     private var destinationCoordinate: CLLocationCoordinate2D {
         if let shop = selectedShop {
+            print("Masuk atas")
             return CLLocationCoordinate2D(latitude: shop.latitude, longitude: shop.longitude)
         } else {
             // Default coordinate if no shop is selected
-            return CLLocationCoordinate2D(latitude: -7.777848720301518, longitude: 110.33756018305395)
+            print("Masuk sini")
+//            return CLLocationCoordinate2D(latitude: -7.777848720301518, longitude: 110.33756018305395)
+            return CLLocationCoordinate2D(latitude: -6.302168805766506, longitude: 106.65218820473441)
         }
     }
     

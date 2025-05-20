@@ -18,31 +18,32 @@ struct AlertArrived: View {
         ZStack {
             Color.black.opacity(0.3)
                 .edgesIgnoringSafeArea(.all)
-            VStack() {
+            VStack(spacing: 8) {
                 Text("You've Arrived!")
                     .font(.headline)
                     .fontWeight(.bold)
-                    .foregroundColor(.brown3)
-                    .padding(.bottom)
+                    .foregroundColor(.primary)
+                    .padding(.top)
                 
                 Text("Hope you enjoy the coffee and the walk!")
                     .multilineTextAlignment(.center)
                     .font(.subheadline)
-                    .foregroundColor(.brown3)
+                    .foregroundColor(.primary)
                     .padding(.bottom)
+                
                 VStack(spacing: 10) {
                     HStack {
                         Image(systemName: "flame.fill")
                             .resizable()
                             .frame(width: 20, height: 28)
-                            .foregroundStyle(Color(uiColor: .brown2))
+                            .foregroundStyle(Color(uiColor: .brown1))
                         HStack {
                             Text("\(latestCalories, specifier: "%.1f")")
                                 .font(.title3)
-                                .foregroundColor(.brown3)
+                                .foregroundColor(.primary)
                             Text("CAL")
                                 .font(.subheadline)
-                                .foregroundColor(.brown3)
+                                .foregroundColor(.primary)
                         }
                     }
                     
@@ -50,40 +51,38 @@ struct AlertArrived: View {
                         Image(systemName: "figure.walk")
                             .resizable()
                             .frame(width: 20, height: 28)
-                            .foregroundStyle(Color(uiColor: .brown2))
+                            .foregroundStyle(Color(uiColor: .brown1))
                         HStack {
                             Text("\(latestSteps)")
                                 .font(.title3)
-                                .foregroundColor(.brown3)
+                                .foregroundColor(.primary)
                             Text("STEPS")
                                 .font(.subheadline)
-                                .foregroundColor(.brown3)
+                                .foregroundColor(.primary)
                         }
                         
                     }
                 }
-                .padding(.vertical, 8)
+                .padding(.bottom)
                 
                 Button(action: {
-//                    onDismiss()
                     dismiss()
                     streakManager.completeToday()
                     liveViewModel.stopLiveActivity()
                     hasArrived = false
                 }) {
-                    Text("OK")
+                    Text("Got it")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
-                    //                    .frame(width: 80, height: 10)
                         .padding()
-                        .background(Color.brown2)
+                        .background(Color.brown1)
                         .foregroundColor(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
-                .padding(.top, 8)
+
             }
             .padding()
-            .frame(width: 300)
+            .frame(width: 330)
             .background(Color.white)
             .cornerRadius(12)
             .shadow(radius: 10)
@@ -91,8 +90,3 @@ struct AlertArrived: View {
     }
 }
 
-//struct ArrivalArrived_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AlertArrived(liveViewModel: liveViewModel)
-//    }
-//}
